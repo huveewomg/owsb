@@ -1,0 +1,42 @@
+[
+  {
+    "userID": "U001",
+    "username": "admin",
+    "password": "admin123",
+    "name": "System Administrator",
+    "role": "ADMIN",
+    "email": "admin@owsb.com"
+  },
+  {
+    "userID": "U002",
+    "username": "sales1",
+    "password": "sales123",
+    "name": "John Sales",
+    "role": "SALES_MANAGER",
+    "email": "john@owsb.com"
+  },
+  {
+    "userID": "U003",
+    "username": "purchase1",
+    "password": "purchase123",
+    "name": "Mary Purchase",
+    "role": "PURCHASE_MANAGER",
+    "email": "mary@owsb.com"
+  },
+  {
+    "userID": "U004",
+    "username": "inventory1",
+    "password": "inventory123",
+    "name": "Alex Inventory",
+    "role": "INVENTORY_MANAGER",
+    "email": "alex@owsb.com"
+  },
+  {
+    "userID": "U005",
+    "username": "finance1",
+    "password": "finance123",
+    "name": "Sarah Finance",
+    "role": "FINANCE_MANAGER",
+    "email": "sarah@owsb.com"
+  }
+]

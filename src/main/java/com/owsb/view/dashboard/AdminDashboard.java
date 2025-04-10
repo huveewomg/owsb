@@ -104,19 +104,25 @@ public class AdminDashboard extends BaseDashboard {
         JPanel formPanel = new JPanel(new GridLayout(6, 2, 10, 10));
         
         formPanel.add(new JLabel("User ID:"));
-        formPanel.add(new JTextField());
+        JTextField idField = new JTextField();
+        idField.setEditable(false); // readonly
+        formPanel.add(idField);
         
         formPanel.add(new JLabel("Username:"));
-        formPanel.add(new JTextField());
+        JTextField usernameField = new JTextField();
+        formPanel.add(usernameField);
         
         formPanel.add(new JLabel("Password:"));
-        formPanel.add(new JPasswordField());
+        JPasswordField passwordField = new JPasswordField();
+        formPanel.add(passwordField);
         
         formPanel.add(new JLabel("Full Name:"));
-        formPanel.add(new JTextField());
+        JTextField nameField = new JTextField();
+        formPanel.add(nameField);
         
         formPanel.add(new JLabel("Email:"));
-        formPanel.add(new JTextField());
+        JTextField emailField = new JTextField();
+        formPanel.add(emailField);
         
         formPanel.add(new JLabel("Role:"));
         JComboBox<String> roleCombo = new JComboBox<>();
@@ -141,12 +147,32 @@ public class AdminDashboard extends BaseDashboard {
         };
         
         JTable userTable = new JTable(data, columnNames);
+        userTable.setDefaultEditor(Object.class, null); // Make the table non-editable
+        userTable.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
+        
+        userTable.addMouseListener(new java.awt.event.MouseAdapter() {
+            @Override
+            public void mouseClicked(java.awt.event.MouseEvent e) {
+                if (e.getClickCount() == 2) {
+                    int row = userTable.getSelectedRow();
+                    if (row >= 0) {
+                        idField.setText((String) userTable.getValueAt(row, 0));
+                        usernameField.setText((String) userTable.getValueAt(row, 1));
+                        nameField.setText((String) userTable.getValueAt(row, 2));
+                        roleCombo.setSelectedItem((String) userTable.getValueAt(row, 3));
+                        emailField.setText((String) userTable.getValueAt(row, 4));
+                        passwordField.setText("");
+                    }
+                }
+            }
+        });
+        
         JScrollPane scrollPane = new JScrollPane(userTable);
         
         // Combine components
         panel.add(formPanel, BorderLayout.NORTH);
-        panel.add(buttonPanel, BorderLayout.CENTER);
-        panel.add(scrollPane, BorderLayout.SOUTH);
+        panel.add(scrollPane, BorderLayout.CENTER);
+        panel.add(buttonPanel, BorderLayout.SOUTH);
         
         return panel;
     }

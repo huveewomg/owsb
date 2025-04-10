@@ -135,6 +135,7 @@ public class SalesManagerDashboard extends BaseDashboard {
         };
         
         JTable itemTable = new JTable(data, columnNames);
+        itemTable.setDefaultEditor(Object.class, null); // Make the table non-editable
         JScrollPane scrollPane = new JScrollPane(itemTable);
         
         // Combine components
@@ -176,6 +177,7 @@ public class SalesManagerDashboard extends BaseDashboard {
         };
         
         JTable supplierTable = new JTable(data, columnNames);
+        supplierTable.setDefaultEditor(Object.class, null); // Make the table non-editable
         JScrollPane scrollPane = new JScrollPane(supplierTable);
         
         // Combine components
@@ -221,6 +223,7 @@ public class SalesManagerDashboard extends BaseDashboard {
         };
         
         JTable salesTable = new JTable(data, columnNames);
+        salesTable.setDefaultEditor(Object.class, null); // Make the table non-editable
         JScrollPane scrollPane = new JScrollPane(salesTable);
         
         // Combine components
@@ -271,6 +274,7 @@ public class SalesManagerDashboard extends BaseDashboard {
         };
         
         JTable prTable = new JTable(data, columnNames);
+        prTable.setDefaultEditor(Object.class, null); // Make the table non-editable
         JScrollPane scrollPane = new JScrollPane(prTable);
         
         // Combine components
@@ -333,6 +337,7 @@ public class SalesManagerDashboard extends BaseDashboard {
         };
         
         JTable poTable = new JTable(data, columnNames);
+        poTable.setDefaultEditor(Object.class, null); // Make the table non-editable
         JScrollPane scrollPane = new JScrollPane(poTable);
         panel.add(scrollPane, BorderLayout.CENTER);
         

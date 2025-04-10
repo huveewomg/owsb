@@ -173,6 +173,7 @@ public class FinanceManagerDashboard extends BaseDashboard {
         panel.add(label, BorderLayout.NORTH);
         
         JTable table = new JTable(data, columnNames);
+        table.setDefaultEditor(Object.class, null); // Make the table non-editable
         JScrollPane scrollPane = new JScrollPane(table);
         panel.add(scrollPane, BorderLayout.CENTER);
         

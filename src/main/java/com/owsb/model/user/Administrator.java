@@ -33,25 +33,4 @@ public class Administrator extends User {
         return true;
     }
     
-    /**
-     * Admin-specific method for user creation
-     * @param user User to create
-     * @return Whether creation was successful
-     */
-    public boolean createUser(User user) {
-        // Implementation would save user to the users.txt file
-        // For demo purposes, just return true
-        return true;
-    }
-    
-    /**
-     * Admin-specific method for user deletion
-     * @param userId ID of user to delete
-     * @return Whether deletion was successful
-     */
-    public boolean deleteUser(String userId) {
-        // Implementation would remove user from the users.txt file
-        // For demo purposes, just return true
-        return true;
-    }
 }

@@ -4,6 +4,7 @@ import com.owsb.controller.AuthController;
 import com.owsb.model.User;
 import com.owsb.model.user.Administrator;
 import com.owsb.util.UserRole;
+import com.owsb.view.user.UserManagementPanel;
 
 import javax.swing.*;
 import java.awt.*;
@@ -15,7 +16,7 @@ import java.awt.*;
 public class AdminDashboard extends BaseDashboard {
     
     // Admin-specific components
-    private JPanel userManagementPanel;
+    private UserManagementPanel userManagementPanel;
     private JPanel systemConfigPanel;
     
     /**
@@ -74,14 +75,8 @@ public class AdminDashboard extends BaseDashboard {
      */
     private void initPanels() {
         // User management panel
-        userManagementPanel = new JPanel(new BorderLayout());
-        JLabel userLabel = new JLabel("User Management", JLabel.CENTER);
-        userLabel.setFont(new Font("Arial", Font.BOLD, 18));
-        userManagementPanel.add(userLabel, BorderLayout.NORTH);
-        
-        JPanel userContent = createUserManagementContent();
-        userManagementPanel.add(userContent, BorderLayout.CENTER);
-        
+        userManagementPanel = new UserManagementPanel(authController);
+
         // System configuration panel
         systemConfigPanel = new JPanel(new BorderLayout());
         JLabel configLabel = new JLabel("System Configuration", JLabel.CENTER);
@@ -91,92 +86,7 @@ public class AdminDashboard extends BaseDashboard {
         JPanel configContent = createSystemConfigContent();
         systemConfigPanel.add(configContent, BorderLayout.CENTER);
     }
-    
-    /**
-     * Create user management content
-     * @return User management panel
-     */
-    private JPanel createUserManagementContent() {
-        JPanel panel = new JPanel(new BorderLayout());
-        panel.setBorder(BorderFactory.createEmptyBorder(10, 10, 10, 10));
-        
-        // User creation form
-        JPanel formPanel = new JPanel(new GridLayout(6, 2, 10, 10));
-        
-        formPanel.add(new JLabel("User ID:"));
-        JTextField idField = new JTextField();
-        idField.setEditable(false); // readonly
-        formPanel.add(idField);
-        
-        formPanel.add(new JLabel("Username:"));
-        JTextField usernameField = new JTextField();
-        formPanel.add(usernameField);
-        
-        formPanel.add(new JLabel("Password:"));
-        JPasswordField passwordField = new JPasswordField();
-        formPanel.add(passwordField);
-        
-        formPanel.add(new JLabel("Full Name:"));
-        JTextField nameField = new JTextField();
-        formPanel.add(nameField);
-        
-        formPanel.add(new JLabel("Email:"));
-        JTextField emailField = new JTextField();
-        formPanel.add(emailField);
-        
-        formPanel.add(new JLabel("Role:"));
-        JComboBox<String> roleCombo = new JComboBox<>();
-        for (UserRole role : UserRole.values()) {
-            roleCombo.addItem(role.getDisplayName());
-        }
-        formPanel.add(roleCombo);
-        
-        // Button panel
-        JPanel buttonPanel = new JPanel();
-        buttonPanel.add(new JButton("Create User"));
-        buttonPanel.add(new JButton("Update User"));
-        buttonPanel.add(new JButton("Delete User"));
-        buttonPanel.add(new JButton("Reset Password"));
-        
-        // Mock user table
-        String[] columnNames = {"User ID", "Username", "Name", "Role", "Email"};
-        Object[][] data = {
-            {"U001", "john_doe", "John Doe", "Sales Manager", "john@example.com"},
-            {"U002", "jane_smith", "Jane Smith", "Purchase Manager", "jane@example.com"},
-            {"U003", "admin", "Admin User", "Administrator", "admin@example.com"}
-        };
-        
-        JTable userTable = new JTable(data, columnNames);
-        userTable.setDefaultEditor(Object.class, null); // Make the table non-editable
-        userTable.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
-        
-        userTable.addMouseListener(new java.awt.event.MouseAdapter() {
-            @Override
-            public void mouseClicked(java.awt.event.MouseEvent e) {
-                if (e.getClickCount() == 2) {
-                    int row = userTable.getSelectedRow();
-                    if (row >= 0) {
-                        idField.setText((String) userTable.getValueAt(row, 0));
-                        usernameField.setText((String) userTable.getValueAt(row, 1));
-                        nameField.setText((String) userTable.getValueAt(row, 2));
-                        roleCombo.setSelectedItem((String) userTable.getValueAt(row, 3));
-                        emailField.setText((String) userTable.getValueAt(row, 4));
-                        passwordField.setText("");
-                    }
-                }
-            }
-        });
-        
-        JScrollPane scrollPane = new JScrollPane(userTable);
-        
-        // Combine components
-        panel.add(formPanel, BorderLayout.NORTH);
-        panel.add(scrollPane, BorderLayout.CENTER);
-        panel.add(buttonPanel, BorderLayout.SOUTH);
-        
-        return panel;
-    }
-    
+      
     /**
      * Create system configuration content
      * @return System configuration panel

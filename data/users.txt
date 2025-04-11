@@ -38,5 +38,13 @@
     "name": "Sarah Finance",
     "role": "FINANCE_MANAGER",
     "email": "sarah@owsb.com"
+  },
+  {
+    "userID": "U006",
+    "username": "test1",
+    "password": "666",
+    "name": "test john",
+    "role": "ADMIN",
+    "email": "test@gmail.com"
   }
 ]

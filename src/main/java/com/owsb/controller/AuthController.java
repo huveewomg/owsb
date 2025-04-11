@@ -155,6 +155,199 @@ public class AuthController {
             return false;
         }
     }
+
+        /**
+     * Register a new user
+     * @param username Username
+     * @param password Password
+     * @param name Full name
+     * @param email Email
+     * @param role User role
+     * @return true if registration successful, false otherwise
+     */
+    public boolean registerUser(String username, String password, String name, String email, UserRole role) {
+        try {
+            // Validate input
+            if (username == null || username.trim().isEmpty() ||
+                password == null || password.trim().isEmpty() ||
+                name == null || name.trim().isEmpty()) {
+                return false;
+            }
+            
+            // Check if username already exists
+            List<User> existingUsers = getAllUsers();
+            for (User user : existingUsers) {
+                if (user.getUsername().equals(username)) {
+                    return false; // Username already exists
+                }
+            }
+            
+            // Generate a unique user ID
+            String userId = generateUserId();
+            
+            // Create new user through factory
+            User newUser = UserFactory.createUser(userId, username, password, name, role, email);
+            
+            // Save user
+            return saveUser(newUser);
+        } catch (IOException e) {
+            System.err.println("Error registering user: " + e.getMessage());
+            return false;
+        }
+    }
+    
+    /**
+     * Update an existing user
+     * @param userId User ID to update
+     * @param username New username
+     * @param name New name
+     * @param email New email
+     * @param role New role
+     * @return true if update successful, false otherwise
+     */
+    public boolean updateUser(String userId, String username, String name, String email, UserRole role) {
+        try {
+            // Get all users
+            List<User> users = getAllUsers();
+            
+            // Check if username already exists (for a different user)
+            for (User user : users) {
+                if (user.getUsername().equals(username) && !user.getUserId().equals(userId)) {
+                    return false; // Username already exists for a different user
+                }
+            }
+            
+            // Find and update user
+            for (User user : users) {
+                if (user.getUserId().equals(userId)) {
+                    user.setUsername(username);
+                    user.setName(name);
+                    user.setEmail(email);
+                    
+                    // Only update role if different (would require creating a new user object)
+                    if (user.getRole() != role) {
+                        // Get current password
+                        String password = user.getPassword();
+                        
+                        // Create new user with updated role
+                        User updatedUser = UserFactory.createUser(userId, username, password, name, role, email);
+                        
+                        // Remove old user
+                        users.remove(user);
+                        
+                        // Add updated user
+                        users.add(updatedUser);
+                    }
+                    
+                    // Save all users
+                    saveUsers(users);
+                    return true;
+                }
+            }
+            
+            return false; // User not found
+        } catch (IOException e) {
+            System.err.println("Error updating user: " + e.getMessage());
+            return false;
+        }
+    }
+
+    /**
+     * Update user password
+     * @param userId User ID
+     * @param newPassword New password
+     * @return true if update successful, false otherwise
+     */
+    public boolean updatePassword(String userId, String newPassword) {
+        try {
+            if (newPassword == null || newPassword.trim().isEmpty()) {
+                return false;
+            }
+            
+            List<User> users = getAllUsers();
+            
+            for (User user : users) {
+                if (user.getUserId().equals(userId)) {
+                    user.setPassword(newPassword);
+                    saveUsers(users);
+                    return true;
+                }
+            }
+            
+            return false; // User not found
+        } catch (IOException e) {
+            System.err.println("Error updating password: " + e.getMessage());
+            return false;
+        }
+    }
+
+    /**
+     * Delete a user
+     * @param userId User ID to delete
+     * @return true if deletion successful, false otherwise
+     */
+    public boolean deleteUser(String userId) {
+        try {
+            List<User> users = getAllUsers();
+            
+            for (int i = 0; i < users.size(); i++) {
+                if (users.get(i).getUserId().equals(userId)) {
+                    users.remove(i);
+                    saveUsers(users);
+                    return true;
+                }
+            }
+            
+            return false; // User not found
+        } catch (IOException e) {
+            System.err.println("Error deleting user: " + e.getMessage());
+            return false;
+        }
+    }
+
+    /**
+     * Save all users to file
+     * @param users List of users to save
+     * @return true if save successful, false otherwise
+     */
+    private boolean saveUsers(List<User> users) throws IOException {
+        List<UserDTO> userDTOs = new ArrayList<>();
+        
+        for (User user : users) {
+            userDTOs.add(userToDTO(user));
+        }
+        
+        FileUtils.writeListToJson(Constants.USER_FILE, userDTOs);
+        return true;
+    }
+
+        
+    /**
+     * Generate a unique user ID
+     * @return New user ID
+     */
+    private String generateUserId() throws IOException {
+        List<User> users = getAllUsers();
+        
+        // Find the highest user ID number
+        int highestId = 0;
+        for (User user : users) {
+            String userId = user.getUserId();
+            if (userId.startsWith("U")) {
+                try {
+                    int idNum = Integer.parseInt(userId.substring(1));
+                    if (idNum > highestId) {
+                        highestId = idNum;
+                    }
+                } catch (NumberFormatException e) {
+                    // Ignore non-numeric IDs
+                }
+            }
+        }
+        
+        // Create a new ID that's one higher
+        return String.format("U%03d", highestId + 1);
+    }
     
     /**
      * Convert User to UserDTO

@@ -20,8 +20,6 @@ public class SalesManager extends User {
     public SalesManager(String userId, String username, String password, String name, String email) {
         super(userId, username, password, name, UserRole.SALES_MANAGER, email);
     }
-
-    //MAKE SOME CHANGES
     
     /**
      * POLYMORPHISM: Override of hasAccess method

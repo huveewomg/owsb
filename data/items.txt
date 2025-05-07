@@ -1,0 +1,92 @@
+[
+  {
+    "itemID": "IT001",
+    "name": "Rice 5kg",
+    "description": "Premium jasmine rice",
+    "unitPrice": 25.50,
+    "category": "Groceries",
+    "supplierID": "SUP001",
+    "dateAdded": "2025-01-15"
+  },
+  {
+    "itemID": "IT002",
+    "name": "Sugar 1kg",
+    "description": "Refined white sugar",
+    "unitPrice": 8.75,
+    "category": "Groceries",
+    "supplierID": "SUP001",
+    "dateAdded": "2025-01-15"
+  },
+  {
+    "itemID": "IT003",
+    "name": "Flour 1kg",
+    "description": "All-purpose flour",
+    "unitPrice": 6.50,
+    "category": "Groceries",
+    "supplierID": "SUP002",
+    "dateAdded": "2025-01-20"
+  },
+  {
+    "itemID": "IT004",
+    "name": "Cooking Oil 2L",
+    "description": "Vegetable cooking oil",
+    "unitPrice": 15.25,
+    "category": "Groceries",
+    "supplierID": "SUP003",
+    "dateAdded": "2025-01-22"
+  },
+  {
+    "itemID": "IT005",
+    "name": "Milk 1L",
+    "description": "Fresh full cream milk",
+    "unitPrice": 7.80,
+    "category": "Fresh Produce",
+    "supplierID": "SUP004",
+    "dateAdded": "2025-01-25"
+  },
+  {
+    "itemID": "IT006",
+    "name": "Eggs (12pk)",
+    "description": "Free-range eggs",
+    "unitPrice": 12.00,
+    "category": "Fresh Produce",
+    "supplierID": "SUP004",
+    "dateAdded": "2025-01-25"
+  },
+  {
+    "itemID": "IT007",
+    "name": "Chicken 1kg",
+    "description": "Fresh chicken breast",
+    "unitPrice": 18.50,
+    "category": "Fresh Produce",
+    "supplierID": "SUP005",
+    "dateAdded": "2025-02-01"
+  },
+  {
+    "itemID": "IT008",
+    "name": "Soap Bar",
+    "description": "Antibacterial soap",
+    "unitPrice": 3.25,
+    "category": "Essentials",
+    "supplierID": "SUP006",
+    "dateAdded": "2025-02-05"
+  },
+  {
+    "itemID": "IT009",
+    "name": "Toothpaste",
+    "description": "Mint flavor toothpaste",
+    "unitPrice": 4.50,
+    "category": "Essentials",
+    "supplierID": "SUP006",
+    "dateAdded": "2025-02-05"
+  },
+  {
+    "itemID": "IT010",
+    "name": "Toilet Paper (6pk)",
+    "description": "2-ply soft toilet paper",
+    "unitPrice": 9.90,
+    "category": "Essentials",
+    "supplierID": "SUP007",
+    "dateAdded": "2025-02-10"
+  }
+]

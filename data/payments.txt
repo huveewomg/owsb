@@ -1,0 +1,38 @@
+[
+  {
+    "paymentID": "PAY001",
+    "date": "2025-03-29",
+    "poID": "PO001",
+    "supplierID": "SUP001",
+    "amount": 1200.00,
+    "paymentMethod": "BANK_TRANSFER",
+    "referenceNumber": "BT20250329001",
+    "financeManagerID": "U005",
+    "status": "COMPLETED",
+    "notes": "Payment for rice stock"
+  },
+  {
+    "paymentID": "PAY002",
+    "date": "2025-03-30",
+    "poID": "PO002",
+    "supplierID": "SUP001",
+    "amount": 850.00,
+    "paymentMethod": "BANK_TRANSFER",
+    "referenceNumber": "BT20250330002",
+    "financeManagerID": "U005",
+    "status": "COMPLETED",
+    "notes": "Payment for sugar stock"
+  },
+  {
+    "paymentID": "PAY003",
+    "date": "2025-04-02",
+    "poID": "PO003",
+    "supplierID": "SUP003",
+    "amount": 600.00,
+    "paymentMethod": "BANK_TRANSFER",
+    "referenceNumber": "BT20250402003",
+    "financeManagerID": "U005",
+    "status": "PENDING",
+    "notes": "Scheduled payment for cooking oil"
+  }
+]

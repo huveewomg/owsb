@@ -42,6 +42,7 @@ public class SalesManagerDashboard extends BaseDashboard {
         
         // Initialize controllers
         this.itemController = new ItemController();
+        this.itemController.setCurrentUser(user);
         this.supplierController = new SupplierController();
         // this.prController = new PurchaseRequisitionController();
         

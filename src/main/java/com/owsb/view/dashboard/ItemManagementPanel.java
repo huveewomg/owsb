@@ -80,7 +80,7 @@ public class ItemManagementPanel extends JPanel {
         nameField = new JTextField();
         descriptionField = new JTextField();
         priceField = new JTextField();
-        categoryCombo = new JComboBox<>(new String[]{"Groceries", "Fresh Produce", "Essentials"});
+        categoryCombo = new JComboBox<>(new String[]{"Groceries", "Fresh Produce", "Essentials"}); // Need Refactor
         
         fieldsPanel.add(new JLabel("Item Code:"));
         fieldsPanel.add(itemCodeLabel);
@@ -116,7 +116,7 @@ public class ItemManagementPanel extends JPanel {
                 
                 // Use controller to add item
                 boolean success = itemController.addItem(name, description, price, category, 
-                                                       "SUP001"); // Default supplier for simplicity
+                                                       "SUP001"); // Need Refactor become fetch from supplier table
                 
                 if (success) {
                     JOptionPane.showMessageDialog(panel, "Item added successfully.");

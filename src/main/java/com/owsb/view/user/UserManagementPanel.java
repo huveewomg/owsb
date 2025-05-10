@@ -7,12 +7,12 @@ import com.owsb.util.UserRole;
 import javax.swing.*;
 import javax.swing.table.DefaultTableModel;
 import java.awt.*;
-import java.io.IOException;
 import java.util.List;
 
 /**
  * Panel for user management operations
  * Implements MVC pattern by separating UI from logic
+ * Uses Repository pattern via the AuthController
  */
 public class UserManagementPanel extends JPanel {
     // UI Components
@@ -192,34 +192,26 @@ public class UserManagementPanel extends JPanel {
      * Load user data from controller
      */
     private void loadUserData() {
-        try {
-            // Clear table
-            tableModel.setRowCount(0);
-            
-            // Load users from controller
-            List<User> users = authController.getAllUsers();
-            
-            // Add users to table
-            for (User user : users) {
-                Object[] row = {
-                    user.getUserId(),
-                    user.getUsername(),
-                    user.getName(),
-                    user.getRole().getDisplayName(),
-                    user.getEmail()
-                };
-                tableModel.addRow(row);
-            }
-            
-            // Clear selection
-            clearForm();
-            
-        } catch (IOException e) {
-            JOptionPane.showMessageDialog(this,
-                "Error loading users: " + e.getMessage(),
-                "Error",
-                JOptionPane.ERROR_MESSAGE);
+        // Clear table
+        tableModel.setRowCount(0);
+        
+        // Load users from controller
+        List<User> users = authController.getAllUsers();
+        
+        // Add users to table
+        for (User user : users) {
+            Object[] row = {
+                user.getUserId(),
+                user.getUsername(),
+                user.getName(),
+                user.getRole().getDisplayName(),
+                user.getEmail()
+            };
+            tableModel.addRow(row);
         }
+        
+        // Clear selection
+        clearForm();
     }
     
     /**
@@ -227,48 +219,36 @@ public class UserManagementPanel extends JPanel {
      * @param userId User ID to select
      */
     private void selectUser(String userId) {
-        try {
-            // Find user
-            List<User> users = authController.getAllUsers();
+        // Find user by ID using controller
+        User user = authController.getUserById(userId);
+        
+        if (user != null) {
+            // Set selected user
+            selectedUser = user;
             
-            for (User user : users) {
-                if (user.getUserId().equals(userId)) {
-                    // Set selected user
-                    selectedUser = user;
-                    
-                    // Populate form
-                    idField.setText(user.getUserId());
-                    usernameField.setText(user.getUsername());
-                    passwordField.setText(""); // Don't show password
-                    nameField.setText(user.getName());
-                    emailField.setText(user.getEmail());
-                    
-                    // Set role in combo box
-                    for (int i = 0; i < UserRole.values().length; i++) {
-                        if (UserRole.values()[i] == user.getRole()) {
-                            roleCombo.setSelectedIndex(i);
-                            break;
-                        }
-                    }
-                    
-                    // Enable/disable buttons
-                    updateButton.setEnabled(true);
-                    deleteButton.setEnabled(true);
-                    resetPasswordButton.setEnabled(true);
-                    createButton.setEnabled(false);
-                    
-                    return;
+            // Populate form
+            idField.setText(user.getUserId());
+            usernameField.setText(user.getUsername());
+            passwordField.setText(""); // Don't show password
+            nameField.setText(user.getName());
+            emailField.setText(user.getEmail());
+            
+            // Set role in combo box
+            for (int i = 0; i < UserRole.values().length; i++) {
+                if (UserRole.values()[i] == user.getRole()) {
+                    roleCombo.setSelectedIndex(i);
+                    break;
                 }
             }
             
+            // Enable/disable buttons
+            updateButton.setEnabled(true);
+            deleteButton.setEnabled(true);
+            resetPasswordButton.setEnabled(true);
+            createButton.setEnabled(false);
+        } else {
             // User not found
             clearForm();
-            
-        } catch (IOException e) {
-            JOptionPane.showMessageDialog(this,
-                "Error selecting user: " + e.getMessage(),
-                "Error",
-                JOptionPane.ERROR_MESSAGE);
         }
     }
     

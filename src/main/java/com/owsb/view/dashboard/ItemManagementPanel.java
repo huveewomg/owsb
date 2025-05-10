@@ -83,7 +83,7 @@ public class ItemManagementPanel extends JPanel {
         nameField = new JTextField();
         descriptionField = new JTextField();
         priceField = new JTextField();
-        categoryCombo = new JComboBox<>(new String[]{"Groceries", "Fresh Produce", "Essentials"});
+        categoryCombo = new JComboBox<>(new String[]{"Groceries", "Fresh Produce", "Essentials"}); //HACK: Hardcoded categories
         supplierCombo = new JComboBox<>();
         
         // Populate supplier combo box

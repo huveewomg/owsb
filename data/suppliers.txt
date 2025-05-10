@@ -3,42 +3,36 @@
     "supplierID": "SUP001",
     "name": "ABC Groceries Sdn Bhd",
     "contactPerson": "John Smith",
-    "phoneNumber": "03-1234-5678"
+    "phone": "019-710 0379"
   },
   {
     "supplierID": "SUP002",
     "name": "XYZ Distributors",
     "contactPerson": "Mary Wong",
-    "phoneNumber": "03-8765-4321"
+    "phone": "016-586 9092"
   },
   {
     "supplierID": "SUP003",
     "name": "Golden Foods Sdn Bhd",
     "contactPerson": "Ali bin Hassan",
-    "phoneNumber": "03-2345-6789"
+    "phone": "011-3959 9451"
   },
   {
     "supplierID": "SUP004",
     "name": "Fresh Dairy Products",
     "contactPerson": "Sarah Tan",
-    "phoneNumber": "03-3456-7890"
+    "phone": "017-124 6406"
   },
   {
     "supplierID": "SUP005",
     "name": "Premium Poultry Supply",
     "contactPerson": "Ahmad bin Ismail",
-    "phoneNumber": "03-4567-8901"
+    "phone": "019-670 4632"
   },
   {
     "supplierID": "SUP006",
     "name": "Hygiene Essentials Co.",
     "contactPerson": "Lisa Lim",
-    "phoneNumber": "03-5678-9012"
-  },
-  {
-    "supplierID": "SUP007",
-    "name": "HomeGoods Trading",
-    "contactPerson": "Michael Chong",
-    "phoneNumber": "03-6789-0123"
+    "phone": "03-8375 7556"
   }
 ]

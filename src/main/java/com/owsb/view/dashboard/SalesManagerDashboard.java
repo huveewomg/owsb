@@ -6,6 +6,8 @@ import com.owsb.controller.SupplierController;
 // import com.owsb.controller.PurchaseRequisitionController;
 import com.owsb.model.User;
 import com.owsb.model.user.SalesManager;
+import com.owsb.view.item.ItemManagementPanel;
+import com.owsb.view.supplier.SupplierManagementPanel;
 
 import javax.swing.*;
 import java.awt.*;

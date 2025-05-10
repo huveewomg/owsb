@@ -1,4 +1,4 @@
-package com.owsb.view.dashboard;
+package com.owsb.view.supplier;
 
 import com.owsb.controller.SupplierController;
 import com.owsb.model.Supplier;
@@ -167,6 +167,7 @@ public class SupplierManagementPanel extends JPanel {
                 
                 if (success) {
                     JOptionPane.showMessageDialog(panel, "Supplier deleted successfully.");
+                    clearForm();
                     refreshSupplierTable();
                 } else {
                     JOptionPane.showMessageDialog(panel, "Failed to delete supplier.", 

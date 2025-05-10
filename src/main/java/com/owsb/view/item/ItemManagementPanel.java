@@ -1,4 +1,4 @@
-package com.owsb.view.dashboard;
+package com.owsb.view.item;
 
 import com.owsb.controller.ItemController;
 import com.owsb.model.Item;

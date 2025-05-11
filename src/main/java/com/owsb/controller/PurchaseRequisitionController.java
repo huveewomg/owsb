@@ -280,6 +280,33 @@ public class PurchaseRequisitionController {
                 item.getUnitPrice()
         );
     }
+    /**
+     * Check if an item already has pending purchase requisitions
+     * @param itemId Item ID to check
+     * @return Information about existing PRs, or null if none exist
+     */
+    public String checkExistingPendingPR(String itemId) {
+        List<PurchaseRequisition> pendingPRs = new ArrayList<>();
+        pendingPRs.addAll(prRepository.findByStatus(Status.NEW));
+        pendingPRs.addAll(prRepository.findByStatus(Status.PENDING_APPROVAL));
+        
+        StringBuilder result = new StringBuilder();
+        
+        for (PurchaseRequisition pr : pendingPRs) {
+            for (PRItem item : pr.getItems()) {
+                if (item.getItemID().equals(itemId)) {
+                    if (result.length() > 0) {
+                        result.append(", ");
+                    }
+                    result.append("PR #").append(pr.getPrID())
+                        .append(" (").append(pr.getStatus().getDisplayName())
+                        .append(", Qty: ").append(item.getQuantity()).append(")");
+                }
+            }
+        }
+        
+        return result.length() > 0 ? result.toString() : null;
+    }
     
     /**
      * Get suggested order quantity for an item

@@ -359,6 +359,26 @@ public class PurchaseRequisitionCreationPanel extends JPanel {
                 continue;
             }
             
+            // Check for existing PRs for this item
+            String existingPRs = prController.checkExistingPendingPR(item.getItemID());
+            
+            if (existingPRs != null) {
+                // Show warning with option to proceed
+                String message = "Item " + item.getItemID() + " already has pending purchase requisitions:\n" + 
+                                 existingPRs + "\n\n" +
+                                 "Do you want to include this item in the current PR?";
+                
+                int result = JOptionPane.showConfirmDialog(this, 
+                        message, 
+                        "Duplicate PR Warning", 
+                        JOptionPane.YES_NO_OPTION,
+                        JOptionPane.WARNING_MESSAGE);
+                
+                if (result != JOptionPane.YES_OPTION) {
+                    continue; // Skip this item and move to the next one
+                }
+            }
+            
             // Create PR item
             PRItem prItem = prController.createPRItemFromItem(item, suggestedQuantity);
             prItems.add(prItem);
@@ -387,6 +407,26 @@ public class PurchaseRequisitionCreationPanel extends JPanel {
         }
         
         Item selectedItem = selectedWrapper.getItem();
+        
+        // Check for existing PRs for this item
+        String existingPRs = prController.checkExistingPendingPR(selectedItem.getItemID());
+        
+        if (existingPRs != null) {
+            // Show warning with option to proceed
+            String message = "This item already has pending purchase requisitions:\n" + 
+                             existingPRs + "\n\n" +
+                             "Do you still want to add this item to the current PR?";
+            
+            int result = JOptionPane.showConfirmDialog(this, 
+                    message, 
+                    "Duplicate PR Warning", 
+                    JOptionPane.YES_NO_OPTION,
+                    JOptionPane.WARNING_MESSAGE);
+            
+            if (result != JOptionPane.YES_OPTION) {
+                return;
+            }
+        }
         
         // Get quantity
         int quantity = (int) quantitySpinner.getValue();
@@ -767,5 +807,4 @@ public class PurchaseRequisitionCreationPanel extends JPanel {
         }
     }
     
-    // Currency renderer is now implemented directly in the initComponents method
 }

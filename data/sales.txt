@@ -1,136 +1,21 @@
 [
   {
-    "saleID": "SL001",
-    "date": "2025-03-28",
-    "itemID": "IT001",
-    "quantity": 25,
-    "salesAmount": 637.50,
-    "salesManagerID": "U002",
-    "notes": "Bulk purchase by regular customer"
-  },
-  {
-    "saleID": "SL002",
-    "date": "2025-03-28",
-    "itemID": "IT002",
-    "quantity": 15,
-    "salesAmount": 131.25,
-    "salesManagerID": "U002",
-    "notes": ""
-  },
-  {
-    "saleID": "SL003",
-    "date": "2025-03-28",
-    "itemID": "IT005",
-    "quantity": 30,
-    "salesAmount": 234.00,
-    "salesManagerID": "U002",
-    "notes": "Promotion day"
-  },
-  {
-    "saleID": "SL004",
-    "date": "2025-03-29",
-    "itemID": "IT003",
-    "quantity": 10,
-    "salesAmount": 65.00,
-    "salesManagerID": "U002",
-    "notes": ""
-  },
-  {
-    "saleID": "SL005",
-    "date": "2025-03-29",
+    "saleID": "SL016",
+    "date": "May 11, 2025, 12:00:00 AM",
     "itemID": "IT004",
-    "quantity": 12,
-    "salesAmount": 183.00,
-    "salesManagerID": "U002",
-    "notes": ""
-  },
-  {
-    "saleID": "SL006",
-    "date": "2025-03-30",
-    "itemID": "IT006",
-    "quantity": 20,
-    "salesAmount": 240.00,
-    "salesManagerID": "U002",
-    "notes": "Weekend special"
-  },
-  {
-    "saleID": "SL007",
-    "date": "2025-03-30",
-    "itemID": "IT007",
+    "itemName": "Cooking Oil 2L",
     "quantity": 15,
-    "salesAmount": 277.50,
-    "salesManagerID": "U002",
-    "notes": "Weekend special"
-  },
-  {
-    "saleID": "SL008",
-    "date": "2025-03-31",
-    "itemID": "IT008",
-    "quantity": 25,
-    "salesAmount": 81.25,
-    "salesManagerID": "U002",
-    "notes": "End of month sale"
-  },
-  {
-    "saleID": "SL009",
-    "date": "2025-03-31",
-    "itemID": "IT009",
-    "quantity": 18,
-    "salesAmount": 81.00,
-    "salesManagerID": "U002",
-    "notes": "End of month sale"
-  },
-  {
-    "saleID": "SL010",
-    "date": "2025-03-31",
-    "itemID": "IT010",
-    "quantity": 22,
-    "salesAmount": 217.80,
-    "salesManagerID": "U002",
-    "notes": "End of month sale"
-  },
-  {
-    "saleID": "SL011",
-    "date": "2025-04-01",
-    "itemID": "IT001",
-    "quantity": 15,
-    "salesAmount": 382.50,
+    "salesAmount": 228.75,
     "salesManagerID": "U002",
     "notes": ""
   },
   {
-    "saleID": "SL012",
-    "date": "2025-04-01",
-    "itemID": "IT002",
-    "quantity": 10,
-    "salesAmount": 87.50,
-    "salesManagerID": "U002",
-    "notes": ""
-  },
-  {
-    "saleID": "SL013",
-    "date": "2025-04-02",
-    "itemID": "IT003",
-    "quantity": 12,
-    "salesAmount": 78.00,
-    "salesManagerID": "U002",
-    "notes": ""
-  },
-  {
-    "saleID": "SL014",
-    "date": "2025-04-02",
+    "saleID": "SL017",
+    "date": "Apr 2, 2025, 12:00:00 AM",
     "itemID": "IT004",
-    "quantity": 8,
-    "salesAmount": 122.00,
-    "salesManagerID": "U002",
-    "notes": ""
-  },
-  {
-    "saleID": "SL015",
-    "date": "2025-04-03",
-    "itemID": "IT005",
-    "quantity": 20,
-    "salesAmount": 156.00,
+    "itemName": "Cooking Oil 2L",
+    "quantity": 3,
+    "salesAmount": 45.75,
     "salesManagerID": "U002",
     "notes": ""
   }

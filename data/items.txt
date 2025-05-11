@@ -20,7 +20,7 @@
     "category": "Groceries",
     "supplierID": "SUP001",
     "dateAdded": "2025-01-15",
-    "currentStock": 85,
+    "currentStock": 100,
     "minimumStock": 40,
     "maximumStock": 150,
     "lastUpdated": "2025-04-02"
@@ -46,7 +46,7 @@
     "category": "Groceries",
     "supplierID": "SUP003",
     "dateAdded": "2025-01-22",
-    "currentStock": 95,
+    "currentStock": 85,
     "minimumStock": 40,
     "maximumStock": 120,
     "lastUpdated": "2025-04-02"

@@ -2,11 +2,13 @@ package com.owsb.view.dashboard;
 
 import com.owsb.controller.AuthController;
 import com.owsb.controller.ItemController;
+import com.owsb.controller.SalesController;
 import com.owsb.controller.SupplierController;
 // import com.owsb.controller.PurchaseRequisitionController;
 import com.owsb.model.User;
 import com.owsb.model.user.SalesManager;
 import com.owsb.view.item.ItemManagementPanel;
+import com.owsb.view.sales.SalesEntryPanel;
 import com.owsb.view.supplier.SupplierManagementPanel;
 
 import javax.swing.*;
@@ -21,12 +23,13 @@ public class SalesManagerDashboard extends BaseDashboard {
     // Dedicated management panels
     private ItemManagementPanel itemPanel;
     private SupplierManagementPanel supplierPanel;
-    private JPanel salesPanel;
+    private SalesEntryPanel salesPanel;
     private JPanel requisitionPanel;
     
     // Controllers - using composition to implement functionality
     private final ItemController itemController;
     private final SupplierController supplierController;
+    private final SalesController salesController;
     // private final PurchaseRequisitionController prController;
     
     /**
@@ -46,6 +49,8 @@ public class SalesManagerDashboard extends BaseDashboard {
         this.itemController = new ItemController();
         this.itemController.setCurrentUser(user);
         this.supplierController = new SupplierController();
+        this.salesController = new SalesController();
+        this.salesController.setCurrentUser(user);
         // this.prController = new PurchaseRequisitionController();
         
         // Initialize UI components
@@ -85,17 +90,8 @@ public class SalesManagerDashboard extends BaseDashboard {
         // Create dedicated panels using the new classes
         itemPanel = new ItemManagementPanel(itemController);
         supplierPanel = new SupplierManagementPanel(supplierController);
-        
-        // Sales entry panel placeholder
-        salesPanel = new JPanel(new BorderLayout());
-        JLabel salesLabel = new JLabel("Daily Sales Entry", JLabel.CENTER);
-        salesLabel.setFont(new Font("Arial", Font.BOLD, 18));
-        salesPanel.add(salesLabel, BorderLayout.NORTH);
-        
-        JLabel salesPlaceholder = new JLabel("Sales entry functionality coming soon...", JLabel.CENTER);
-        salesPlaceholder.setFont(new Font("Arial", Font.ITALIC, 14));
-        salesPanel.add(salesPlaceholder, BorderLayout.CENTER);
-        
+        salesPanel = new SalesEntryPanel(salesController);
+                
         // Purchase requisition panel placeholder
         requisitionPanel = new JPanel(new BorderLayout());
         JLabel requisitionLabel = new JLabel("Purchase Requisitions", JLabel.CENTER);

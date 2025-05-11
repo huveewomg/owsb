@@ -158,7 +158,7 @@ public class PurchaseRequisitionRepository implements Repository<PurchaseRequisi
      */
     private boolean saveList(List<PurchaseRequisition> requisitions) {
         try {
-            FileUtils.createBackup(Constants.PR_FILE);
+            // FileUtils.createBackup(Constants.PR_FILE);
             FileUtils.writeListToJson(Constants.PR_FILE, requisitions);
             return true;
         } catch (IOException e) {

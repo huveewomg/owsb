@@ -2,12 +2,13 @@ package com.owsb.view.dashboard;
 
 import com.owsb.controller.AuthController;
 import com.owsb.controller.ItemController;
+import com.owsb.controller.PurchaseRequisitionController;
 import com.owsb.controller.SalesController;
 import com.owsb.controller.SupplierController;
-// import com.owsb.controller.PurchaseRequisitionController;
 import com.owsb.model.User;
 import com.owsb.model.user.SalesManager;
 import com.owsb.view.item.ItemManagementPanel;
+import com.owsb.view.requisition.PurchaseRequisitionPanel;
 import com.owsb.view.sales.SalesEntryPanel;
 import com.owsb.view.supplier.SupplierManagementPanel;
 
@@ -24,13 +25,13 @@ public class SalesManagerDashboard extends BaseDashboard {
     private ItemManagementPanel itemPanel;
     private SupplierManagementPanel supplierPanel;
     private SalesEntryPanel salesPanel;
-    private JPanel requisitionPanel;
+    private PurchaseRequisitionPanel requisitionPanel;
     
     // Controllers - using composition to implement functionality
     private final ItemController itemController;
     private final SupplierController supplierController;
     private final SalesController salesController;
-    // private final PurchaseRequisitionController prController;
+    private final PurchaseRequisitionController prController; // Added PR controller
     
     /**
      * Constructor for SalesManagerDashboard
@@ -51,7 +52,8 @@ public class SalesManagerDashboard extends BaseDashboard {
         this.supplierController = new SupplierController();
         this.salesController = new SalesController();
         this.salesController.setCurrentUser(user);
-        // this.prController = new PurchaseRequisitionController();
+        this.prController = new PurchaseRequisitionController();
+        this.prController.setCurrentUser(user);
         
         // Initialize UI components
         initPanels();
@@ -91,16 +93,9 @@ public class SalesManagerDashboard extends BaseDashboard {
         itemPanel = new ItemManagementPanel(itemController);
         supplierPanel = new SupplierManagementPanel(supplierController);
         salesPanel = new SalesEntryPanel(salesController);
-                
-        // Purchase requisition panel placeholder
-        requisitionPanel = new JPanel(new BorderLayout());
-        JLabel requisitionLabel = new JLabel("Purchase Requisitions", JLabel.CENTER);
-        requisitionLabel.setFont(new Font("Arial", Font.BOLD, 18));
-        requisitionPanel.add(requisitionLabel, BorderLayout.NORTH);
         
-        JLabel requisitionPlaceholder = new JLabel("Purchase requisition functionality coming soon...", JLabel.CENTER);
-        requisitionPlaceholder.setFont(new Font("Arial", Font.ITALIC, 14));
-        requisitionPanel.add(requisitionPlaceholder, BorderLayout.CENTER);
+        // Purchase requisition panel - now using the new PR panel
+        requisitionPanel = new PurchaseRequisitionPanel(prController, currentUser);
     }
     
     /**

@@ -1,125 +1,60 @@
 [
   {
-    "prID": "PR001",
-    "date": "2025-03-25",
+    "prID": "PR008",
+    "date": "May 11, 2025, 2:18:27 PM",
+    "requiredDate": "May 25, 2025, 2:14:42 PM",
     "salesManagerID": "U002",
-    "status": "PROCESSED",
-    "notes": "Regular stock replenishment",
+    "status": "NEW",
+    "notes": "PreStock before raya",
     "items": [
+      {
+        "itemID": "IT011",
+        "itemName": "test",
+        "quantity": 20,
+        "requiredDate": "May 25, 2025, 2:15:54 PM",
+        "suggestedSupplierID": "SUP001",
+        "unitPrice": 12.0,
+        "estimatedCost": 240.0
+      },
       {
         "itemID": "IT001",
-        "quantity": 50,
-        "requiredDate": "2025-04-05",
-        "suggestedSupplierID": "SUP001"
-      }
-    ]
-  },
-  {
-    "prID": "PR002",
-    "date": "2025-03-26",
-    "salesManagerID": "U002",
-    "status": "PROCESSED",
-    "notes": "Upcoming promotion needs",
-    "items": [
-      {
-        "itemID": "IT002",
-        "quantity": 100,
-        "requiredDate": "2025-04-10",
-        "suggestedSupplierID": "SUP001"
-      }
-    ]
-  },
-  {
-    "prID": "PR003",
-    "date": "2025-03-27",
-    "salesManagerID": "U002",
-    "status": "REJECTED",
-    "notes": "Stock approaching minimum level",
-    "items": [
-      {
-        "itemID": "IT003",
-        "quantity": 30,
-        "requiredDate": "2025-04-15",
-        "suggestedSupplierID": "SUP002"
-      }
-    ]
-  },
-  {
-    "prID": "PR004",
-    "date": "2025-03-28",
-    "salesManagerID": "U002",
-    "status": "PROCESSED",
-    "notes": "Stock replenishment",
-    "items": [
-      {
-        "itemID": "IT004",
-        "quantity": 40,
-        "requiredDate": "2025-04-20",
-        "suggestedSupplierID": "SUP003"
-      }
-    ]
-  },
-  {
-    "prID": "PR005",
-    "date": "2025-03-29",
-    "salesManagerID": "U002",
-    "status": "NEW",
-    "notes": "Weekly order for perishable goods",
-    "items": [
-      {
-        "itemID": "IT005",
-        "quantity": 60,
-        "requiredDate": "2025-04-05",
-        "suggestedSupplierID": "SUP004"
+        "itemName": "Rice 5kg",
+        "quantity": 25,
+        "requiredDate": "May 25, 2025, 2:17:33 PM",
+        "suggestedSupplierID": "SUP001",
+        "unitPrice": 25.5,
+        "estimatedCost": 637.5
       },
-      {
-        "itemID": "IT006",
-        "quantity": 40,
-        "requiredDate": "2025-04-05",
-        "suggestedSupplierID": "SUP004"
-      }
-    ]
-  },
-  {
-    "prID": "PR006",
-    "date": "2025-03-30",
-    "salesManagerID": "U002",
-    "status": "NEW",
-    "notes": "Stock approaching minimum level",
-    "items": [
       {
         "itemID": "IT007",
-        "quantity": 35,
-        "requiredDate": "2025-04-07",
-        "suggestedSupplierID": "SUP005"
+        "itemName": "Chicken 1kg",
+        "quantity": 5,
+        "requiredDate": "May 25, 2025, 2:34:06 PM",
+        "suggestedSupplierID": "SUP005",
+        "unitPrice": 18.5,
+        "estimatedCost": 92.5
       }
-    ]
+    ],
+    "estimatedTotal": 970.0
   },
   {
-    "prID": "PR007",
-    "date": "2025-04-01",
+    "prID": "PR009",
+    "date": "May 11, 2025, 2:24:42 PM",
+    "requiredDate": "May 25, 2024, 12:00:00 AM",
     "salesManagerID": "U002",
-    "status": "NEW",
-    "notes": "Monthly essentials order",
+    "status": "PENDING_APPROVAL",
+    "notes": "",
     "items": [
       {
-        "itemID": "IT008",
-        "quantity": 80,
-        "requiredDate": "2025-04-15",
-        "suggestedSupplierID": "SUP006"
-      },
-      {
-        "itemID": "IT009",
-        "quantity": 60,
-        "requiredDate": "2025-04-15",
-        "suggestedSupplierID": "SUP006"
-      },
-      {
-        "itemID": "IT010",
-        "quantity": 40,
-        "requiredDate": "2025-04-15",
-        "suggestedSupplierID": "SUP007"
+        "itemID": "IT011",
+        "itemName": "test",
+        "quantity": 15,
+        "requiredDate": "May 25, 2025, 2:24:24 PM",
+        "suggestedSupplierID": "SUP001",
+        "unitPrice": 12.0,
+        "estimatedCost": 180.0
       }
-    ]
+    ],
+    "estimatedTotal": 180.0
   }
 ]

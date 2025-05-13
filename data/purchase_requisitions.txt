@@ -42,7 +42,7 @@
     "date": "May 11, 2025, 2:24:42 PM",
     "requiredDate": "May 25, 2024, 12:00:00 AM",
     "salesManagerID": "U002",
-    "status": "PENDING_APPROVAL",
+    "status": "PROCESSED",
     "notes": "",
     "items": [
       {

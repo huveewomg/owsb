@@ -568,24 +568,8 @@ public class PurchaseRequisitionListPanel extends JPanel {
         // Get the PR ID
         String prId = (String) prTable.getValueAt(selectedRow, 0);
         
-        // TODO: Implement PO creation
-        // For now, just update the PR status
-        boolean updated = prController.changePurchaseRequisitionStatus(prId, Status.PROCESSED);
-        
-        if (updated) {
-            JOptionPane.showMessageDialog(this, 
-                    "Purchase requisition processed successfully.", 
-                    "Success", 
-                    JOptionPane.INFORMATION_MESSAGE);
-            
-            // Reload PRs
-            loadPurchaseRequisitions();
-        } else {
-            JOptionPane.showMessageDialog(this, 
-                    "Failed to process purchase requisition.", 
-                    "Error", 
-                    JOptionPane.ERROR_MESSAGE);
-        }
+        // Fire event to notify parent to show PO generation panel
+        firePropertyChange("createPO", null, prId);
     }
     
     /**
@@ -609,5 +593,4 @@ public class PurchaseRequisitionListPanel extends JPanel {
             return displayName;
         }
     }
-    
 }

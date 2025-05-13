@@ -1,6 +1,6 @@
-package com.owsb.view.requisition;
+package com.owsb.view.order;
 
-import com.owsb.controller.PurchaseRequisitionController;
+import com.owsb.controller.PurchaseOrderController;
 import com.owsb.model.User;
 
 import javax.swing.*;
@@ -9,29 +9,29 @@ import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
 
 /**
- * Panel for purchase requisition management
- * Acts as a container for PR creation and list panels
+ * Panel for purchase order management
+ * Acts as a container for PO generation and list panels
  */
-public class PurchaseRequisitionPanel extends JPanel implements PropertyChangeListener {
+public class PurchaseOrderPanel extends JPanel implements PropertyChangeListener {
     // Panels
     private CardLayout cardLayout;
     private JPanel cardPanel;
-    private PurchaseRequisitionCreationPanel creationPanel;
-    private PurchaseRequisitionListPanel listPanel;
+    private PurchaseOrderGenerationPanel generationPanel;
+    private PurchaseOrderListPanel listPanel;
     
     // Controller
-    private final PurchaseRequisitionController prController;
+    private final PurchaseOrderController poController;
     
     // Current user
     private final User currentUser;
     
     /**
-     * Constructor for PurchaseRequisitionPanel
-     * @param prController Purchase requisition controller
+     * Constructor for PurchaseOrderPanel
+     * @param poController Purchase order controller
      * @param currentUser Current user
      */
-    public PurchaseRequisitionPanel(PurchaseRequisitionController prController, User currentUser) {
-        this.prController = prController;
+    public PurchaseOrderPanel(PurchaseOrderController poController, User currentUser) {
+        this.poController = poController;
         this.currentUser = currentUser;
         
         // Set up panel
@@ -52,17 +52,16 @@ public class PurchaseRequisitionPanel extends JPanel implements PropertyChangeLi
         cardLayout = new CardLayout();
         cardPanel = new JPanel(cardLayout);
         
-        // Create PR creation panel
-        creationPanel = new PurchaseRequisitionCreationPanel(prController);
-        creationPanel.addPropertyChangeListener(this);
+        // Create PO generation panel
+        generationPanel = new PurchaseOrderGenerationPanel(poController);
+        generationPanel.addPropertyChangeListener(this);
         
-        // Create PR list panel
-        listPanel = new PurchaseRequisitionListPanel(prController, currentUser);
-        listPanel.addPropertyChangeListener(this);
+        // Create PO list panel
+        listPanel = new PurchaseOrderListPanel(poController, currentUser);
         
         // Add panels to card panel
         cardPanel.add(listPanel, "list");
-        cardPanel.add(creationPanel, "creation");
+        cardPanel.add(generationPanel, "generation");
         
         // Show list panel initially
         cardLayout.show(cardPanel, "list");
@@ -81,19 +80,16 @@ public class PurchaseRequisitionPanel extends JPanel implements PropertyChangeLi
         panel.setBorder(BorderFactory.createEmptyBorder(0, 0, 10, 0));
         
         // Create title label
-        JLabel titleLabel = new JLabel("Purchase Requisitions");
+        JLabel titleLabel = new JLabel("Purchase Orders");
         titleLabel.setFont(new Font("Arial", Font.BOLD, 18));
         
         // Create button panel
         JPanel buttonPanel = new JPanel(new FlowLayout(FlowLayout.RIGHT));
         
-        JButton newButton = new JButton("New Requisition");
-        JButton listButton = new JButton("View All Requisitions");
+        JButton listButton = new JButton("View All Purchase Orders");
         
-        newButton.addActionListener(e -> showCreationPanel(null));
         listButton.addActionListener(e -> showListPanel());
         
-        buttonPanel.add(newButton);
         buttonPanel.add(listButton);
         
         // Add components to panel
@@ -104,24 +100,22 @@ public class PurchaseRequisitionPanel extends JPanel implements PropertyChangeLi
     }
     
     /**
-     * Show the PR creation panel
-     * @param prId PR ID to edit, or null for new PR
+     * Show the PO generation panel
+     * @param prId PR ID to create PO from
      */
-    private void showCreationPanel(String prId) {
-        if (prId != null) {
-            // Set up for editing
-            creationPanel.setupForEdit(prId);
-        }
+    public void showGenerationPanel(String prId) {
+        // Load the PR
+        generationPanel.loadPurchaseRequisition(prId);
         
-        cardLayout.show(cardPanel, "creation");
+        cardLayout.show(cardPanel, "generation");
     }
     
     /**
-     * Show the PR list panel
+     * Show the PO list panel
      */
     private void showListPanel() {
-        // Reload PRs
-        listPanel.loadPurchaseRequisitions();
+        // Reload POs
+        listPanel.loadPurchaseOrders();
         
         cardLayout.show(cardPanel, "list");
     }
@@ -132,10 +126,9 @@ public class PurchaseRequisitionPanel extends JPanel implements PropertyChangeLi
      */
     @Override
     public void propertyChange(PropertyChangeEvent evt) {
-        switch (evt.getPropertyName()) {
-            case "prSaved", "prSubmitted", "prCancelled" -> showListPanel();
-            case "editPR" -> showCreationPanel((String) evt.getNewValue());
-            case "createPO" -> firePropertyChange("createPO", null, evt.getNewValue());
+        if (evt.getPropertyName().equals("poGenerated") || 
+            evt.getPropertyName().equals("poCancelled")) {
+            showListPanel();
         }
     }
 }

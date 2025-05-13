@@ -31,7 +31,7 @@ public class SalesManagerDashboard extends BaseDashboard {
     private final ItemController itemController;
     private final SupplierController supplierController;
     private final SalesController salesController;
-    private final PurchaseRequisitionController prController; // Added PR controller
+    private final PurchaseRequisitionController prController;
     
     /**
      * Constructor for SalesManagerDashboard
@@ -93,8 +93,6 @@ public class SalesManagerDashboard extends BaseDashboard {
         itemPanel = new ItemManagementPanel(itemController);
         supplierPanel = new SupplierManagementPanel(supplierController);
         salesPanel = new SalesEntryPanel(salesController);
-        
-        // Purchase requisition panel - now using the new PR panel
         requisitionPanel = new PurchaseRequisitionPanel(prController, currentUser);
     }
     

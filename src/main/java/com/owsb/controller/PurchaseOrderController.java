@@ -216,7 +216,7 @@ public class PurchaseOrderController {
         }
         
         // Update the PO
-        po.setStatus(Status.APPROVED);
+        po.setStatus(Status.PENDING_ARRIVAL);
         po.setFinanceManagerID(currentUser.getUserId());
         
         // Save the updated PO
@@ -280,7 +280,31 @@ public class PurchaseOrderController {
     }
     
     /**
-     * Mark a purchase order as completed (for Inventory Manager)
+     * Mark a purchase order as received (for Inventory Manager)
+     * @param poId PO ID
+     * @return true if marked as received successfully
+     */
+    public boolean markPurchaseOrderReceived(String poId) {
+        // Get the purchase order
+        PurchaseOrder po = poRepository.findById(poId);
+        if (po == null) {
+            return false;
+        }
+        
+        // Check if PO can be marked as received (only if status is PENDING_ARRIVAL)
+        if (po.getStatus() != Status.PENDING_ARRIVAL) {
+            return false;
+        }
+        
+        // Update the PO
+        po.setStatus(Status.PENDING_PAYMENT);
+        
+        // Save the updated PO
+        return poRepository.update(po);
+    }
+    
+    /**
+     * Mark a purchase order as completed (for Finance Manager)
      * @param poId PO ID
      * @return true if marked as completed successfully
      */
@@ -291,13 +315,23 @@ public class PurchaseOrderController {
             return false;
         }
         
-        // Check if PO can be marked as completed (only if status is APPROVED)
-        if (po.getStatus() != Status.APPROVED) {
+        // Check if PO can be marked as completed (only if status is PENDING_PAYMENT)
+        if (po.getStatus() != Status.PENDING_PAYMENT) {
             return false;
         }
         
         // Update the PO
         po.setStatus(Status.COMPLETED);
+        
+        // Also update the related PR to COMPLETED
+        String prId = po.getPrID();
+        if (prId != null && !prId.isEmpty()) {
+            PurchaseRequisition pr = prRepository.findById(prId);
+            if (pr != null) {
+                pr.setStatus(PurchaseRequisition.Status.COMPLETED);
+                prRepository.update(pr);
+            }
+        }
         
         // Save the updated PO
         return poRepository.update(po);

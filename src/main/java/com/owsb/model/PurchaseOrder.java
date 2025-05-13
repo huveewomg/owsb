@@ -11,12 +11,13 @@ import java.util.List;
  */
 public class PurchaseOrder {
     
-    // Possible PO status values
     public enum Status {
         PENDING("Pending"),
         APPROVED("Approved"), 
-        REJECTED("Rejected"),
+        PENDING_ARRIVAL("Pending Arrival"),
+        PENDING_PAYMENT("Pending Payment"),
         COMPLETED("Completed"),
+        REJECTED("Rejected"),
         CANCELLED("Cancelled");
         
         private final String displayName;

@@ -170,6 +170,8 @@ public class PurchaseOrderListPanel extends JPanel {
         return new StatusFilter[]{
                 new StatusFilter("All", null),
                 new StatusFilter("Pending", PurchaseOrder.Status.PENDING),
+                new StatusFilter("Pending Arrival", PurchaseOrder.Status.PENDING_ARRIVAL),
+                new StatusFilter("Pending Payment", PurchaseOrder.Status.PENDING_PAYMENT),
                 new StatusFilter("Approved", PurchaseOrder.Status.APPROVED),
                 new StatusFilter("Rejected", PurchaseOrder.Status.REJECTED),
                 new StatusFilter("Completed", PurchaseOrder.Status.COMPLETED),

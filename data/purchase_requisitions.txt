@@ -4,7 +4,7 @@
     "date": "May 11, 2025, 2:18:27 PM",
     "requiredDate": "May 25, 2025, 2:14:42 PM",
     "salesManagerID": "U002",
-    "status": "NEW",
+    "status": "COMPLETED",
     "notes": "PreStock before raya",
     "items": [
       {
@@ -56,5 +56,24 @@
       }
     ],
     "estimatedTotal": 180.0
+  },
+  {
+    "prID": "PR010",
+    "date": "May 13, 2025, 12:36:53 PM",
+    "requiredDate": "May 27, 2025, 12:36:24 PM",
+    "salesManagerID": "U002",
+    "status": "PROCESSED",
+    "notes": "",
+    "items": [
+      {
+        "itemID": "IT010",
+        "itemName": "Toilet Paper (6pk)",
+        "quantity": 21,
+        "requiredDate": "May 27, 2025, 12:36:52 PM",
+        "unitPrice": 9.9,
+        "estimatedCost": 207.9
+      }
+    ],
+    "estimatedTotal": 207.9
   }
 ]

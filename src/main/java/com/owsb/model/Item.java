@@ -88,9 +88,41 @@ public class Item {
     /**
      * Updates stock level and tracks last update date
      * @param quantity Change in quantity (positive for additions, negative for deductions)
+     * @return true if update successful, false if it would result in negative stock
      */
-    public void updateStock(int quantity) {
-        this.currentStock += quantity;
+    public boolean updateStock(int quantity) {
+        int newStock = this.currentStock + quantity;
+        // Prevent negative stock
+        if (newStock < 0) {
+            return false;
+        }
+        
+        this.currentStock = newStock;
         this.lastUpdated = LocalDate.now().toString();
+        return true;
+    }
+    
+    /**
+     * Get stock status
+     * @return Stock status ("OK", "LOW", or "CRITICAL")
+     */
+    public String getStockStatus() {
+        if (currentStock <= minimumStock / 2) {
+            return "CRITICAL";
+        } else if (currentStock < minimumStock) {
+            return "LOW";
+        } else {
+            return "OK";
+        }
+    }
+    
+    @Override
+    public String toString() {
+        return "Item{" +
+                "itemID='" + itemID + '\'' +
+                ", name='" + name + '\'' +
+                ", currentStock=" + currentStock +
+                ", unitPrice=" + unitPrice +
+                '}';
     }
 }

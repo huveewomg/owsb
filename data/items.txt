@@ -3,10 +3,14 @@
     "itemID": "IT001",
     "name": "Rice 5kg",
     "description": "Premium jasmine rice",
-    "unitPrice": 25.50,
+    "unitPrice": 25.5,
     "category": "Groceries",
     "supplierID": "SUP001",
-    "dateAdded": "2025-01-15"
+    "dateAdded": "2025-01-15",
+    "currentStock": 120,
+    "minimumStock": 50,
+    "maximumStock": 200,
+    "lastUpdated": "2025-04-01"
   },
   {
     "itemID": "IT002",
@@ -15,16 +19,24 @@
     "unitPrice": 8.75,
     "category": "Groceries",
     "supplierID": "SUP001",
-    "dateAdded": "2025-01-15"
+    "dateAdded": "2025-01-15",
+    "currentStock": 100,
+    "minimumStock": 40,
+    "maximumStock": 150,
+    "lastUpdated": "2025-04-02"
   },
   {
     "itemID": "IT003",
     "name": "Flour 1kg",
     "description": "All-purpose flour",
-    "unitPrice": 6.50,
+    "unitPrice": 6.5,
     "category": "Groceries",
     "supplierID": "SUP002",
-    "dateAdded": "2025-01-20"
+    "dateAdded": "2025-01-20",
+    "currentStock": 65,
+    "minimumStock": 30,
+    "maximumStock": 100,
+    "lastUpdated": "2025-04-01"
   },
   {
     "itemID": "IT004",
@@ -33,34 +45,37 @@
     "unitPrice": 15.25,
     "category": "Groceries",
     "supplierID": "SUP003",
-    "dateAdded": "2025-01-22"
+    "dateAdded": "2025-01-22",
+    "currentStock": 85,
+    "minimumStock": 40,
+    "maximumStock": 120,
+    "lastUpdated": "2025-04-02"
   },
   {
     "itemID": "IT005",
     "name": "Milk 1L",
     "description": "Fresh full cream milk",
-    "unitPrice": 7.80,
+    "unitPrice": 7.8,
     "category": "Fresh Produce",
     "supplierID": "SUP004",
-    "dateAdded": "2025-01-25"
-  },
-  {
-    "itemID": "IT006",
-    "name": "Eggs (12pk)",
-    "description": "Free-range eggs",
-    "unitPrice": 12.00,
-    "category": "Fresh Produce",
-    "supplierID": "SUP004",
-    "dateAdded": "2025-01-25"
+    "dateAdded": "2025-01-25",
+    "currentStock": 110,
+    "minimumStock": 50,
+    "maximumStock": 150,
+    "lastUpdated": "2025-04-03"
   },
   {
     "itemID": "IT007",
     "name": "Chicken 1kg",
     "description": "Fresh chicken breast",
-    "unitPrice": 18.50,
+    "unitPrice": 18.5,
     "category": "Fresh Produce",
     "supplierID": "SUP005",
-    "dateAdded": "2025-02-01"
+    "dateAdded": "2025-02-01",
+    "currentStock": 75,
+    "minimumStock": 35,
+    "maximumStock": 100,
+    "lastUpdated": "2025-04-04"
   },
   {
     "itemID": "IT008",
@@ -69,24 +84,49 @@
     "unitPrice": 3.25,
     "category": "Essentials",
     "supplierID": "SUP006",
-    "dateAdded": "2025-02-05"
+    "dateAdded": "2025-02-05",
+    "currentStock": 150,
+    "minimumStock": 60,
+    "maximumStock": 200,
+    "lastUpdated": "2025-04-05"
   },
   {
     "itemID": "IT009",
     "name": "Toothpaste",
     "description": "Mint flavor toothpaste",
-    "unitPrice": 4.50,
+    "unitPrice": 4.5,
     "category": "Essentials",
     "supplierID": "SUP006",
-    "dateAdded": "2025-02-05"
+    "dateAdded": "2025-02-05",
+    "currentStock": 130,
+    "minimumStock": 50,
+    "maximumStock": 180,
+    "lastUpdated": "2025-04-05"
   },
   {
     "itemID": "IT010",
     "name": "Toilet Paper (6pk)",
     "description": "2-ply soft toilet paper",
-    "unitPrice": 9.90,
+    "unitPrice": 9.9,
     "category": "Essentials",
     "supplierID": "SUP007",
-    "dateAdded": "2025-02-10"
+    "dateAdded": "2025-02-10",
+    "currentStock": 90,
+    "minimumStock": 45,
+    "maximumStock": 120,
+    "lastUpdated": "2025-04-06"
+  },
+  {
+    "itemID": "IT011",
+    "name": "test",
+    "description": "12",
+    "unitPrice": 12.0,
+    "category": "Groceries",
+    "supplierID": "SUP001",
+    "dateAdded": "2025-05-10",
+    "currentStock": 0,
+    "minimumStock": 10,
+    "maximumStock": 100,
+    "lastUpdated": "2025-05-10"
   }
 ]

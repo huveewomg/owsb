@@ -1,35 +1,63 @@
 package com.owsb.controller;
 
 import com.owsb.model.Supplier;
-import com.owsb.util.FileUtils;
-import com.owsb.util.Constants;
-
-import java.io.IOException;
-import java.lang.reflect.Type;
+import com.owsb.repository.SupplierRepository;
 import java.util.List;
 
 public class SupplierController {
+    private final SupplierRepository supplierRepository;
 
-    public Object[][] getSupplierData() {
-        try {
-            Type supplierListType = FileUtils.getListType(Supplier.class);
-            List<Supplier> suppliers = FileUtils.readListFromJson(Constants.SUPPLIER_FILE, supplierListType);
+    public SupplierController() {
+        this.supplierRepository = new SupplierRepository();
+    }
 
-            // Include: supplierID, name, contactPerson, phoneNumber
-            Object[][] data = new Object[suppliers.size()][4];
+    public String generateNextSupplierId() {
+        return supplierRepository.generateSupplierId();
+    }
 
-            for (int i = 0; i < suppliers.size(); i++) {
-                Supplier supplier = suppliers.get(i);
-                data[i][0] = supplier.getSupplierID();
-                data[i][1] = supplier.getName();
-                data[i][2] = supplier.getContactPerson();
-                data[i][3] = supplier.getPhoneNumber();
-            }
-
-            return data;
-        } catch (IOException e) {
-            e.printStackTrace();
-            return new Object[0][0];
+    public boolean addSupplier(String name, String contactPerson, String phone) {
+        if (name == null || name.trim().isEmpty() ||
+            contactPerson == null || contactPerson.trim().isEmpty() ||
+            phone == null || phone.trim().isEmpty()) {
+            return false;
         }
+        String supplierId = supplierRepository.generateSupplierId();
+        Supplier supplier = new Supplier(supplierId, name, contactPerson, phone);
+        return supplierRepository.save(supplier);
+    }
+
+    public boolean updateSupplier(String supplierId, String name, String contactPerson, String phone) {
+        if (supplierId == null || supplierId.trim().isEmpty() ||
+            name == null || name.trim().isEmpty() ||
+            contactPerson == null || contactPerson.trim().isEmpty() ||
+            phone == null || phone.trim().isEmpty()) {
+            return false;
+        }
+        Supplier supplier = supplierRepository.findById(supplierId);
+        if (supplier == null) {
+            return false;
+        }
+        supplier.setName(name);
+        supplier.setContactPerson(contactPerson);
+        supplier.setPhone(phone);
+        return supplierRepository.update(supplier);
+    }
+
+    public boolean deleteSupplier(String supplierId) {
+        if (supplierId == null || supplierId.trim().isEmpty()) {
+            return false;
+        }
+        return supplierRepository.delete(supplierId);
+    }
+
+    public Supplier getSupplierById(String supplierId) {
+        if (supplierId == null || supplierId.trim().isEmpty()) {
+            return null;
+        }
+        return supplierRepository.findById(supplierId);
+    }
+
+    public List<Supplier> getAllSuppliers() {
+        return supplierRepository.findAll();
     }
 }

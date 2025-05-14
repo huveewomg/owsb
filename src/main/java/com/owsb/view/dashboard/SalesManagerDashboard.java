@@ -5,12 +5,14 @@ import com.owsb.controller.ItemController;
 import com.owsb.controller.PurchaseRequisitionController;
 import com.owsb.controller.SalesController;
 import com.owsb.controller.SupplierController;
+import com.owsb.controller.PurchaseOrderController;
 import com.owsb.model.User;
 import com.owsb.model.user.SalesManager;
 import com.owsb.view.item.ItemManagementPanel;
 import com.owsb.view.requisition.PurchaseRequisitionPanel;
 import com.owsb.view.sales.SalesEntryPanel;
 import com.owsb.view.supplier.SupplierManagementPanel;
+import com.owsb.view.order.PurchaseOrderPanel;
 
 import javax.swing.*;
 import java.awt.*;
@@ -26,12 +28,14 @@ public class SalesManagerDashboard extends BaseDashboard {
     private SupplierManagementPanel supplierPanel;
     private SalesEntryPanel salesPanel;
     private PurchaseRequisitionPanel requisitionPanel;
+    private PurchaseOrderPanel purchaseOrderPanel;
     
     // Controllers - using composition to implement functionality
     private final ItemController itemController;
     private final SupplierController supplierController;
     private final SalesController salesController;
     private final PurchaseRequisitionController prController;
+    private final PurchaseOrderController poController;
     
     /**
      * Constructor for SalesManagerDashboard
@@ -54,6 +58,8 @@ public class SalesManagerDashboard extends BaseDashboard {
         this.salesController.setCurrentUser(user);
         this.prController = new PurchaseRequisitionController();
         this.prController.setCurrentUser(user);
+        this.poController = new PurchaseOrderController();
+        this.poController.setCurrentUser(user);
         
         // Initialize UI components
         initPanels();
@@ -63,7 +69,7 @@ public class SalesManagerDashboard extends BaseDashboard {
         addMenuButton("Manage Suppliers", e -> showSupplierPanel());
         addMenuButton("Daily Sales Entry", e -> showSalesPanel());
         addMenuButton("Purchase Requisitions", e -> showRequisitionPanel());
-        addMenuButton("View Purchase Orders", e -> viewPurchaseOrders());
+        addMenuButton("View Purchase Orders", e -> showPurchaseOrdersPanel());
     }
     
     /**
@@ -94,6 +100,7 @@ public class SalesManagerDashboard extends BaseDashboard {
         supplierPanel = new SupplierManagementPanel(supplierController);
         salesPanel = new SalesEntryPanel(salesController);
         requisitionPanel = new PurchaseRequisitionPanel(prController, currentUser);
+        purchaseOrderPanel = new PurchaseOrderPanel(poController, currentUser);
     }
     
     /**
@@ -129,21 +136,10 @@ public class SalesManagerDashboard extends BaseDashboard {
     }
     
     /**
-     * View purchase orders
+     * Show purchase orders panel
      */
-    private void viewPurchaseOrders() {
-        JPanel panel = new JPanel(new BorderLayout());
-        panel.setBorder(BorderFactory.createEmptyBorder(10, 10, 10, 10));
-        
-        JLabel label = new JLabel("Purchase Orders", JLabel.CENTER);
-        label.setFont(new Font("Arial", Font.BOLD, 18));
-        panel.add(label, BorderLayout.NORTH);
-        
-        JLabel placeholder = new JLabel("Purchase order functionality coming soon...", JLabel.CENTER);
-        placeholder.setFont(new Font("Arial", Font.ITALIC, 14));
-        panel.add(placeholder, BorderLayout.CENTER);
-        
-        setContent(panel);
+    private void showPurchaseOrdersPanel() {
+        setContent(purchaseOrderPanel);
         setStatus("Viewing Purchase Orders");
     }
 }

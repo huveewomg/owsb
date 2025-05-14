@@ -1,10 +1,10 @@
 [
   {
     "paymentID": "PAY001",
-    "date": "2025-03-29",
+    "date": "Mar 29, 2025, 12:00:00 AM",
     "poID": "PO001",
     "supplierID": "SUP001",
-    "amount": 1200.00,
+    "amount": 1200.0,
     "paymentMethod": "BANK_TRANSFER",
     "referenceNumber": "BT20250329001",
     "financeManagerID": "U005",
@@ -13,10 +13,10 @@
   },
   {
     "paymentID": "PAY002",
-    "date": "2025-03-30",
+    "date": "Mar 30, 2025, 12:00:00 AM",
     "poID": "PO002",
     "supplierID": "SUP001",
-    "amount": 850.00,
+    "amount": 850.0,
     "paymentMethod": "BANK_TRANSFER",
     "referenceNumber": "BT20250330002",
     "financeManagerID": "U005",
@@ -25,14 +25,38 @@
   },
   {
     "paymentID": "PAY003",
-    "date": "2025-04-02",
+    "date": "Apr 2, 2025, 12:00:00 AM",
     "poID": "PO003",
     "supplierID": "SUP003",
-    "amount": 600.00,
+    "amount": 600.0,
     "paymentMethod": "BANK_TRANSFER",
     "referenceNumber": "BT20250402003",
     "financeManagerID": "U005",
-    "status": "PENDING",
+    "status": "COMPLETED",
     "notes": "Scheduled payment for cooking oil"
+  },
+  {
+    "paymentID": "PAY004",
+    "date": "May 13, 2025, 8:43:21 PM",
+    "poID": "PO003",
+    "supplierID": "SUP001",
+    "amount": 970.0,
+    "paymentMethod": "BANK_TRANSFER",
+    "referenceNumber": "BA20250513268",
+    "financeManagerID": "U005",
+    "status": "COMPLETED",
+    "notes": "Order"
+  },
+  {
+    "paymentID": "PAY005",
+    "date": "May 14, 2025, 10:05:45 AM",
+    "poID": "PO004",
+    "supplierID": "SUP001",
+    "amount": 230.25,
+    "paymentMethod": "CREDIT_CARD",
+    "referenceNumber": "CR20250514977",
+    "financeManagerID": "U005",
+    "status": "COMPLETED",
+    "notes": "Thank"
   }
 ]

@@ -1,8 +1,14 @@
 package com.owsb.view.dashboard;
 
 import com.owsb.controller.AuthController;
+import com.owsb.controller.PurchaseOrderController;
+import com.owsb.controller.PurchaseRequisitionController;
 import com.owsb.model.User;
 import com.owsb.model.user.FinanceManager;
+import com.owsb.view.finance.PaymentHistoryPanel;
+import com.owsb.view.finance.PaymentPanel;
+import com.owsb.view.order.PurchaseOrderPanel;
+import com.owsb.view.requisition.PurchaseRequisitionListPanel;
 
 import javax.swing.*;
 import java.awt.*;
@@ -13,12 +19,16 @@ import java.awt.*;
  */
 public class FinanceManagerDashboard extends BaseDashboard {
     
+    // Controllers
+    private final PurchaseRequisitionController prController;
+    private final PurchaseOrderController poController;
+    
     // Specific panels for Finance Manager
-    private JPanel approvePOPanel;
-    private JPanel paymentsPanel;
+    private PurchaseOrderPanel approvePOPanel;
+    private PaymentPanel paymentsPanel;
+    private PaymentHistoryPanel paymentHistoryPanel;
     private JPanel financialReportsPanel;
-    private JPanel viewPRPanel;
-    private JPanel viewPOPanel;
+    private PurchaseRequisitionListPanel viewPRPanel;
     
     /**
      * Constructor for FinanceManagerDashboard
@@ -32,6 +42,16 @@ public class FinanceManagerDashboard extends BaseDashboard {
         if (!(user instanceof FinanceManager)) {
             throw new IllegalArgumentException("User must be a Finance Manager");
         }
+        
+        // Initialize controllers
+        this.prController = new PurchaseRequisitionController();
+        this.prController.setCurrentUser(user);
+        
+        this.poController = new PurchaseOrderController();
+        this.poController.setCurrentUser(user);
+        
+        // Initialize panels
+        initPanels();
     }
     
     /**
@@ -49,64 +69,26 @@ public class FinanceManagerDashboard extends BaseDashboard {
      */
     @Override
     protected void initRoleComponents() {
-        // Initialize panel placeholders
-        initPanels();
-        
         // Add menu buttons for Finance Manager functions
         addMenuButton("Approve Purchase Orders", e -> showApprovePOPanel());
         addMenuButton("Process Payments", e -> showPaymentsPanel());
+        addMenuButton("Payment History", e -> showPaymentHistoryPanel());
         addMenuButton("Financial Reports", e -> showFinancialReportsPanel());
         addMenuButton("View Requisitions", e -> showViewPRPanel());
-        addMenuButton("View Purchase Orders", e -> showViewPOPanel());
     }
     
     /**
      * Initialize panel placeholders
      */
     private void initPanels() {
-        // Approve Purchase Orders panel
-        approvePOPanel = createSimplePanel("Approve Purchase Orders", 
-            new String[]{"PO ID", "Date", "Item Code", "Quantity", "Supplier", "Total Amount", "Status"},
-            new Object[][]{
-                {"PO001", "2025-03-26", "IT001", 50, "SUP001", "$1,250.00", "PENDING"},
-                {"PO002", "2025-03-27", "IT002", 100, "SUP002", "$580.00", "PENDING"}
-            },
-            new JButton[]{ new JButton("Approve"), new JButton("Reject") }
-        );
+        // Approve Purchase Orders panel - Use PurchaseOrderPanel
+        approvePOPanel = new PurchaseOrderPanel(poController, currentUser);
         
-        // Process Payments panel
-        paymentsPanel = new JPanel(new BorderLayout());
-        paymentsPanel.setBorder(BorderFactory.createEmptyBorder(10, 10, 10, 10));
+        // Process Payments panel - Use PaymentPanel
+        paymentsPanel = new PaymentPanel(poController);
         
-        JLabel paymentsLabel = new JLabel("Process Payments", JLabel.CENTER);
-        paymentsLabel.setFont(new Font("Arial", Font.BOLD, 18));
-        paymentsPanel.add(paymentsLabel, BorderLayout.NORTH);
-        
-        JPanel formPanel = new JPanel(new GridLayout(5, 2, 10, 10));
-        
-        formPanel.add(new JLabel("PO ID:"));
-        JComboBox<String> poCombo = new JComboBox<>(new String[]{"PO001", "PO002"});
-        formPanel.add(poCombo);
-        
-        formPanel.add(new JLabel("Supplier:"));
-        formPanel.add(new JTextField("SUP001"));
-        
-        formPanel.add(new JLabel("Amount:"));
-        formPanel.add(new JTextField("$1,250.00"));
-        
-        formPanel.add(new JLabel("Payment Method:"));
-        JComboBox<String> methodCombo = new JComboBox<>(new String[]{"Bank Transfer", "Check", "Credit"});
-        formPanel.add(methodCombo);
-        
-        formPanel.add(new JLabel("Payment Date:"));
-        formPanel.add(new JTextField(new java.text.SimpleDateFormat("yyyy-MM-dd").format(new java.util.Date())));
-        
-        JPanel buttonPanel = new JPanel();
-        buttonPanel.add(new JButton("Process Payment"));
-        buttonPanel.add(new JButton("Cancel"));
-        
-        paymentsPanel.add(formPanel, BorderLayout.CENTER);
-        paymentsPanel.add(buttonPanel, BorderLayout.SOUTH);
+        // Payment History panel - Use PaymentHistoryPanel
+        paymentHistoryPanel = new PaymentHistoryPanel();
         
         // Financial Reports panel
         financialReportsPanel = new JPanel(new BorderLayout());
@@ -126,66 +108,8 @@ public class FinanceManagerDashboard extends BaseDashboard {
         
         financialReportsPanel.add(reportsButtonPanel, BorderLayout.CENTER);
         
-        // View Purchase Requisitions panel
-        viewPRPanel = createSimplePanel("View Purchase Requisitions", 
-            new String[]{"PR ID", "Date", "Item Code", "Quantity", "Required Date", "Status"},
-            new Object[][]{
-                {"PR001", "2025-03-25", "IT001", 50, "2025-04-05", "NEW"},
-                {"PR002", "2025-03-26", "IT002", 100, "2025-04-10", "NEW"},
-                {"PR003", "2025-03-27", "IT003", 30, "2025-04-15", "NEW"}
-            });
-        
-        // View Purchase Orders panel
-        viewPOPanel = createSimplePanel("View Purchase Orders", 
-            new String[]{"PO ID", "Date", "Item Code", "Supplier", "Amount", "Status"},
-            new Object[][]{
-                {"PO001", "2025-03-26", "IT001", "SUP001", "$1,250.00", "PENDING"},
-                {"PO002", "2025-03-27", "IT002", "SUP002", "$580.00", "PENDING"},
-                {"PO003", "2025-03-25", "IT003", "SUP001", "$210.00", "APPROVED"}
-            });
-    }
-    
-    /**
-     * Create a simple panel with a table
-     * @param title Panel title
-     * @param columnNames Column names for table
-     * @param data Table data
-     * @return Panel with table
-     */
-    private JPanel createSimplePanel(String title, String[] columnNames, Object[][] data) {
-        return createSimplePanel(title, columnNames, data, null);
-    }
-    
-    /**
-     * Create a simple panel with a table and action buttons
-     * @param title Panel title
-     * @param columnNames Column names for table
-     * @param data Table data
-     * @param actionButtons Action buttons to add
-     * @return Panel with table and buttons
-     */
-    private JPanel createSimplePanel(String title, String[] columnNames, Object[][] data, JButton[] actionButtons) {
-        JPanel panel = new JPanel(new BorderLayout());
-        panel.setBorder(BorderFactory.createEmptyBorder(10, 10, 10, 10));
-        
-        JLabel label = new JLabel(title, JLabel.CENTER);
-        label.setFont(new Font("Arial", Font.BOLD, 18));
-        panel.add(label, BorderLayout.NORTH);
-        
-        JTable table = new JTable(data, columnNames);
-        table.setDefaultEditor(Object.class, null); // Make the table non-editable
-        JScrollPane scrollPane = new JScrollPane(table);
-        panel.add(scrollPane, BorderLayout.CENTER);
-        
-        if (actionButtons != null && actionButtons.length > 0) {
-            JPanel buttonPanel = new JPanel();
-            for (JButton button : actionButtons) {
-                buttonPanel.add(button);
-            }
-            panel.add(buttonPanel, BorderLayout.SOUTH);
-        }
-        
-        return panel;
+        // View Purchase Requisitions panel - Use PurchaseRequisitionListPanel
+        viewPRPanel = new PurchaseRequisitionListPanel(prController, currentUser);
     }
     
     // Methods to show different panels
@@ -199,18 +123,22 @@ public class FinanceManagerDashboard extends BaseDashboard {
         setStatus("Processing Payments");
     }
     
+    private void showPaymentHistoryPanel() {
+        // Reload payment history
+        paymentHistoryPanel.loadPayments();
+        setContent(paymentHistoryPanel);
+        setStatus("Viewing Payment History");
+    }
+    
     private void showFinancialReportsPanel() {
         setContent(financialReportsPanel);
         setStatus("Financial Reports");
     }
     
     private void showViewPRPanel() {
+        // Reload requisitions
+        viewPRPanel.loadPurchaseRequisitions();
         setContent(viewPRPanel);
         setStatus("Viewing Purchase Requisitions");
-    }
-    
-    private void showViewPOPanel() {
-        setContent(viewPOPanel);
-        setStatus("Viewing Purchase Orders");
     }
 }

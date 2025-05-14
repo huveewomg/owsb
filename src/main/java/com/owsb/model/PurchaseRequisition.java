@@ -17,7 +17,8 @@ public class PurchaseRequisition {
         PENDING_APPROVAL("Pending Approval"),
         APPROVED("Approved"),
         REJECTED("Rejected"),
-        PROCESSED("Processed");
+        PROCESSED("Processed"),
+        COMPLETED("Completed");
         
         private final String displayName;
         

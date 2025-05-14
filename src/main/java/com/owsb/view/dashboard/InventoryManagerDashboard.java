@@ -1,8 +1,12 @@
 package com.owsb.view.dashboard;
 
 import com.owsb.controller.AuthController;
+import com.owsb.controller.PurchaseOrderController;
+import com.owsb.controller.PurchaseRequisitionController;
 import com.owsb.model.User;
 import com.owsb.model.user.InventoryManager;
+import com.owsb.view.inventory.StockUpdatePanel;
+import com.owsb.view.order.PurchaseOrderPanel;
 
 import javax.swing.*;
 import java.awt.*;
@@ -13,12 +17,16 @@ import java.awt.*;
  */
 public class InventoryManagerDashboard extends BaseDashboard {
     
+    // Controllers
+    private final PurchaseRequisitionController prController;
+    private final PurchaseOrderController poController;
+    
     // Specific panels for Inventory Manager
     private JPanel viewItemsPanel;
-    private JPanel updateStockPanel;
+    private StockUpdatePanel updateStockPanel;
     private JPanel lowStockPanel;
     private JPanel stockReportsPanel;
-    private JPanel viewPOPanel;
+    private PurchaseOrderPanel viewPOPanel;
     
     /**
      * Constructor for InventoryManagerDashboard
@@ -32,6 +40,16 @@ public class InventoryManagerDashboard extends BaseDashboard {
         if (!(user instanceof InventoryManager)) {
             throw new IllegalArgumentException("User must be an Inventory Manager");
         }
+        
+        // Initialize controllers
+        this.prController = new PurchaseRequisitionController();
+        this.prController.setCurrentUser(user);
+        
+        this.poController = new PurchaseOrderController();
+        this.poController.setCurrentUser(user);
+        
+        // Initialize panels
+        initPanels();
     }
     
     /**
@@ -49,9 +67,6 @@ public class InventoryManagerDashboard extends BaseDashboard {
      */
     @Override
     protected void initRoleComponents() {
-        // Initialize panel placeholders
-        initPanels();
-        
         // Add menu buttons for Inventory Manager functions
         addMenuButton("View Items", e -> showViewItemsPanel());
         addMenuButton("Update Stock", e -> showUpdateStockPanel());
@@ -73,32 +88,7 @@ public class InventoryManagerDashboard extends BaseDashboard {
                 {"IT003", "Flour 1kg", 15, 20, "LOW"}
             });
         
-        // Update Stock panel
-        updateStockPanel = new JPanel(new BorderLayout());
-        updateStockPanel.setBorder(BorderFactory.createEmptyBorder(10, 10, 10, 10));
-        
-        JLabel updateLabel = new JLabel("Update Stock", JLabel.CENTER);
-        updateLabel.setFont(new Font("Arial", Font.BOLD, 18));
-        updateStockPanel.add(updateLabel, BorderLayout.NORTH);
-        
-        JPanel formPanel = new JPanel(new GridLayout(3, 2, 10, 10));
-        
-        formPanel.add(new JLabel("PO ID:"));
-        JComboBox<String> poCombo = new JComboBox<>(new String[]{"PO001", "PO002"});
-        formPanel.add(poCombo);
-        
-        formPanel.add(new JLabel("Received Quantity:"));
-        formPanel.add(new JTextField());
-        
-        formPanel.add(new JLabel("Notes:"));
-        formPanel.add(new JTextField());
-        
-        JPanel buttonPanel = new JPanel();
-        buttonPanel.add(new JButton("Update Stock"));
-        buttonPanel.add(new JButton("Cancel"));
-        
-        updateStockPanel.add(formPanel, BorderLayout.CENTER);
-        updateStockPanel.add(buttonPanel, BorderLayout.SOUTH);
+        updateStockPanel = new StockUpdatePanel(poController);
         
         // Low Stock Alerts panel
         lowStockPanel = createSimplePanel("Low Stock Alerts", 
@@ -127,13 +117,7 @@ public class InventoryManagerDashboard extends BaseDashboard {
         
         stockReportsPanel.add(reportsButtonPanel, BorderLayout.CENTER);
         
-        // View Purchase Orders panel (for receiving)
-        viewPOPanel = createSimplePanel("View Purchase Orders", 
-            new String[]{"PO ID", "Date", "Item Code", "Quantity", "Status", "Received"},
-            new Object[][]{
-                {"PO001", "2025-03-26", "IT001", 50, "APPROVED", "No"},
-                {"PO002", "2025-03-27", "IT002", 100, "APPROVED", "No"}
-            });
+        viewPOPanel = new PurchaseOrderPanel(poController, currentUser);
     }
     
     /**

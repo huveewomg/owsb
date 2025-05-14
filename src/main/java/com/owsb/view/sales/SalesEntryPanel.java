@@ -73,25 +73,8 @@ public class SalesEntryPanel extends JPanel {
      * Initialize components
      */
     private void initComponents() {
-        // Top panel - Date selection
-        topPanel = new JPanel(new FlowLayout(FlowLayout.LEFT));
-        
-        dateLabel = new JLabel("Sales Date:");
-        
-        // Date spinner with today's date
-        SpinnerDateModel dateModel = new SpinnerDateModel(new Date(), null, null, Calendar.DAY_OF_MONTH);
-        dateSpinner = new JSpinner(dateModel);
-        JSpinner.DateEditor dateEditor = new JSpinner.DateEditor(dateSpinner, "yyyy-MM-dd");
-        dateSpinner.setEditor(dateEditor);
-        
-        // Add view sales button
-        JButton viewSalesButton = new JButton("View Sales");
-        viewSalesButton.addActionListener(e -> viewSales());
-        
-        topPanel.add(dateLabel);
-        topPanel.add(dateSpinner);
-        topPanel.add(Box.createHorizontalStrut(20));
-        topPanel.add(viewSalesButton);
+        // Create header panel
+        topPanel = createHeaderPanel();
         
         // Center panel - Sales table
         centerPanel = new JPanel(new BorderLayout(5, 5));
@@ -168,6 +151,40 @@ public class SalesEntryPanel extends JPanel {
         add(topPanel, BorderLayout.NORTH);
         add(centerPanel, BorderLayout.CENTER);
         add(bottomPanel, BorderLayout.SOUTH);
+    }
+    
+    /**
+     * Create header panel with title and date selection
+     * @return Header panel
+     */
+    private JPanel createHeaderPanel() {
+        JPanel panel = new JPanel(new BorderLayout());
+        panel.setBorder(BorderFactory.createEmptyBorder(0, 0, 10, 0));
+        
+        JLabel titleLabel = new JLabel("Sales Entry");
+        titleLabel.setFont(new Font("Arial", Font.BOLD, 18));
+        JPanel datePanel = new JPanel(new FlowLayout(FlowLayout.LEFT));
+        
+        dateLabel = new JLabel("Sales Date:");
+        
+        SpinnerDateModel dateModel = new SpinnerDateModel(new Date(), null, null, Calendar.DAY_OF_MONTH);
+        dateSpinner = new JSpinner(dateModel);
+        JSpinner.DateEditor dateEditor = new JSpinner.DateEditor(dateSpinner, "yyyy-MM-dd");
+        dateSpinner.setEditor(dateEditor);
+        
+        datePanel.add(dateLabel);
+        datePanel.add(dateSpinner);
+        
+        JPanel buttonPanel = new JPanel(new FlowLayout(FlowLayout.RIGHT));
+        JButton viewSalesButton = new JButton("View Sales");
+        viewSalesButton.addActionListener(e -> viewSales());
+        buttonPanel.add(viewSalesButton);
+        
+        panel.add(titleLabel, BorderLayout.WEST);
+        panel.add(datePanel, BorderLayout.CENTER);
+        panel.add(buttonPanel, BorderLayout.EAST);
+        
+        return panel;
     }
     
     /**

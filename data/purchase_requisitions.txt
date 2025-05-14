@@ -4,7 +4,7 @@
     "date": "May 11, 2025, 2:18:27 PM",
     "requiredDate": "May 25, 2025, 2:14:42 PM",
     "salesManagerID": "U002",
-    "status": "NEW",
+    "status": "COMPLETED",
     "notes": "PreStock before raya",
     "items": [
       {
@@ -42,7 +42,7 @@
     "date": "May 11, 2025, 2:24:42 PM",
     "requiredDate": "May 25, 2024, 12:00:00 AM",
     "salesManagerID": "U002",
-    "status": "PENDING_APPROVAL",
+    "status": "PROCESSED",
     "notes": "",
     "items": [
       {
@@ -56,5 +56,62 @@
       }
     ],
     "estimatedTotal": 180.0
+  },
+  {
+    "prID": "PR010",
+    "date": "May 13, 2025, 12:36:53 PM",
+    "requiredDate": "May 27, 2025, 12:36:24 PM",
+    "salesManagerID": "U002",
+    "status": "PROCESSED",
+    "notes": "",
+    "items": [
+      {
+        "itemID": "IT010",
+        "itemName": "Toilet Paper (6pk)",
+        "quantity": 21,
+        "requiredDate": "May 27, 2025, 12:36:52 PM",
+        "unitPrice": 9.9,
+        "estimatedCost": 207.9
+      }
+    ],
+    "estimatedTotal": 207.9
+  },
+  {
+    "prID": "PR011",
+    "date": "May 14, 2025, 10:04:12 AM",
+    "requiredDate": "May 28, 2025, 10:03:35 AM",
+    "salesManagerID": "U002",
+    "status": "COMPLETED",
+    "notes": "StockUp",
+    "items": [
+      {
+        "itemID": "IT001",
+        "itemName": "Rice 5kg",
+        "quantity": 5,
+        "requiredDate": "May 28, 2025, 10:03:56 AM",
+        "suggestedSupplierID": "SUP001",
+        "unitPrice": 25.5,
+        "estimatedCost": 127.5
+      },
+      {
+        "itemID": "IT002",
+        "itemName": "Sugar 1kg",
+        "quantity": 11,
+        "requiredDate": "May 28, 2025, 10:03:58 AM",
+        "suggestedSupplierID": "SUP001",
+        "unitPrice": 8.75,
+        "estimatedCost": 96.25
+      },
+      {
+        "itemID": "IT003",
+        "itemName": "Flour 1kg",
+        "quantity": 1,
+        "requiredDate": "May 28, 2025, 10:04:00 AM",
+        "suggestedSupplierID": "SUP002",
+        "unitPrice": 6.5,
+        "estimatedCost": 6.5
+      }
+    ],
+    "estimatedTotal": 230.25
   }
 ]

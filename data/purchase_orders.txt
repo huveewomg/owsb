@@ -1,92 +1,125 @@
 [
   {
     "poID": "PO001",
-    "date": "2025-03-26",
-    "prID": "PR001",
+    "prID": "PR009",
+    "date": "May 13, 2025, 11:22:32 AM",
+    "deliveryDate": "Jun 25, 2024, 12:00:00 AM",
     "purchaseManagerID": "U003",
-    "supplierID": "SUP001",
-    "expectedDeliveryDate": "2025-04-08",
+    "financeManagerID": "U005",
+    "status": "COMPLETED",
+    "notes": "",
+    "items": [
+      {
+        "itemID": "IT011",
+        "itemName": "test",
+        "quantity": 15,
+        "supplierID": "SUP001",
+        "supplierName": "ABC Groceries Sdn Bhd",
+        "unitPrice": 12.0,
+        "totalCost": 180.0
+      }
+    ],
+    "totalValue": 180.0
+  },
+  {
+    "poID": "PO002",
+    "prID": "PR010",
+    "date": "May 13, 2025, 12:37:08 PM",
+    "deliveryDate": "May 27, 2025, 12:36:24 PM",
+    "purchaseManagerID": "U003",
+    "financeManagerID": "U005",
     "status": "APPROVED",
-    "approvalDate": "2025-03-27",
-    "approvedBy": "U005",
+    "notes": "",
+    "items": [
+      {
+        "itemID": "IT010",
+        "itemName": "Toilet Paper (6pk)",
+        "quantity": 21,
+        "supplierName": "Unknown Supplier",
+        "unitPrice": 9.9,
+        "totalCost": 207.9
+      }
+    ],
+    "totalValue": 207.9
+  },
+  {
+    "poID": "PO003",
+    "prID": "PR008",
+    "date": "May 13, 2025, 8:21:41 PM",
+    "deliveryDate": "May 25, 2025, 2:14:42 PM",
+    "purchaseManagerID": "U003",
+    "financeManagerID": "U005",
+    "status": "COMPLETED",
+    "notes": "",
+    "items": [
+      {
+        "itemID": "IT011",
+        "itemName": "test",
+        "quantity": 20,
+        "supplierID": "SUP001",
+        "supplierName": "ABC Groceries Sdn Bhd",
+        "unitPrice": 12.0,
+        "totalCost": 240.0
+      },
+      {
+        "itemID": "IT001",
+        "itemName": "Rice 5kg",
+        "quantity": 25,
+        "supplierID": "SUP001",
+        "supplierName": "ABC Groceries Sdn Bhd",
+        "unitPrice": 25.5,
+        "totalCost": 637.5
+      },
+      {
+        "itemID": "IT007",
+        "itemName": "Chicken 1kg",
+        "quantity": 5,
+        "supplierID": "SUP005",
+        "supplierName": "Premium Poultry Supply",
+        "unitPrice": 18.5,
+        "totalCost": 92.5
+      }
+    ],
+    "totalValue": 970.0
+  },
+  {
+    "poID": "PO004",
+    "prID": "PR011",
+    "date": "May 14, 2025, 10:04:32 AM",
+    "deliveryDate": "May 28, 2025, 10:03:35 AM",
+    "purchaseManagerID": "U003",
+    "financeManagerID": "U005",
+    "status": "COMPLETED",
     "notes": "",
     "items": [
       {
         "itemID": "IT001",
-        "quantity": 50,
-        "unitPrice": 24.00,
-        "totalPrice": 1200.00
-      }
-    ],
-    "totalAmount": 1200.00
-  },
-  {
-    "poID": "PO002",
-    "date": "2025-03-27",
-    "prID": "PR002",
-    "purchaseManagerID": "U003",
-    "supplierID": "SUP001",
-    "expectedDeliveryDate": "2025-04-12",
-    "status": "APPROVED",
-    "approvalDate": "2025-03-28",
-    "approvedBy": "U005",
-    "notes": "Bulk order discount applied",
-    "items": [
-      {
-        "itemID": "IT002",
-        "quantity": 100,
-        "unitPrice": 8.50,
-        "totalPrice": 850.00
-      }
-    ],
-    "totalAmount": 850.00
-  },
-  {
-    "poID": "PO003",
-    "date": "2025-03-29",
-    "prID": "PR004",
-    "purchaseManagerID": "U003",
-    "supplierID": "SUP003",
-    "expectedDeliveryDate": "2025-04-20",
-    "status": "PENDING",
-    "approvalDate": null,
-    "approvedBy": null,
-    "notes": "Awaiting finance approval",
-    "items": [
-      {
-        "itemID": "IT004",
-        "quantity": 40,
-        "unitPrice": 15.00,
-        "totalPrice": 600.00
-      }
-    ],
-    "totalAmount": 600.00
-  },
-  {
-    "poID": "PO004",
-    "date": "2025-04-01",
-    "prID": "PR005",
-    "purchaseManagerID": "U003",
-    "supplierID": "SUP004",
-    "expectedDeliveryDate": "2025-04-06",
-    "status": "PENDING",
-    "approvalDate": null,
-    "approvedBy": null,
-    "notes": "Rush order for perishable goods",
-    "items": [
-      {
-        "itemID": "IT005",
-        "quantity": 60,
-        "unitPrice": 7.50,
-        "totalPrice": 450.00
+        "itemName": "Rice 5kg",
+        "quantity": 5,
+        "supplierID": "SUP001",
+        "supplierName": "ABC Groceries Sdn Bhd",
+        "unitPrice": 25.5,
+        "totalCost": 127.5
       },
       {
-        "itemID": "IT006",
-        "quantity": 40,
-        "unitPrice": 11.80,
-        "totalPrice": 472.00
+        "itemID": "IT002",
+        "itemName": "Sugar 1kg",
+        "quantity": 11,
+        "supplierID": "SUP001",
+        "supplierName": "ABC Groceries Sdn Bhd",
+        "unitPrice": 8.75,
+        "totalCost": 96.25
+      },
+      {
+        "itemID": "IT003",
+        "itemName": "Flour 1kg",
+        "quantity": 1,
+        "supplierID": "SUP002",
+        "supplierName": "XYZ Distributors",
+        "unitPrice": 6.5,
+        "totalCost": 6.5
       }
     ],
-    "totalAmount": 922.00
+    "totalValue": 230.25
   }
 ]

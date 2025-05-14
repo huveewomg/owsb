@@ -46,5 +46,17 @@
     "financeManagerID": "U005",
     "status": "COMPLETED",
     "notes": "Order"
+  },
+  {
+    "paymentID": "PAY005",
+    "date": "May 14, 2025, 10:05:45 AM",
+    "poID": "PO004",
+    "supplierID": "SUP001",
+    "amount": 230.25,
+    "paymentMethod": "CREDIT_CARD",
+    "referenceNumber": "CR20250514977",
+    "financeManagerID": "U005",
+    "status": "COMPLETED",
+    "notes": "Thank"
   }
 ]

@@ -71,7 +71,7 @@ public class PurchaseManagerDashboard extends BaseDashboard implements PropertyC
         // Add menu buttons for Purchase Manager functions
         addMenuButton("View Items", e -> showViewItemsPanel());
         addMenuButton("View Suppliers", e -> showViewSuppliersPanel());
-        addMenuButton("View Requisitions", e -> showViewRequisitionsPanel());
+        addMenuButton("View Requisitions/ Create PO", e -> showViewRequisitionsPanel());
         addMenuButton("Purchase Orders", e -> showPurchaseOrdersPanel());
     }
     

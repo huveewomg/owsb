@@ -251,6 +251,16 @@ public class PurchaseOrderController {
         po.setFinanceManagerID(currentUser.getUserId());
         po.setNotes(po.getNotes() + "\n[REJECTED] " + reason);
         
+        // Also update the related PR to REJECTED
+        String prId = po.getPrID();
+        if (prId != null && !prId.isEmpty()) {
+            PurchaseRequisition pr = prRepository.findById(prId);
+            if (pr != null) {
+                pr.setStatus(PurchaseRequisition.Status.REJECTED);
+                prRepository.update(pr);
+            }
+        }
+        
         // Save the updated PO
         return poRepository.update(po);
     }

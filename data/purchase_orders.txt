@@ -81,5 +81,45 @@
       }
     ],
     "totalValue": 970.0
+  },
+  {
+    "poID": "PO004",
+    "prID": "PR011",
+    "date": "May 14, 2025, 10:04:32 AM",
+    "deliveryDate": "May 28, 2025, 10:03:35 AM",
+    "purchaseManagerID": "U003",
+    "financeManagerID": "U005",
+    "status": "COMPLETED",
+    "notes": "",
+    "items": [
+      {
+        "itemID": "IT001",
+        "itemName": "Rice 5kg",
+        "quantity": 5,
+        "supplierID": "SUP001",
+        "supplierName": "ABC Groceries Sdn Bhd",
+        "unitPrice": 25.5,
+        "totalCost": 127.5
+      },
+      {
+        "itemID": "IT002",
+        "itemName": "Sugar 1kg",
+        "quantity": 11,
+        "supplierID": "SUP001",
+        "supplierName": "ABC Groceries Sdn Bhd",
+        "unitPrice": 8.75,
+        "totalCost": 96.25
+      },
+      {
+        "itemID": "IT003",
+        "itemName": "Flour 1kg",
+        "quantity": 1,
+        "supplierID": "SUP002",
+        "supplierName": "XYZ Distributors",
+        "unitPrice": 6.5,
+        "totalCost": 6.5
+      }
+    ],
+    "totalValue": 230.25
   }
 ]

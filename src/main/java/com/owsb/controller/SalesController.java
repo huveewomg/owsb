@@ -6,6 +6,7 @@ import com.owsb.model.SaleItem;
 import com.owsb.model.User;
 import com.owsb.repository.ItemRepository;
 import com.owsb.repository.SalesRepository;
+import com.owsb.util.Constants;
 
 import java.util.ArrayList;
 import java.util.Date;
@@ -20,8 +21,8 @@ public class SalesController {
     private final ItemRepository itemRepository;
     private User currentUser;
     
-    // Default profit ratio
-    public static final double DEFAULT_PROFIT_RATIO = 0.10; // 10%
+    // Reference to the default profit ratio constant
+    public static final double DEFAULT_PROFIT_RATIO = Constants.DEFAULT_PROFIT_RATIO;
     
     /**
      * Constructor for SalesController

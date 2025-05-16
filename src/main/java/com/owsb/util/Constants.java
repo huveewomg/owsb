@@ -21,6 +21,9 @@ public class Constants {
     public static final String PO_FILE = DATA_DIR + File.separator + "purchase_orders.txt";
     public static final String PAYMENTS_FILE = DATA_DIR + File.separator + "payments.txt";
     
+    // Business constants
+    public static final double DEFAULT_PROFIT_RATIO = 0.10; // 10%
+    
     // Ensure data directory exists
     static {
         File dataDir = new File(DATA_DIR);

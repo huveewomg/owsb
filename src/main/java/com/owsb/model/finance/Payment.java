@@ -1,4 +1,4 @@
-package com.owsb.model;
+package com.owsb.model.finance;
 
 import java.text.SimpleDateFormat;
 import java.util.Date;

@@ -191,5 +191,44 @@
       }
     ],
     "totalValue": 35.25
+  },
+  {
+    "poID": "PO007",
+    "prID": "PR014",
+    "date": "May 16, 2025, 6:19:53 PM",
+    "deliveryDate": "May 30, 2025, 5:48:36 PM",
+    "purchaseManagerID": "U003",
+    "status": "PENDING",
+    "notes": "",
+    "items": [
+      {
+        "itemID": "IT001",
+        "itemName": "Rice 5kg",
+        "quantity": 1,
+        "supplierID": "SUP008",
+        "supplierName": "Budget Grocery Supplier",
+        "unitPrice": 25.5,
+        "totalCost": 25.5
+      },
+      {
+        "itemID": "IT012",
+        "itemName": "Basmati Rice 2kg",
+        "quantity": 1,
+        "supplierID": "SUP001",
+        "supplierName": "ABC Groceries Sdn Bhd",
+        "unitPrice": 18.9,
+        "totalCost": 18.9
+      },
+      {
+        "itemID": "IT019",
+        "itemName": "Imported Cheese 250g",
+        "quantity": 1,
+        "supplierID": "SUP009",
+        "supplierName": "Premium Import Foods",
+        "unitPrice": 16.9,
+        "totalCost": 16.9
+      }
+    ],
+    "totalValue": 61.3
   }
 ]

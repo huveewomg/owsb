@@ -7,7 +7,9 @@
     "itemIDs": [
       "IT001",
       "IT002",
-      "IT011"
+      "IT011",
+      "IT012",
+      "IT015"
     ]
   },
   {
@@ -16,7 +18,9 @@
     "contactPerson": "Mary Wong",
     "phone": "016-586 9092",
     "itemIDs": [
-      "IT003"
+      "IT003",
+      "IT012",
+      "IT014"
     ]
   },
   {
@@ -25,7 +29,11 @@
     "contactPerson": "Ali bin Hassan",
     "phone": "011-3959 9451",
     "itemIDs": [
-      "IT004"
+      "IT004",
+      "IT001",
+      "IT002",
+      "IT016",
+      "IT018"
     ]
   },
   {
@@ -34,7 +42,8 @@
     "contactPerson": "Sarah Tan",
     "phone": "017-124 6406",
     "itemIDs": [
-      "IT005"
+      "IT005",
+      "IT013"
     ]
   },
   {
@@ -43,7 +52,8 @@
     "contactPerson": "Ahmad bin Ismail",
     "phone": "019-670 4632",
     "itemIDs": [
-      "IT007"
+      "IT007",
+      "IT018"
     ]
   },
   {
@@ -53,7 +63,8 @@
     "phone": "03-8375 7556",
     "itemIDs": [
       "IT008",
-      "IT009"
+      "IT009",
+      "IT017"
     ]
   },
   {
@@ -62,7 +73,42 @@
     "contactPerson": "Derrick",
     "phone": "012-7566421",
     "itemIDs": [
-      "IT010"
+      "IT010",
+      "IT008",
+      "IT009"
+    ]
+  },
+  {
+    "supplierID": "SUP008",
+    "name": "Budget Grocery Supplier",
+    "contactPerson": "Rajesh Kumar",
+    "phone": "018-332 9854",
+    "itemIDs": [
+      "IT001",
+      "IT002",
+      "IT003",
+      "IT004"
+    ]
+  },
+  {
+    "supplierID": "SUP009",
+    "name": "Premium Import Foods",
+    "contactPerson": "Jessica Chen",
+    "phone": "019-887 4532",
+    "itemIDs": [
+      "IT015",
+      "IT016",
+      "IT019"
+    ]
+  },
+  {
+    "supplierID": "SUP010",
+    "name": "Eco Packaging Solutions",
+    "contactPerson": "David Wong",
+    "phone": "011-2698 4321",
+    "itemIDs": [
+      "IT010",
+      "IT017"
     ]
   }
 ]

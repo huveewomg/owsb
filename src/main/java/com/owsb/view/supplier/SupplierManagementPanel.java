@@ -1,17 +1,21 @@
 package com.owsb.view.supplier;
 
+import com.owsb.controller.ItemController;
 import com.owsb.controller.SupplierController;
+import com.owsb.model.inventory.Item;
 import com.owsb.model.supplier.Supplier;
 
 import javax.swing.*;
 import javax.swing.table.DefaultTableModel;
 import java.awt.*;
 import java.awt.event.ActionEvent;
+import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 /**
- * Panel for supplier management operations
- * Separates supplier management UI from the main dashboard
+ * panel for supplier management operations
+ * Allows managing which items a supplier can provide
  */
 public class SupplierManagementPanel extends JPanel {
     // UI Components
@@ -20,17 +24,29 @@ public class SupplierManagementPanel extends JPanel {
     private JTextField contactPersonField;
     private JTextField phoneField;
     private JTable supplierTable;
-    private DefaultTableModel tableModel;
+    private DefaultTableModel supplierTableModel;
     
-    // Controller reference
+    // Item assignment components
+    private JTable supplierItemsTable;
+    private DefaultTableModel supplierItemsTableModel;
+    private JTable availableItemsTable;
+    private DefaultTableModel availableItemsTableModel;
+    
+    // Controllers
     private final SupplierController supplierController;
+    private final ItemController itemController;
+    
+    // Current supplier
+    private Supplier currentSupplier;
     
     /**
      * Constructor
      * @param supplierController Supplier controller
+     * @param itemController Item controller
      */
-    public SupplierManagementPanel(SupplierController supplierController) {
+    public SupplierManagementPanel(SupplierController supplierController, ItemController itemController) {
         this.supplierController = supplierController;
+        this.itemController = itemController;
         
         // Set up panel
         setLayout(new BorderLayout());
@@ -41,20 +57,30 @@ public class SupplierManagementPanel extends JPanel {
         headerLabel.setFont(new Font("Arial", Font.BOLD, 18));
         add(headerLabel, BorderLayout.NORTH);
         
-        // Create split pane for form and table
-        JSplitPane splitPane = new JSplitPane(JSplitPane.HORIZONTAL_SPLIT);
-        splitPane.setDividerLocation(400);
+        // Create main content panel with supplier details and item management
+        JSplitPane mainSplitPane = new JSplitPane(JSplitPane.VERTICAL_SPLIT);
+        mainSplitPane.setDividerLocation(300);
+        
+        // Top section: Supplier details and list
+        JSplitPane topSplitPane = new JSplitPane(JSplitPane.HORIZONTAL_SPLIT);
+        topSplitPane.setDividerLocation(400);
         
         // Add form panel to left side
         JPanel formPanel = createFormPanel();
-        splitPane.setLeftComponent(formPanel);
+        topSplitPane.setLeftComponent(formPanel);
         
-        // Add table panel to right side
-        JPanel tablePanel = createTablePanel();
-        splitPane.setRightComponent(tablePanel);
+        // Add supplier table panel to right side
+        JPanel tablePanel = createSupplierTablePanel();
+        topSplitPane.setRightComponent(tablePanel);
         
-        // Add split pane to center
-        add(splitPane, BorderLayout.CENTER);
+        mainSplitPane.setTopComponent(topSplitPane);
+        
+        // Bottom section: Item assignment
+        JPanel itemAssignmentPanel = createItemAssignmentPanel();
+        mainSplitPane.setBottomComponent(itemAssignmentPanel);
+        
+        // Add main split pane to center
+        add(mainSplitPane, BorderLayout.CENTER);
         
         // Initial data load
         refreshSupplierTable();
@@ -124,13 +150,12 @@ public class SupplierManagementPanel extends JPanel {
         
         // Update Supplier action
         updateButton.addActionListener((ActionEvent e) -> {
-            int selectedRow = supplierTable.getSelectedRow();
-            if (selectedRow == -1) {
+            if (currentSupplier == null) {
                 JOptionPane.showMessageDialog(panel, "Please select a supplier to update.");
                 return;
             }
             
-            String supplierId = (String) tableModel.getValueAt(selectedRow, 0);
+            String supplierId = currentSupplier.getSupplierID();
             String name = nameField.getText().trim();
             String contactPerson = contactPersonField.getText().trim();
             String phone = phoneField.getText().trim();
@@ -140,8 +165,14 @@ public class SupplierManagementPanel extends JPanel {
             
             if (success) {
                 JOptionPane.showMessageDialog(panel, "Supplier updated successfully.");
-                clearForm();
                 refreshSupplierTable();
+                // Keep the same supplier selected
+                for (int i = 0; i < supplierTable.getRowCount(); i++) {
+                    if (supplierTable.getValueAt(i, 0).equals(supplierId)) {
+                        supplierTable.setRowSelectionInterval(i, i);
+                        break;
+                    }
+                }
             } else {
                 JOptionPane.showMessageDialog(panel, "Failed to update supplier.", 
                                             "Error", JOptionPane.ERROR_MESSAGE);
@@ -150,13 +181,12 @@ public class SupplierManagementPanel extends JPanel {
         
         // Delete Supplier action
         deleteButton.addActionListener((ActionEvent e) -> {
-            int selectedRow = supplierTable.getSelectedRow();
-            if (selectedRow == -1) {
+            if (currentSupplier == null) {
                 JOptionPane.showMessageDialog(panel, "Please select a supplier to delete.");
                 return;
             }
             
-            String supplierId = (String) tableModel.getValueAt(selectedRow, 0);
+            String supplierId = currentSupplier.getSupplierID();
             
             int confirm = JOptionPane.showConfirmDialog(panel, 
                 "Are you sure you want to delete this supplier?", 
@@ -169,6 +199,7 @@ public class SupplierManagementPanel extends JPanel {
                     JOptionPane.showMessageDialog(panel, "Supplier deleted successfully.");
                     clearForm();
                     refreshSupplierTable();
+                    clearItemTables();
                 } else {
                     JOptionPane.showMessageDialog(panel, "Failed to delete supplier.", 
                                                 "Error", JOptionPane.ERROR_MESSAGE);
@@ -177,7 +208,11 @@ public class SupplierManagementPanel extends JPanel {
         });
         
         // Clear form action
-        clearButton.addActionListener(e -> clearForm());
+        clearButton.addActionListener(e -> {
+            clearForm();
+            supplierTable.clearSelection();
+            clearItemTables();
+        });
         
         // Add buttons to panel
         buttonPanel.add(addButton);
@@ -193,10 +228,10 @@ public class SupplierManagementPanel extends JPanel {
     }
     
     /**
-     * Create table panel with supplier list
-     * @return Table panel
+     * Create supplier table panel
+     * @return Supplier table panel
      */
-    private JPanel createTablePanel() {
+    private JPanel createSupplierTablePanel() {
         JPanel panel = new JPanel(new BorderLayout());
         panel.setBorder(BorderFactory.createCompoundBorder(
             BorderFactory.createEmptyBorder(5, 5, 5, 5),
@@ -204,7 +239,7 @@ public class SupplierManagementPanel extends JPanel {
         ));
         
         // Table model with non-editable cells
-        tableModel = new DefaultTableModel(
+        supplierTableModel = new DefaultTableModel(
             new String[]{"Supplier Code", "Name", "Contact Person", "Phone"}, 0) {
             @Override
             public boolean isCellEditable(int row, int column) {
@@ -213,7 +248,7 @@ public class SupplierManagementPanel extends JPanel {
         };
         
         // Create table
-        supplierTable = new JTable(tableModel);
+        supplierTable = new JTable(supplierTableModel);
         supplierTable.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
         supplierTable.setFillsViewportHeight(true);
         
@@ -222,14 +257,20 @@ public class SupplierManagementPanel extends JPanel {
             if (!e.getValueIsAdjusting()) {
                 int selectedRow = supplierTable.getSelectedRow();
                 if (selectedRow != -1) {
-                    String supplierId = (String) tableModel.getValueAt(selectedRow, 0);
-                    Supplier supplier = supplierController.getSupplierById(supplierId);
+                    String supplierId = (String) supplierTableModel.getValueAt(selectedRow, 0);
+                    currentSupplier = supplierController.getSupplierById(supplierId);
                     
-                    if (supplier != null) {
-                        nameField.setText(supplier.getName());
-                        contactPersonField.setText(supplier.getContactPerson());
-                        phoneField.setText(supplier.getPhone());
+                    if (currentSupplier != null) {
+                        nameField.setText(currentSupplier.getName());
+                        contactPersonField.setText(currentSupplier.getContactPerson());
+                        phoneField.setText(currentSupplier.getPhone());
+                        
+                        // Update item tables
+                        refreshItemTables();
                     }
+                } else {
+                    currentSupplier = null;
+                    clearItemTables();
                 }
             }
         });
@@ -250,30 +291,271 @@ public class SupplierManagementPanel extends JPanel {
     }
     
     /**
+     * Create item assignment panel
+     * @return Item assignment panel
+     */
+    private JPanel createItemAssignmentPanel() {
+        JPanel panel = new JPanel(new BorderLayout());
+        panel.setBorder(BorderFactory.createCompoundBorder(
+            BorderFactory.createEmptyBorder(5, 5, 5, 5),
+            BorderFactory.createTitledBorder("Item Assignment")
+        ));
+        
+        // Split pane for supplier items and available items
+        JSplitPane splitPane = new JSplitPane(JSplitPane.HORIZONTAL_SPLIT);
+        splitPane.setDividerLocation(400);
+        
+        // Supplier items panel
+        JPanel supplierItemsPanel = new JPanel(new BorderLayout());
+        supplierItemsPanel.setBorder(BorderFactory.createTitledBorder("Supplier Items"));
+        
+        supplierItemsTableModel = new DefaultTableModel(
+            new String[]{"Item Code", "Name", "Description", "Price", "Category"}, 0) {
+            @Override
+            public boolean isCellEditable(int row, int column) {
+                return false;
+            }
+        };
+        
+        supplierItemsTable = new JTable(supplierItemsTableModel);
+        supplierItemsTable.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
+        supplierItemsTable.setFillsViewportHeight(true);
+        
+        JScrollPane supplierItemsScrollPane = new JScrollPane(supplierItemsTable);
+        supplierItemsPanel.add(supplierItemsScrollPane, BorderLayout.CENTER);
+        
+        JButton removeItemButton = new JButton("Remove Selected Item");
+        removeItemButton.addActionListener(e -> removeItemFromSupplier());
+        
+        JPanel supplierItemsButtonPanel = new JPanel(new FlowLayout(FlowLayout.RIGHT));
+        supplierItemsButtonPanel.add(removeItemButton);
+        supplierItemsPanel.add(supplierItemsButtonPanel, BorderLayout.SOUTH);
+        
+        splitPane.setLeftComponent(supplierItemsPanel);
+        
+        // Available items panel
+        JPanel availableItemsPanel = new JPanel(new BorderLayout());
+        availableItemsPanel.setBorder(BorderFactory.createTitledBorder("Available Items"));
+        
+        availableItemsTableModel = new DefaultTableModel(
+            new String[]{"Item Code", "Name", "Description", "Price", "Category"}, 0) {
+            @Override
+            public boolean isCellEditable(int row, int column) {
+                return false;
+            }
+        };
+        
+        availableItemsTable = new JTable(availableItemsTableModel);
+        availableItemsTable.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
+        availableItemsTable.setFillsViewportHeight(true);
+        
+        JScrollPane availableItemsScrollPane = new JScrollPane(availableItemsTable);
+        availableItemsPanel.add(availableItemsScrollPane, BorderLayout.CENTER);
+        
+        JButton addItemButton = new JButton("Add Selected Item");
+        addItemButton.addActionListener(e -> addItemToSupplier());
+        
+        JPanel availableItemsButtonPanel = new JPanel(new FlowLayout(FlowLayout.RIGHT));
+        availableItemsButtonPanel.add(addItemButton);
+        availableItemsPanel.add(availableItemsButtonPanel, BorderLayout.SOUTH);
+        
+        splitPane.setRightComponent(availableItemsPanel);
+        
+        panel.add(splitPane, BorderLayout.CENTER);
+        
+        return panel;
+    }
+    
+    /**
      * Clear form fields
      */
     private void clearForm() {
         nameField.setText("");
         contactPersonField.setText("");
         phoneField.setText("");
-        supplierTable.clearSelection();
+        currentSupplier = null;
+    }
+    
+    /**
+     * Clear item tables
+     */
+    private void clearItemTables() {
+        supplierItemsTableModel.setRowCount(0);
+        availableItemsTableModel.setRowCount(0);
     }
     
     /**
      * Refresh supplier table with latest data
      */
     private void refreshSupplierTable() {
-        tableModel.setRowCount(0);
+        // Remember selected supplier
+        String selectedSupplierId = null;
+        if (currentSupplier != null) {
+            selectedSupplierId = currentSupplier.getSupplierID();
+        }
+        
+        supplierTableModel.setRowCount(0);
         
         List<Supplier> suppliers = supplierController.getAllSuppliers();
         
         for (Supplier supplier : suppliers) {
-            tableModel.addRow(new Object[]{
+            supplierTableModel.addRow(new Object[]{
                 supplier.getSupplierID(),
                 supplier.getName(),
                 supplier.getContactPerson(),
                 supplier.getPhone()
             });
+        }
+        
+        // Restore selection if possible
+        if (selectedSupplierId != null) {
+            for (int i = 0; i < supplierTable.getRowCount(); i++) {
+                if (supplierTable.getValueAt(i, 0).equals(selectedSupplierId)) {
+                    supplierTable.setRowSelectionInterval(i, i);
+                    break;
+                }
+            }
+        }
+    }
+    
+    /**
+     * Refresh item tables based on current supplier
+     */
+    private void refreshItemTables() {
+        if (currentSupplier == null) {
+            clearItemTables();
+            return;
+        }
+        
+        // Clear tables
+        supplierItemsTableModel.setRowCount(0);
+        availableItemsTableModel.setRowCount(0);
+        
+        // Get all items
+        List<Item> allItems = itemController.getAllItems();
+        
+        // Get supplier items
+        List<String> supplierItemIds = currentSupplier.getItemIDs();
+        if (supplierItemIds == null) {
+            supplierItemIds = new ArrayList<>();
+        }
+        
+        // Populate supplier items table
+        for (Item item : allItems) {
+            if (supplierItemIds.contains(item.getItemID())) {
+                supplierItemsTableModel.addRow(new Object[]{
+                    item.getItemID(),
+                    item.getName(),
+                    item.getDescription(),
+                    item.getUnitPrice(),
+                    item.getCategory()
+                });
+            }
+        }
+        
+        // Populate available items table (items not already assigned to supplier)
+        for (Item item : allItems) {
+            if (!supplierItemIds.contains(item.getItemID())) {
+                availableItemsTableModel.addRow(new Object[]{
+                    item.getItemID(),
+                    item.getName(),
+                    item.getDescription(),
+                    item.getUnitPrice(),
+                    item.getCategory()
+                });
+            }
+        }
+    }
+    
+    /**
+     * Add selected item to supplier
+     */
+    private void addItemToSupplier() {
+        if (currentSupplier == null) {
+            JOptionPane.showMessageDialog(this, 
+                    "Please select a supplier first.", 
+                    "No Supplier Selected", 
+                    JOptionPane.WARNING_MESSAGE);
+            return;
+        }
+        
+        int selectedRow = availableItemsTable.getSelectedRow();
+        if (selectedRow == -1) {
+            JOptionPane.showMessageDialog(this, 
+                    "Please select an item to add.", 
+                    "No Item Selected", 
+                    JOptionPane.WARNING_MESSAGE);
+            return;
+        }
+        
+        String itemId = (String) availableItemsTableModel.getValueAt(selectedRow, 0);
+        
+        // Update supplier's items
+        boolean success = supplierController.addItemToSupplier(currentSupplier.getSupplierID(), itemId);
+        
+        if (success) {
+            // Refresh current supplier
+            currentSupplier = supplierController.getSupplierById(currentSupplier.getSupplierID());
+            
+            // Refresh tables
+            refreshItemTables();
+        } else {
+            JOptionPane.showMessageDialog(this, 
+                    "Failed to add item to supplier.", 
+                    "Error", 
+                    JOptionPane.ERROR_MESSAGE);
+        }
+    }
+    
+    /**
+     * Remove selected item from supplier
+     */
+    private void removeItemFromSupplier() {
+        if (currentSupplier == null) {
+            JOptionPane.showMessageDialog(this, 
+                    "Please select a supplier first.", 
+                    "No Supplier Selected", 
+                    JOptionPane.WARNING_MESSAGE);
+            return;
+        }
+        
+        int selectedRow = supplierItemsTable.getSelectedRow();
+        if (selectedRow == -1) {
+            JOptionPane.showMessageDialog(this, 
+                    "Please select an item to remove.", 
+                    "No Item Selected", 
+                    JOptionPane.WARNING_MESSAGE);
+            return;
+        }
+        
+        String itemId = (String) supplierItemsTableModel.getValueAt(selectedRow, 0);
+        
+        // Check if this is the primary supplier for the item
+        Item item = itemController.getItemById(itemId);
+        if (item != null && item.getSupplierID().equals(currentSupplier.getSupplierID())) {
+            int confirm = JOptionPane.showConfirmDialog(this, 
+                    "This supplier is the primary supplier for this item. Are you sure you want to remove it?", 
+                    "Primary Supplier Warning", JOptionPane.YES_NO_OPTION, JOptionPane.WARNING_MESSAGE);
+            
+            if (confirm != JOptionPane.YES_OPTION) {
+                return;
+            }
+        }
+        
+        // Update supplier's items
+        boolean success = supplierController.removeItemFromSupplier(currentSupplier.getSupplierID(), itemId);
+        
+        if (success) {
+            // Refresh current supplier
+            currentSupplier = supplierController.getSupplierById(currentSupplier.getSupplierID());
+            
+            // Refresh tables
+            refreshItemTables();
+        } else {
+            JOptionPane.showMessageDialog(this, 
+                    "Failed to remove item from supplier.", 
+                    "Error", 
+                    JOptionPane.ERROR_MESSAGE);
         }
     }
 }

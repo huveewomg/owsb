@@ -28,6 +28,7 @@ public class ItemManagementPanel extends JPanel {
     
     // Controller reference
     private final ItemController itemController;
+    private ItemCategoryManagementPanel categoryPanel;
     
     /**
      * Constructor
@@ -52,6 +53,14 @@ public class ItemManagementPanel extends JPanel {
         // Add form panel to left side
         JPanel formPanel = createFormPanel();
         splitPane.setLeftComponent(formPanel);
+
+        // Add category management panel below form
+        categoryPanel = new ItemCategoryManagementPanel();
+        categoryPanel.setCategoryChangeListener(this::refreshCategoryCombo);
+        JPanel leftPanel = new JPanel(new BorderLayout());
+        leftPanel.add(formPanel, BorderLayout.CENTER);
+        leftPanel.add(categoryPanel, BorderLayout.SOUTH);
+        splitPane.setLeftComponent(leftPanel);
         
         // Add table panel to right side
         JPanel tablePanel = createTablePanel();
@@ -83,7 +92,7 @@ public class ItemManagementPanel extends JPanel {
         nameField = new JTextField();
         descriptionField = new JTextField();
         priceField = new JTextField();
-        categoryCombo = new JComboBox<>(new String[]{"Groceries", "Fresh Produce", "Essentials"}); //HACK: Hardcoded categories
+        categoryCombo = new JComboBox<>(getCategoryArray());
         supplierCombo = new JComboBox<>();
         
         // Populate supplier combo box
@@ -149,17 +158,18 @@ public class ItemManagementPanel extends JPanel {
                 JOptionPane.showMessageDialog(panel, "Please select an item to update.");
                 return;
             }
-            
+
             String itemId = (String) tableModel.getValueAt(selectedRow, 0);
             try {
                 String name = nameField.getText().trim();
                 String description = descriptionField.getText().trim();
                 double price = Double.parseDouble(priceField.getText().trim());
                 String category = (String) categoryCombo.getSelectedItem();
-                
-                // Use controller to update item
-                boolean success = itemController.updateItem(itemId, name, description, price, category);
-                
+                String supplierId = SupplierUtils.getSelectedSupplierId(supplierCombo);
+
+                // Use controller to update item (with supplier)
+                boolean success = itemController.updateItem(itemId, name, description, price, category, supplierId);
+
                 if (success) {
                     JOptionPane.showMessageDialog(panel, "Item updated successfully.");
                     clearForm();
@@ -314,5 +324,14 @@ public class ItemManagementPanel extends JPanel {
                 supplierName
             });
         }
+    }
+    
+    private String[] getCategoryArray() {
+        java.util.List<String> categories = ItemCategoryManagementPanel.getCategories();
+        return categories.toArray(new String[0]);
+    }
+    
+    private void refreshCategoryCombo() {
+        categoryCombo.setModel(new DefaultComboBoxModel<>(getCategoryArray()));
     }
 }

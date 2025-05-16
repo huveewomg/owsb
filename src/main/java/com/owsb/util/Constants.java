@@ -20,6 +20,7 @@ public class Constants {
     public static final String PR_FILE = DATA_DIR + File.separator + "purchase_requisitions.txt";
     public static final String PO_FILE = DATA_DIR + File.separator + "purchase_orders.txt";
     public static final String PAYMENTS_FILE = DATA_DIR + File.separator + "payments.txt";
+    public static final String ITEM_CATEGORY_FILE = DATA_DIR + File.separator + "item_categories.txt";
     
     // Business constants
     public static final double DEFAULT_PROFIT_RATIO = 0.10; // 10%

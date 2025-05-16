@@ -180,5 +180,43 @@
       }
     ],
     "estimatedTotal": 35.25
+  },
+  {
+    "prID": "PR014",
+    "date": "May 16, 2025, 5:49:23 PM",
+    "requiredDate": "May 30, 2025, 5:48:36 PM",
+    "salesManagerID": "U002",
+    "status": "PROCESSED",
+    "notes": "",
+    "items": [
+      {
+        "itemID": "IT001",
+        "itemName": "Rice 5kg",
+        "quantity": 1,
+        "requiredDate": "May 30, 2025, 5:49:17 PM",
+        "suggestedSupplierID": "SUP001",
+        "unitPrice": 25.5,
+        "estimatedCost": 25.5
+      },
+      {
+        "itemID": "IT012",
+        "itemName": "Basmati Rice 2kg",
+        "quantity": 1,
+        "requiredDate": "May 30, 2025, 5:49:20 PM",
+        "suggestedSupplierID": "SUP001",
+        "unitPrice": 18.9,
+        "estimatedCost": 18.9
+      },
+      {
+        "itemID": "IT019",
+        "itemName": "Imported Cheese 250g",
+        "quantity": 1,
+        "requiredDate": "May 30, 2025, 5:49:22 PM",
+        "suggestedSupplierID": "SUP009",
+        "unitPrice": 16.9,
+        "estimatedCost": 16.9
+      }
+    ],
+    "estimatedTotal": 61.3
   }
 ]

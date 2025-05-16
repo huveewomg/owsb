@@ -165,7 +165,12 @@ public class SupplierRepository implements Repository<Supplier> {
         Supplier supplier = new Supplier(dto.supplierID, dto.name, dto.contactPerson, dto.phone);
         supplier.setEmail(dto.email);
         supplier.setAddress(dto.address);
-        supplier.setItemIDs(dto.itemIDs);
+        // Ensure itemIDs is never null
+        if (dto.itemIDs == null) {
+            supplier.setItemIDs(new ArrayList<>());
+        } else {
+            supplier.setItemIDs(dto.itemIDs);
+        }
         return supplier;
     }
 

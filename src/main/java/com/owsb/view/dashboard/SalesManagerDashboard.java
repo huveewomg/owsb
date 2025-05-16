@@ -97,7 +97,7 @@ public class SalesManagerDashboard extends BaseDashboard {
     private void initPanels() {
         // Create dedicated panels using the new classes
         itemPanel = new ItemManagementPanel(itemController);
-        supplierPanel = new SupplierManagementPanel(supplierController);
+        supplierPanel = new SupplierManagementPanel(supplierController, itemController);
         salesPanel = new SalesEntryPanel(salesController);
         requisitionPanel = new PurchaseRequisitionPanel(prController, currentUser);
         purchaseOrderPanel = new PurchaseOrderPanel(poController, currentUser);

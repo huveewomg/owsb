@@ -1,16 +1,21 @@
 package com.owsb.view.order;
 
 import com.owsb.controller.PurchaseOrderController;
+import com.owsb.controller.SupplierSelectionController;
 import com.owsb.model.procurement.POItem;
 import com.owsb.model.procurement.PRItem;
 import com.owsb.model.procurement.PurchaseRequisition;
-// import com.owsb.model.Supplier;
+import com.owsb.model.supplier.Supplier;
 import com.owsb.repository.SupplierRepository;
 
 import javax.swing.*;
 import javax.swing.table.DefaultTableCellRenderer;
 import javax.swing.table.DefaultTableModel;
+import javax.swing.table.TableCellEditor;
+import javax.swing.table.TableCellRenderer;
 import java.awt.*;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.text.NumberFormat;
 import java.text.SimpleDateFormat;
 import java.util.*;
@@ -48,14 +53,15 @@ public class PurchaseOrderGenerationPanel extends JPanel {
     private JButton cancelButton;
     private JButton generateButton;
     
-    // Controller
+    // Controllers
     private final PurchaseOrderController poController;
-    private final SupplierRepository supplierRepository;
+    private final SupplierSelectionController supplierSelectionController;
     
     // Data
     private String prId;
     private PurchaseRequisition pr;
     private final List<POItem> poItems = new ArrayList<>();
+    private Map<String, List<Supplier>> itemSuppliers = new HashMap<>();
     
     // Formatters
     private final SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
@@ -67,7 +73,7 @@ public class PurchaseOrderGenerationPanel extends JPanel {
      */
     public PurchaseOrderGenerationPanel(PurchaseOrderController poController) {
         this.poController = poController;
-        this.supplierRepository = new SupplierRepository();
+        this.supplierSelectionController = new SupplierSelectionController();
         
         // Set up panel
         setLayout(new BorderLayout(10, 10));
@@ -128,7 +134,7 @@ public class PurchaseOrderGenerationPanel extends JPanel {
                 new Object[]{"Item Code", "Item Name", "Quantity", "Supplier", "Unit Price", "Total"}, 0) {
             @Override
             public boolean isCellEditable(int row, int column) {
-                return column == 3; // Only supplier column is editable (for future enhancement)
+                return column == 3; // Only supplier column is editable
             }
             
             @Override
@@ -155,6 +161,9 @@ public class PurchaseOrderGenerationPanel extends JPanel {
         // Set column renderers
         itemsTable.getColumnModel().getColumn(4).setCellRenderer(currencyRenderer);
         itemsTable.getColumnModel().getColumn(5).setCellRenderer(currencyRenderer);
+        
+        // Set the supplier column to use a custom table cell editor
+        itemsTable.getColumnModel().getColumn(3).setCellEditor(new SupplierCellEditor());
         
         // Create scroll pane for table
         JScrollPane tableScrollPane = new JScrollPane(itemsTable);
@@ -239,19 +248,25 @@ public class PurchaseOrderGenerationPanel extends JPanel {
         // Clear existing items
         tableModel.setRowCount(0);
         poItems.clear();
+        itemSuppliers.clear();
         
         // Add PR items to table
         for (PRItem prItem : pr.getItems()) {
-            // Get the supplier name
-            String supplierName = poController.getSupplierName(prItem.getSuggestedSupplierID());
+            // Get all potential suppliers for this item
+            List<Supplier> suppliers = supplierSelectionController.getAlternativeSuppliersForItem(prItem.getItemID());
+            itemSuppliers.put(prItem.getItemID(), suppliers);
             
-            // Create a PO item
+            // Get the suggested supplier from PR
+            String suggestedSupplierId = prItem.getSuggestedSupplierID();
+            String suggestedSupplierName = poController.getSupplierName(suggestedSupplierId);
+            
+            // Create a PO item with the suggested supplier
             POItem poItem = new POItem(
                     prItem.getItemID(),
                     prItem.getItemName(),
                     prItem.getQuantity(),
-                    prItem.getSuggestedSupplierID(),
-                    supplierName,
+                    suggestedSupplierId,
+                    suggestedSupplierName,
                     prItem.getUnitPrice()
             );
             
@@ -262,7 +277,7 @@ public class PurchaseOrderGenerationPanel extends JPanel {
                     prItem.getItemID(),
                     prItem.getItemName(),
                     prItem.getQuantity(),
-                    supplierName,
+                    suggestedSupplierName,
                     prItem.getUnitPrice(),
                     poItem.getTotalCost()
             });
@@ -288,7 +303,6 @@ public class PurchaseOrderGenerationPanel extends JPanel {
      * Cancel purchase order generation
      */
     private void cancel() {
-        // Ask for confirmation
         int response = JOptionPane.showConfirmDialog(this, 
                 "Are you sure you want to cancel? All changes will be lost.", 
                 "Confirm Cancel", 
@@ -297,6 +311,75 @@ public class PurchaseOrderGenerationPanel extends JPanel {
         if (response == JOptionPane.YES_OPTION) {
             // Notify parent
             firePropertyChange("poCancelled", false, true);
+        }
+    }
+
+    // Add the custom SupplierCellEditor class as an inner class
+    private class SupplierCellEditor extends AbstractCellEditor implements TableCellEditor {
+        private final JComboBox<String> comboBox;
+        private String currentItemId;
+        private List<Supplier> currentSuppliers;
+        
+        public SupplierCellEditor() {
+            comboBox = new JComboBox<>();
+            
+            // Add action listener that stores the selection but doesn't immediately commit it
+            comboBox.addActionListener(e -> {
+                // This is important to prevent action cascade
+                if (!comboBox.isPopupVisible()) {
+                    fireEditingStopped();
+                }
+            });
+        }
+        
+        @Override
+        public Component getTableCellEditorComponent(JTable table, Object value, 
+                                                  boolean isSelected, int row, int column) {
+            // Get the item ID for this row
+            currentItemId = (String) table.getValueAt(row, 0);
+            
+            // Get the suppliers for this item
+            currentSuppliers = itemSuppliers.getOrDefault(currentItemId, new ArrayList<>());
+            
+            // Clear and repopulate the combo box
+            comboBox.removeAllItems();
+            for (Supplier supplier : currentSuppliers) {
+                comboBox.addItem(supplier.getName());
+            }
+            
+            // Set the current value
+            if (value != null) {
+                comboBox.setSelectedItem(value);
+            }
+            
+            return comboBox;
+        }
+        
+        @Override
+        public Object getCellEditorValue() {
+            String selectedSupplierName = (String) comboBox.getSelectedItem();
+            
+            // Find the supplier ID for this name
+            String selectedSupplierId = null;
+            for (Supplier supplier : currentSuppliers) {
+                if (supplier.getName().equals(selectedSupplierName)) {
+                    selectedSupplierId = supplier.getSupplierID();
+                    break;
+                }
+            }
+            
+            // Update the item in poItems
+            if (selectedSupplierId != null) {
+                for (POItem poItem : poItems) {
+                    if (poItem.getItemID().equals(currentItemId)) {
+                        poItem.setSupplierID(selectedSupplierId);
+                        poItem.setSupplierName(selectedSupplierName);
+                        break;
+                    }
+                }
+            }
+            
+            return selectedSupplierName;
         }
     }
     
@@ -310,7 +393,12 @@ public class PurchaseOrderGenerationPanel extends JPanel {
         // Get notes
         String notes = notesArea.getText().trim();
         
-        // Create PO
+        // Make sure we stop any active editing before generating the PO
+        if (itemsTable.isEditing()) {
+            itemsTable.getCellEditor().stopCellEditing();
+        }
+        
+        // Create PO with the selected suppliers for each item
         boolean success = poController.createPurchaseOrder(prId, deliveryDate, notes, poItems);
         
         // Show message

@@ -184,16 +184,15 @@ public class ItemController {
               currentUser.getRole() == UserRole.ADMIN)) {
             return false;
         }
-        
-        // Get the item before deleting
-        Item item = itemRepository.findById(itemId);
         boolean deleted = itemRepository.delete(itemId);
-        if (deleted && item != null) {
-            // Remove itemID from supplier's itemIDs list
-            Supplier supplier = supplierRepository.findById(item.getSupplierID());
-            if (supplier != null) {
-                supplier.removeItem(itemId);
-                supplierRepository.update(supplier);
+        if (deleted) {
+            // Remove itemID from all suppliers' itemIDs list
+            List<Supplier> suppliers = supplierRepository.findAll();
+            for (Supplier supplier : suppliers) {
+                if (supplier.getItemIDs() != null && supplier.getItemIDs().contains(itemId)) {
+                    supplier.removeItem(itemId);
+                    supplierRepository.update(supplier);
+                }
             }
         }
         return deleted;

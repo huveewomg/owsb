@@ -1,7 +1,7 @@
 package com.owsb.view.requisition;
 
 import com.owsb.controller.PurchaseRequisitionController;
-import com.owsb.model.User;
+import com.owsb.model.user.User;
 
 import javax.swing.*;
 import java.awt.*;

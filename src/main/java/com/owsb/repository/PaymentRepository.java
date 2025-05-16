@@ -1,6 +1,6 @@
 package com.owsb.repository;
 
-import com.owsb.model.Payment;
+import com.owsb.model.finance.Payment;
 import com.owsb.util.Constants;
 import com.owsb.util.FileUtils;
 

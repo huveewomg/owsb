@@ -1,6 +1,6 @@
 package com.owsb.repository;
 
-import com.owsb.model.Sale;
+import com.owsb.model.sales.Sale;
 import com.owsb.util.Constants;
 import com.owsb.util.FileUtils;
 

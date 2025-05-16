@@ -1,10 +1,10 @@
 package com.owsb.view.order;
 
 import com.owsb.controller.PurchaseOrderController;
-import com.owsb.model.POItem;
-import com.owsb.model.PurchaseOrder;
-import com.owsb.model.User;
+import com.owsb.model.procurement.POItem;
+import com.owsb.model.procurement.PurchaseOrder;
 import com.owsb.model.user.FinanceManager;
+import com.owsb.model.user.User;
 import com.owsb.util.Constants;
 
 import javax.swing.*;

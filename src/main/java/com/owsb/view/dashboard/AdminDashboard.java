@@ -1,8 +1,8 @@
 package com.owsb.view.dashboard;
 
 import com.owsb.controller.AuthController;
-import com.owsb.model.User;
 import com.owsb.model.user.Administrator;
+import com.owsb.model.user.User;
 import com.owsb.util.UserRole;
 import com.owsb.view.user.UserManagementPanel;
 

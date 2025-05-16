@@ -1,6 +1,6 @@
 package com.owsb.view.finance;
 
-import com.owsb.model.Payment;
+import com.owsb.model.finance.Payment;
 import com.owsb.repository.PaymentRepository;
 
 import javax.swing.*;

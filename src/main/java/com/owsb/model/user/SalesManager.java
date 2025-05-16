@@ -1,6 +1,5 @@
 package com.owsb.model.user;
 
-import com.owsb.model.User;
 import com.owsb.util.UserRole;
 
 /**

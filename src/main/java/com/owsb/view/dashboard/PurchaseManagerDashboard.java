@@ -3,8 +3,8 @@ package com.owsb.view.dashboard;
 import com.owsb.controller.AuthController;
 import com.owsb.controller.PurchaseOrderController;
 import com.owsb.controller.PurchaseRequisitionController;
-import com.owsb.model.User;
 import com.owsb.model.user.PurchaseManager;
+import com.owsb.model.user.User;
 import com.owsb.view.order.PurchaseOrderPanel;
 import com.owsb.view.requisition.PurchaseRequisitionListPanel;
 

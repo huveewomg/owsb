@@ -1,7 +1,7 @@
 package com.owsb.view.order;
 
 import com.owsb.controller.PurchaseOrderController;
-import com.owsb.model.User;
+import com.owsb.model.user.User;
 
 import javax.swing.*;
 import java.awt.*;

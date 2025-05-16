@@ -1,9 +1,9 @@
 package com.owsb.view.order;
 
 import com.owsb.controller.PurchaseOrderController;
-import com.owsb.model.POItem;
-import com.owsb.model.PRItem;
-import com.owsb.model.PurchaseRequisition;
+import com.owsb.model.procurement.POItem;
+import com.owsb.model.procurement.PRItem;
+import com.owsb.model.procurement.PurchaseRequisition;
 // import com.owsb.model.Supplier;
 import com.owsb.repository.SupplierRepository;
 

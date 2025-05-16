@@ -1,7 +1,7 @@
 package com.owsb.view.dashboard;
 
 import com.owsb.controller.AuthController;
-import com.owsb.model.User;
+import com.owsb.model.user.User;
 
 import javax.swing.*;
 import java.awt.*;

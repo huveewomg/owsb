@@ -1,4 +1,4 @@
-package com.owsb.model;
+package com.owsb.model.supplier;
 
 import java.util.ArrayList;
 import java.util.List;

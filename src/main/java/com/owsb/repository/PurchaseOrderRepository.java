@@ -1,6 +1,6 @@
 package com.owsb.repository;
 
-import com.owsb.model.PurchaseOrder;
+import com.owsb.model.procurement.PurchaseOrder;
 import com.owsb.util.Constants;
 import com.owsb.util.FileUtils;
 

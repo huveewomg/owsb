@@ -1,4 +1,4 @@
-package com.owsb.model;
+package com.owsb.model.procurement;
 
 import com.owsb.util.Constants;
 import java.text.SimpleDateFormat;

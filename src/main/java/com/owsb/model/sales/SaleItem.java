@@ -1,4 +1,4 @@
-package com.owsb.model;
+package com.owsb.model.sales;
 
 /**
  * SaleItem class representing an individual item in a sale

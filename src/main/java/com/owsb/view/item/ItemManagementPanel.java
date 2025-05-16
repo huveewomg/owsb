@@ -149,17 +149,18 @@ public class ItemManagementPanel extends JPanel {
                 JOptionPane.showMessageDialog(panel, "Please select an item to update.");
                 return;
             }
-            
+
             String itemId = (String) tableModel.getValueAt(selectedRow, 0);
             try {
                 String name = nameField.getText().trim();
                 String description = descriptionField.getText().trim();
                 double price = Double.parseDouble(priceField.getText().trim());
                 String category = (String) categoryCombo.getSelectedItem();
-                
-                // Use controller to update item
-                boolean success = itemController.updateItem(itemId, name, description, price, category);
-                
+                String supplierId = SupplierUtils.getSelectedSupplierId(supplierCombo);
+
+                // Use controller to update item (with supplier)
+                boolean success = itemController.updateItem(itemId, name, description, price, category, supplierId);
+
                 if (success) {
                     JOptionPane.showMessageDialog(panel, "Item updated successfully.");
                     clearForm();

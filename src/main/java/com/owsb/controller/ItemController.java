@@ -2,7 +2,9 @@ package com.owsb.controller;
 
 import com.owsb.model.Item;
 import com.owsb.model.User;
+import com.owsb.model.Supplier;
 import com.owsb.repository.ItemRepository;
+import com.owsb.repository.SupplierRepository;
 import com.owsb.util.UserRole;
 
 import java.util.List;
@@ -14,6 +16,7 @@ import java.util.List;
  */
 public class ItemController {
     private final ItemRepository itemRepository;
+    private final SupplierRepository supplierRepository = new SupplierRepository();
     private User currentUser;
     
     /**
@@ -73,7 +76,16 @@ public class ItemController {
         // Create and save new item
         String itemId = itemRepository.generateItemId();
         Item newItem = new Item(itemId, name, description, unitPrice, category, supplierID);
-        return itemRepository.save(newItem);
+        boolean itemSaved = itemRepository.save(newItem);
+        if (itemSaved) {
+            // Add itemID to supplier's itemIDs list
+            Supplier supplier = supplierRepository.findById(supplierID);
+            if (supplier != null) {
+                supplier.addItem(itemId);
+                supplierRepository.update(supplier);
+            }
+        }
+        return itemSaved;
     }
     
     /**
@@ -104,16 +116,29 @@ public class ItemController {
         if (existingItem == null) {
             return false;
         }
-        
+        String oldSupplierId = existingItem.getSupplierID();
         // Update item properties
         existingItem.setName(name);
         existingItem.setDescription(description);
         existingItem.setUnitPrice(unitPrice);
         existingItem.setCategory(category);
         existingItem.setSupplierID(supplierID);
-        
-        // Save updates
-        return itemRepository.update(existingItem);
+        boolean updated = itemRepository.update(existingItem);
+        if (!updated) return false;
+        // If supplier changed, update suppliers.txt
+        if (!oldSupplierId.equals(supplierID)) {
+            Supplier oldSupplier = supplierRepository.findById(oldSupplierId);
+            if (oldSupplier != null) {
+                oldSupplier.removeItem(itemId);
+                supplierRepository.update(oldSupplier);
+            }
+            Supplier newSupplier = supplierRepository.findById(supplierID);
+            if (newSupplier != null) {
+                newSupplier.addItem(itemId);
+                supplierRepository.update(newSupplier);
+            }
+        }
+        return true;
     }
 
     /**
@@ -160,7 +185,18 @@ public class ItemController {
             return false;
         }
         
-        return itemRepository.delete(itemId);
+        // Get the item before deleting
+        Item item = itemRepository.findById(itemId);
+        boolean deleted = itemRepository.delete(itemId);
+        if (deleted && item != null) {
+            // Remove itemID from supplier's itemIDs list
+            Supplier supplier = supplierRepository.findById(item.getSupplierID());
+            if (supplier != null) {
+                supplier.removeItem(itemId);
+                supplierRepository.update(supplier);
+            }
+        }
+        return deleted;
     }
     
     /**

@@ -3,16 +3,20 @@ package com.owsb.view.sales;
 import com.owsb.controller.SalesController;
 import com.owsb.model.Item;
 import com.owsb.model.Sale;
+import com.owsb.model.SaleItem;
 
 import javax.swing.*;
+import javax.swing.table.DefaultTableCellRenderer;
 import javax.swing.table.DefaultTableModel;
 import java.awt.*;
+import java.text.NumberFormat;
+import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.*;
 import java.util.List;
 
 /**
- * Panel for daily item-wise sales entry
+ * Panel for daily item-wise sales entry with profit ratio
  * Demonstrates separation of concerns by keeping UI separate from business logic
  */
 public class SalesEntryPanel extends JPanel {
@@ -29,6 +33,7 @@ public class SalesEntryPanel extends JPanel {
     
     private JComboBox<Item> itemComboBox;
     private JSpinner quantitySpinner;
+    private JSpinner profitRatioSpinner;
     private JButton addButton;
     private JButton removeButton;
     
@@ -38,6 +43,7 @@ public class SalesEntryPanel extends JPanel {
     
     private JButton saveButton;
     private JButton clearButton;
+    private JButton viewButton;
     
     // For editing mode
     private boolean editMode = false;
@@ -47,8 +53,12 @@ public class SalesEntryPanel extends JPanel {
     private final SalesController salesController;
     
     // Data
-    private final List<Map<String, Object>> currentSaleItems = new ArrayList<>();
+    private final List<SaleItem> saleItems = new ArrayList<>();
     private Date selectedDate = new Date();
+    
+    // Formatters
+    private final NumberFormat currencyFormat = NumberFormat.getCurrencyInstance();
+    private final NumberFormat percentFormat = NumberFormat.getPercentInstance();
     
     /**
      * Constructor for SalesEntryPanel
@@ -67,6 +77,9 @@ public class SalesEntryPanel extends JPanel {
         
         // Add listeners
         addListeners();
+        
+        // Update totals
+        updateTotals();
     }
     
     /**
@@ -81,10 +94,21 @@ public class SalesEntryPanel extends JPanel {
         
         // Create table model with columns
         tableModel = new DefaultTableModel(
-                new Object[]{"Item Code", "Item Name", "Quantity", "Unit Price", "Total"}, 0) {
+                new Object[]{"Item Code", "Item Name", "Quantity", "Unit Price", "Profit %", "Subtotal"}, 0) {
             @Override
             public boolean isCellEditable(int row, int column) {
-                return false; // Make table cells non-editable
+                return column == 2 || column == 4; // Only quantity and profit columns are editable
+            }
+            
+            @Override
+            public Class<?> getColumnClass(int columnIndex) {
+                switch (columnIndex) {
+                    case 2: return Integer.class; // Quantity
+                    case 3: return Double.class;  // Unit Price
+                    case 4: return Double.class;  // Profit %
+                    case 5: return Double.class;  // Subtotal
+                    default: return String.class;
+                }
             }
         };
         
@@ -92,6 +116,22 @@ public class SalesEntryPanel extends JPanel {
         salesTable = new JTable(tableModel);
         salesTable.getTableHeader().setReorderingAllowed(false);
         salesTable.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
+        
+        // Set custom renderers
+        DefaultTableCellRenderer rightAlign = new DefaultTableCellRenderer();
+        rightAlign.setHorizontalAlignment(JLabel.RIGHT);
+        
+        // Currency renderer
+        DefaultTableCellRenderer currencyRenderer = new DefaultTableCellRenderer();
+        currencyRenderer.setHorizontalAlignment(JLabel.RIGHT);
+        
+        // Percentage renderer
+        DefaultTableCellRenderer percentRenderer = new DefaultTableCellRenderer();
+        percentRenderer.setHorizontalAlignment(JLabel.RIGHT);
+        
+        salesTable.getColumnModel().getColumn(3).setCellRenderer(currencyRenderer); // Unit Price
+        salesTable.getColumnModel().getColumn(4).setCellRenderer(percentRenderer);  // Profit %
+        salesTable.getColumnModel().getColumn(5).setCellRenderer(currencyRenderer); // Subtotal
         
         // Scroll pane for table
         JScrollPane tableScrollPane = new JScrollPane(salesTable);
@@ -102,12 +142,21 @@ public class SalesEntryPanel extends JPanel {
         
         itemComboBox = new JComboBox<>();
         itemComboBox.setPreferredSize(new Dimension(250, 25));
+        itemComboBox.setRenderer(new ItemRenderer());
         
         JLabel quantityLabel = new JLabel("Quantity:");
         
         SpinnerNumberModel quantityModel = new SpinnerNumberModel(1, 1, 10000, 1);
         quantitySpinner = new JSpinner(quantityModel);
         quantitySpinner.setPreferredSize(new Dimension(80, 25));
+        
+        JLabel profitRatioLabel = new JLabel("Profit %:");
+        
+        SpinnerNumberModel profitModel = new SpinnerNumberModel(
+                SalesController.DEFAULT_PROFIT_RATIO, 0.0, 1.0, 0.01);
+        profitRatioSpinner = new JSpinner(profitModel);
+        profitRatioSpinner.setEditor(new JSpinner.NumberEditor(profitRatioSpinner, "##0.##%"));
+        profitRatioSpinner.setPreferredSize(new Dimension(80, 25));
         
         addButton = new JButton("Add Item");
         removeButton = new JButton("Remove Selected");
@@ -117,12 +166,30 @@ public class SalesEntryPanel extends JPanel {
         itemSelectionPanel.add(itemComboBox);
         itemSelectionPanel.add(quantityLabel);
         itemSelectionPanel.add(quantitySpinner);
+        itemSelectionPanel.add(profitRatioLabel);
+        itemSelectionPanel.add(profitRatioSpinner);
         itemSelectionPanel.add(addButton);
         itemSelectionPanel.add(removeButton);
         
         // Add to center panel
         centerPanel.add(itemSelectionPanel, BorderLayout.NORTH);
         centerPanel.add(tableScrollPane, BorderLayout.CENTER);
+        
+        // Add total panel below the table
+        JPanel totalPanel = new JPanel(new FlowLayout(FlowLayout.RIGHT));
+        totalPanel.add(new JLabel("Total Cost: "));
+        JLabel totalCostLabel = new JLabel(currencyFormat.format(0.0));
+        totalPanel.add(totalCostLabel);
+        
+        totalPanel.add(new JLabel("Total Profit: "));
+        JLabel totalProfitLabel = new JLabel(currencyFormat.format(0.0));
+        totalPanel.add(totalProfitLabel);
+        
+        totalPanel.add(new JLabel("Grand Total: "));
+        JLabel grandTotalLabel = new JLabel(currencyFormat.format(0.0));
+        totalPanel.add(grandTotalLabel);
+        
+        centerPanel.add(totalPanel, BorderLayout.SOUTH);
         
         // Bottom panel - Notes and save/clear buttons
         bottomPanel = new JPanel(new BorderLayout(5, 5));
@@ -140,7 +207,9 @@ public class SalesEntryPanel extends JPanel {
         JPanel buttonPanel = new JPanel(new FlowLayout(FlowLayout.RIGHT));
         saveButton = new JButton("Save Sales");
         clearButton = new JButton("Clear");
+        viewButton = new JButton("View Sales");
         
+        buttonPanel.add(viewButton);
         buttonPanel.add(clearButton);
         buttonPanel.add(saveButton);
         
@@ -175,14 +244,8 @@ public class SalesEntryPanel extends JPanel {
         datePanel.add(dateLabel);
         datePanel.add(dateSpinner);
         
-        JPanel buttonPanel = new JPanel(new FlowLayout(FlowLayout.RIGHT));
-        JButton viewSalesButton = new JButton("View Sales");
-        viewSalesButton.addActionListener(e -> viewSales());
-        buttonPanel.add(viewSalesButton);
-        
         panel.add(titleLabel, BorderLayout.WEST);
         panel.add(datePanel, BorderLayout.CENTER);
-        panel.add(buttonPanel, BorderLayout.EAST);
         
         return panel;
     }
@@ -201,9 +264,6 @@ public class SalesEntryPanel extends JPanel {
         for (Item item : items) {
             itemComboBox.addItem(item);
         }
-        
-        // Set the custom renderer for the combo box
-        itemComboBox.setRenderer(new ItemRenderer());
     }
     
     /**
@@ -224,11 +284,39 @@ public class SalesEntryPanel extends JPanel {
             removeButton.setEnabled(salesTable.getSelectedRow() != -1);
         });
         
+        // Table model listener for edits
+        tableModel.addTableModelListener(e -> {
+            if (e.getColumn() == 2 || e.getColumn() == 4) { // Quantity or Profit %
+                int row = e.getFirstRow();
+                if (row >= 0 && row < saleItems.size()) {
+                    // Update the sale item
+                    SaleItem saleItem = saleItems.get(row);
+                    
+                    if (e.getColumn() == 2) { // Quantity
+                        int quantity = (int) tableModel.getValueAt(row, 2);
+                        saleItem.setQuantity(quantity);
+                    } else if (e.getColumn() == 4) { // Profit %
+                        double profitRatio = (double) tableModel.getValueAt(row, 4);
+                        saleItem.setProfitRatio(profitRatio);
+                    }
+                    
+                    // Update the subtotal in the table
+                    tableModel.setValueAt(saleItem.getSubtotal(), row, 5);
+                    
+                    // Update totals
+                    updateTotals();
+                }
+            }
+        });
+        
         // Save button listener
         saveButton.addActionListener(e -> saveSales());
         
         // Clear button listener
         clearButton.addActionListener(e -> clearForm());
+        
+        // View button listener
+        viewButton.addActionListener(e -> viewSales());
     }
     
     /**
@@ -257,38 +345,48 @@ public class SalesEntryPanel extends JPanel {
             return;
         }
         
+        // Get profit ratio
+        double profitRatio = (double) profitRatioSpinner.getValue();
+        
         // Check if item already in table
         for (int i = 0; i < tableModel.getRowCount(); i++) {
             if (tableModel.getValueAt(i, 0).equals(selectedItem.getItemID())) {
                 JOptionPane.showMessageDialog(this, 
-                        "This item is already in the table. Please remove it first if you want to change the quantity.", 
+                        "This item is already in the table. Please remove it first if you want to change the quantity or change directly in the table.", 
                         "Duplicate Item", 
                         JOptionPane.WARNING_MESSAGE);
                 return;
             }
         }
         
-        // Calculate total
-        double total = selectedItem.getUnitPrice() * quantity;
-        
-        // Add to table model
-        tableModel.addRow(new Object[]{
+        // Create a new sale item
+        SaleItem saleItem = new SaleItem(
                 selectedItem.getItemID(),
                 selectedItem.getName(),
                 quantity,
                 selectedItem.getUnitPrice(),
-                total
+                profitRatio
+        );
+        
+        // Add to list
+        saleItems.add(saleItem);
+        
+        // Add to table model
+        tableModel.addRow(new Object[]{
+                saleItem.getItemID(),
+                saleItem.getItemName(),
+                saleItem.getQuantity(),
+                saleItem.getUnitPrice(),
+                saleItem.getProfitRatio(),
+                saleItem.getSubtotal()
         });
         
-        // Add to current sale items
-        Map<String, Object> saleItem = new HashMap<>();
-        saleItem.put("item", selectedItem);
-        saleItem.put("quantity", quantity);
-        saleItem.put("total", total);
-        currentSaleItems.add(saleItem);
+        // Update totals
+        updateTotals();
         
-        // Reset quantity spinner
+        // Reset quantity and profit spinners
         quantitySpinner.setValue(1);
+        profitRatioSpinner.setValue(SalesController.DEFAULT_PROFIT_RATIO);
     }
     
     /**
@@ -297,18 +395,51 @@ public class SalesEntryPanel extends JPanel {
     private void removeSelectedItem() {
         int selectedRow = salesTable.getSelectedRow();
         if (selectedRow != -1) {
-            currentSaleItems.remove(selectedRow);
+            saleItems.remove(selectedRow);
             tableModel.removeRow(selectedRow);
             removeButton.setEnabled(false);
+            
+            // Update totals    
+            updateTotals();
         }
     }
     
     /**
-     * Save sales entries
+     * Update the totals display
+     */
+    private void updateTotals() {
+        double totalCost = 0.0;
+        double totalProfit = 0.0;
+        double grandTotal = 0.0;
+        
+        for (SaleItem item : saleItems) {
+            totalCost += item.getCostPrice();
+            totalProfit += item.getProfitAmount();
+            grandTotal += item.getSubtotal();
+        }
+        
+        // Update the labels
+        Component[] components = ((JPanel)centerPanel.getComponent(2)).getComponents();
+        for (int i = 0; i < components.length; i++) {
+            if (components[i] instanceof JLabel) {
+                JLabel label = (JLabel) components[i];
+                if (i == 1) { // Total Cost
+                    label.setText(currencyFormat.format(totalCost));
+                } else if (i == 3) { // Total Profit
+                    label.setText(currencyFormat.format(totalProfit));
+                } else if (i == 5) { // Grand Total
+                    label.setText(currencyFormat.format(grandTotal));
+                }
+            }
+        }
+    }
+    
+    /**
+     * Save the sales
      */
     private void saveSales() {
         // Check if there are any items
-        if (currentSaleItems.isEmpty()) {
+        if (saleItems.isEmpty()) {
             JOptionPane.showMessageDialog(this, 
                     "Please add at least one item.", 
                     "No Items", 
@@ -319,42 +450,25 @@ public class SalesEntryPanel extends JPanel {
         // Get notes
         String notes = notesArea.getText().trim();
         
-        // If in edit mode, first delete the existing sale
-        if (editMode && editingSaleId != null) {
-            salesController.deleteSale(editingSaleId);
-            editMode = false;
-            editingSaleId = null;
-            saveButton.setText("Save Sales");
-        }
+        boolean success;
         
-        // Save each sale
-        boolean allSaved = true;
-        for (Map<String, Object> saleItem : currentSaleItems) {
-            Item item = (Item) saleItem.get("item");
-            int quantity = (int) saleItem.get("quantity");
-            
-            boolean saved = salesController.createSale(
-                    selectedDate,
-                    item.getItemID(),
-                    quantity,
-                    notes
-            );
-            
-            if (!saved) {
-                allSaved = false;
-            }
+        // Save the sale
+        if (editMode && editingSaleId != null) {
+            success = salesController.updateSale(editingSaleId, selectedDate, saleItems, notes);
+        } else {
+            success = salesController.createSale(selectedDate, saleItems, notes);
         }
         
         // Show message
-        if (allSaved) {
+        if (success) {
             JOptionPane.showMessageDialog(this, 
-                    "Sales entries saved successfully.", 
+                    "Sale saved successfully.", 
                     "Success", 
                     JOptionPane.INFORMATION_MESSAGE);
             clearForm();
         } else {
             JOptionPane.showMessageDialog(this, 
-                    "There was a problem saving some sales entries.", 
+                    "Failed to save sale.", 
                     "Error", 
                     JOptionPane.ERROR_MESSAGE);
         }
@@ -366,11 +480,12 @@ public class SalesEntryPanel extends JPanel {
     private void clearForm() {
         // Clear table
         tableModel.setRowCount(0);
-        currentSaleItems.clear();
+        saleItems.clear();
         
         // Reset components
         dateSpinner.setValue(new Date());
         quantitySpinner.setValue(1);
+        profitRatioSpinner.setValue(SalesController.DEFAULT_PROFIT_RATIO);
         notesArea.setText("");
         removeButton.setEnabled(false);
         
@@ -378,13 +493,16 @@ public class SalesEntryPanel extends JPanel {
         editMode = false;
         editingSaleId = null;
         saveButton.setText("Save Sales");
+        
+        // Update totals
+        updateTotals();
     }
     
     /**
-     * View sales for a specific date
+     * View sales for the selected date
      */
     private void viewSales() {
-        // Get selected date
+        // Get the date
         Date date = (Date) dateSpinner.getValue();
         
         // Get sales for that date
@@ -402,79 +520,154 @@ public class SalesEntryPanel extends JPanel {
         JDialog dialog = new JDialog((JFrame) SwingUtilities.getWindowAncestor(this), 
                 "Sales for " + new SimpleDateFormat("yyyy-MM-dd").format(date), true);
         dialog.setLayout(new BorderLayout(10, 10));
-        dialog.setSize(700, 400);
+        dialog.setSize(800, 500);
         dialog.setLocationRelativeTo(this);
         
-        // Create table model
-        DefaultTableModel model = new DefaultTableModel(
-                new Object[]{"Sale ID", "Item Code", "Item Name", "Quantity", "Amount", "Notes"}, 0) {
+        // Create panel for sales list
+        JPanel salesListPanel = new JPanel(new BorderLayout(5, 5));
+        salesListPanel.setBorder(BorderFactory.createTitledBorder("Sales List"));
+        
+        // Create table model for sales
+        DefaultTableModel salesModel = new DefaultTableModel(
+                new Object[]{"Sale ID", "Items", "Total Amount", "Profit", "Notes"}, 0) {
             @Override
             public boolean isCellEditable(int row, int column) {
                 return false;
             }
         };
         
-        // Fill table with sales data
+        // Create table
+        JTable salesTable = new JTable(salesModel);
+        salesTable.getTableHeader().setReorderingAllowed(false);
+        salesTable.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
+        
+        // Set custom renderers
+        DefaultTableCellRenderer rightAlign = new DefaultTableCellRenderer();
+        rightAlign.setHorizontalAlignment(JLabel.RIGHT);
+        
+        salesTable.getColumnModel().getColumn(2).setCellRenderer(rightAlign); // Total
+        salesTable.getColumnModel().getColumn(3).setCellRenderer(rightAlign); // Profit
+        
+        // Fill table
         for (Sale sale : sales) {
-            model.addRow(new Object[]{
+            salesModel.addRow(new Object[]{
                     sale.getSaleID(),
-                    sale.getItemID(),
-                    sale.getItemName(),
-                    sale.getQuantity(),
-                    sale.getSalesAmount(),
+                    sale.getItemCount(),
+                    currencyFormat.format(sale.getTotalAmount()),
+                    currencyFormat.format(sale.getTotalProfitAmount()),
                     sale.getNotes()
             });
         }
         
+        // Add to scroll pane
+        JScrollPane salesScrollPane = new JScrollPane(salesTable);
+        salesListPanel.add(salesScrollPane, BorderLayout.CENTER);
+        
+        // Create panel for sale details
+        JPanel saleDetailsPanel = new JPanel(new BorderLayout(5, 5));
+        saleDetailsPanel.setBorder(BorderFactory.createTitledBorder("Sale Details"));
+        
+        // Create table model for sale items
+        DefaultTableModel itemsModel = new DefaultTableModel(
+                new Object[]{"Item Code", "Item Name", "Quantity", "Unit Price", "Profit %", "Subtotal"}, 0) {
+            @Override
+            public boolean isCellEditable(int row, int column) {
+                return false;
+            }
+        };
+        
         // Create table
-        JTable table = new JTable(model);
-        table.getTableHeader().setReorderingAllowed(false);
-        table.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
+        JTable itemsTable = new JTable(itemsModel);
+        itemsTable.getTableHeader().setReorderingAllowed(false);
+        
+        // Set custom renderers
+        itemsTable.getColumnModel().getColumn(3).setCellRenderer(rightAlign); // Unit Price
+        itemsTable.getColumnModel().getColumn(4).setCellRenderer(rightAlign); // Profit %
+        itemsTable.getColumnModel().getColumn(5).setCellRenderer(rightAlign); // Subtotal
         
         // Add to scroll pane
-        JScrollPane scrollPane = new JScrollPane(table);
+        JScrollPane itemsScrollPane = new JScrollPane(itemsTable);
+        saleDetailsPanel.add(itemsScrollPane, BorderLayout.CENTER);
         
-        // Create buttons
+        // Create split pane
+        JSplitPane splitPane = new JSplitPane(JSplitPane.VERTICAL_SPLIT, salesListPanel, saleDetailsPanel);
+        splitPane.setDividerLocation(200);
+        
+        // Create button panel
         JPanel buttonPanel = new JPanel(new FlowLayout(FlowLayout.RIGHT));
         
-        JButton editButton = new JButton("Edit");
-        editButton.setEnabled(false);
-        
-        JButton deleteButton = new JButton("Delete");
-        deleteButton.setEnabled(false);
-        
+        JButton viewButton = new JButton("View Sale");
+        JButton editButton = new JButton("Edit Sale");
+        JButton deleteButton = new JButton("Delete Sale");
         JButton closeButton = new JButton("Close");
         
+        viewButton.setEnabled(false);
+        editButton.setEnabled(false);
+        deleteButton.setEnabled(false);
+        
+        buttonPanel.add(viewButton);
         buttonPanel.add(editButton);
         buttonPanel.add(deleteButton);
         buttonPanel.add(closeButton);
         
-        // Add components to dialog
-        dialog.add(new JLabel("Sales for " + new SimpleDateFormat("yyyy-MM-dd").format(date)), 
-                BorderLayout.NORTH);
-        dialog.add(scrollPane, BorderLayout.CENTER);
-        dialog.add(buttonPanel, BorderLayout.SOUTH);
-        
         // Add listeners
-        table.getSelectionModel().addListSelectionListener(e -> {
-            boolean hasSelection = table.getSelectedRow() != -1;
+        salesTable.getSelectionModel().addListSelectionListener(e -> {
+            int selectedRow = salesTable.getSelectedRow();
+            boolean hasSelection = selectedRow != -1;
+            
+            viewButton.setEnabled(hasSelection);
             editButton.setEnabled(hasSelection);
             deleteButton.setEnabled(hasSelection);
+            
+            if (hasSelection) {
+                // Get the selected sale
+                String saleId = (String) salesTable.getValueAt(selectedRow, 0);
+                Sale sale = salesController.getSaleById(saleId);
+                
+                if (sale != null) {
+                    // Clear the items table
+                    itemsModel.setRowCount(0);
+                    
+                    // Fill with items from the selected sale
+                    for (SaleItem item : sale.getItems()) {
+                        itemsModel.addRow(new Object[]{
+                                item.getItemID(),
+                                item.getItemName(),
+                                item.getQuantity(),
+                                currencyFormat.format(item.getUnitPrice()),
+                                percentFormat.format(item.getProfitRatio()),
+                                currencyFormat.format(item.getSubtotal())
+                        });
+                    }
+                }
+            } else {
+                // Clear the items table
+                itemsModel.setRowCount(0);
+            }
+        });
+        
+        viewButton.addActionListener(e -> {
+            int selectedRow = salesTable.getSelectedRow();
+            if (selectedRow != -1) {
+                String saleId = (String) salesTable.getValueAt(selectedRow, 0);
+                viewSaleDetails(saleId, dialog);
+            }
         });
         
         editButton.addActionListener(e -> {
-            int row = table.getSelectedRow();
-            if (row != -1) {
-                String saleId = (String) table.getValueAt(row, 0);
+            int selectedRow = salesTable.getSelectedRow();
+            if (selectedRow != -1) {
+                String saleId = (String) salesTable.getValueAt(selectedRow, 0);
                 editSale(saleId);
                 dialog.dispose();
             }
         });
         
         deleteButton.addActionListener(e -> {
-            int row = table.getSelectedRow();
-            if (row != -1) {
-                String saleId = (String) table.getValueAt(row, 0);
+            int selectedRow = salesTable.getSelectedRow();
+            if (selectedRow != -1) {
+                String saleId = (String) salesTable.getValueAt(selectedRow, 0);
+                
                 int confirm = JOptionPane.showConfirmDialog(dialog, 
                         "Are you sure you want to delete this sale?", 
                         "Confirm Delete", 
@@ -482,14 +675,17 @@ public class SalesEntryPanel extends JPanel {
                 
                 if (confirm == JOptionPane.YES_OPTION) {
                     boolean deleted = salesController.deleteSale(saleId);
+                    
                     if (deleted) {
-                        model.removeRow(row);
+                        salesModel.removeRow(selectedRow);
+                        itemsModel.setRowCount(0);
+                        
                         JOptionPane.showMessageDialog(dialog, 
                                 "Sale deleted successfully.", 
                                 "Success", 
                                 JOptionPane.INFORMATION_MESSAGE);
                         
-                        if (model.getRowCount() == 0) {
+                        if (salesModel.getRowCount() == 0) {
                             dialog.dispose();
                         }
                     } else {
@@ -504,13 +700,121 @@ public class SalesEntryPanel extends JPanel {
         
         closeButton.addActionListener(e -> dialog.dispose());
         
+        // Add components to dialog
+        dialog.add(splitPane, BorderLayout.CENTER);
+        dialog.add(buttonPanel, BorderLayout.SOUTH);
+        
         // Show dialog
         dialog.setVisible(true);
     }
     
     /**
-     * Edit an existing sale
-     * @param saleId Sale ID to edit
+     * View details of a sale
+     * @param saleId Sale ID
+     * @param parent Parent dialog
+     */
+    private void viewSaleDetails(String saleId, JDialog parent) {
+        // Get the sale
+        Sale sale = salesController.getSaleById(saleId);
+        if (sale == null) {
+            JOptionPane.showMessageDialog(parent, 
+                    "Sale not found.", 
+                    "Error", 
+                    JOptionPane.ERROR_MESSAGE);
+            return;
+        }
+        
+        // Create dialog
+        JDialog dialog = new JDialog(parent, "Sale Details: " + saleId, true);
+        dialog.setLayout(new BorderLayout(10, 10));
+        dialog.setSize(600, 400);
+        dialog.setLocationRelativeTo(parent);
+        
+        // Create details panel
+        JPanel detailsPanel = new JPanel(new GridLayout(0, 2, 10, 5));
+        detailsPanel.setBorder(BorderFactory.createTitledBorder("Sale Information"));
+        
+        detailsPanel.add(new JLabel("Sale ID:"));
+        detailsPanel.add(new JLabel(sale.getSaleID()));
+        
+        detailsPanel.add(new JLabel("Date:"));
+        detailsPanel.add(new JLabel(sale.getFormattedDate()));
+        
+        detailsPanel.add(new JLabel("Created By:"));
+        detailsPanel.add(new JLabel(sale.getSalesManagerID()));
+        
+        detailsPanel.add(new JLabel("Total Items:"));
+        detailsPanel.add(new JLabel(String.valueOf(sale.getItemCount())));
+        
+        detailsPanel.add(new JLabel("Total Cost:"));
+        detailsPanel.add(new JLabel(currencyFormat.format(sale.getTotalCostPrice())));
+        
+        detailsPanel.add(new JLabel("Total Profit:"));
+        detailsPanel.add(new JLabel(currencyFormat.format(sale.getTotalProfitAmount())));
+        
+        detailsPanel.add(new JLabel("Grand Total:"));
+        detailsPanel.add(new JLabel(currencyFormat.format(sale.getTotalAmount())));
+        
+        detailsPanel.add(new JLabel("Average Profit:"));
+        detailsPanel.add(new JLabel(percentFormat.format(sale.getAverageProfitRatio())));
+        
+        detailsPanel.add(new JLabel("Notes:"));
+        detailsPanel.add(new JLabel(sale.getNotes()));
+        
+        // Create table for items
+        DefaultTableModel itemsModel = new DefaultTableModel(
+                new Object[]{"Item Code", "Item Name", "Quantity", "Unit Price", "Profit %", "Subtotal"}, 0) {
+            @Override
+            public boolean isCellEditable(int row, int column) {
+                return false;
+            }
+        };
+        
+        JTable itemsTable = new JTable(itemsModel);
+        itemsTable.getTableHeader().setReorderingAllowed(false);
+        
+        // Set custom renderers
+        DefaultTableCellRenderer rightAlign = new DefaultTableCellRenderer();
+        rightAlign.setHorizontalAlignment(JLabel.RIGHT);
+        
+        itemsTable.getColumnModel().getColumn(3).setCellRenderer(rightAlign); // Unit Price
+        itemsTable.getColumnModel().getColumn(4).setCellRenderer(rightAlign); // Profit %
+        itemsTable.getColumnModel().getColumn(5).setCellRenderer(rightAlign); // Subtotal
+        
+        // Fill with items
+        for (SaleItem item : sale.getItems()) {
+            itemsModel.addRow(new Object[]{
+                    item.getItemID(),
+                    item.getItemName(),
+                    item.getQuantity(),
+                    currencyFormat.format(item.getUnitPrice()),
+                    percentFormat.format(item.getProfitRatio()),
+                    currencyFormat.format(item.getSubtotal())
+            });
+        }
+        
+        // Add to scroll pane
+        JScrollPane itemsScrollPane = new JScrollPane(itemsTable);
+        itemsScrollPane.setBorder(BorderFactory.createTitledBorder("Items"));
+        
+        // Create button panel
+        JPanel buttonPanel = new JPanel(new FlowLayout(FlowLayout.RIGHT));
+        JButton closeButton = new JButton("Close");
+        closeButton.addActionListener(e -> dialog.dispose());
+        buttonPanel.add(closeButton);
+        
+        // Add components to dialog
+        dialog.add(detailsPanel, BorderLayout.NORTH);
+        dialog.add(itemsScrollPane, BorderLayout.CENTER);
+        dialog.add(buttonPanel, BorderLayout.SOUTH);
+        
+        // Show dialog
+        dialog.setVisible(true);
+    }
+    
+    /**
+     * Edit a sale
+     * @param saleId Sale ID
      */
     private void editSale(String saleId) {
         // Get the sale
@@ -523,14 +827,10 @@ public class SalesEntryPanel extends JPanel {
             return;
         }
         
-        // Set edit mode
+        // Set up for editing
         editMode = true;
         editingSaleId = saleId;
         saveButton.setText("Update Sale");
-        
-        // Clear current items
-        tableModel.setRowCount(0);
-        currentSaleItems.clear();
         
         // Set date
         dateSpinner.setValue(sale.getDate());
@@ -539,36 +839,28 @@ public class SalesEntryPanel extends JPanel {
         // Set notes
         notesArea.setText(sale.getNotes());
         
-        // Get the item
-        Item item = salesController.getItemById(sale.getItemID());
-        if (item == null) {
-            JOptionPane.showMessageDialog(this, 
-                    "Item not found.", 
-                    "Error", 
-                    JOptionPane.ERROR_MESSAGE);
-            return;
+        // Clear existing items
+        tableModel.setRowCount(0);
+        saleItems.clear();
+        
+        // Add sale items
+        for (SaleItem item : sale.getItems()) {
+            saleItems.add(item);
+            
+            tableModel.addRow(new Object[]{
+                    item.getItemID(),
+                    item.getItemName(),
+                    item.getQuantity(),
+                    item.getUnitPrice(),
+                    item.getProfitRatio(),
+                    item.getSubtotal()
+            });
         }
         
-        // Add to table
-        tableModel.addRow(new Object[]{
-                item.getItemID(),
-                item.getName(),
-                sale.getQuantity(),
-                sale.getSalesAmount() / sale.getQuantity(),
-                sale.getSalesAmount()
-        });
-        
-        // Add to current sale items
-        Map<String, Object> saleItem = new HashMap<>();
-        saleItem.put("item", item);
-        saleItem.put("quantity", sale.getQuantity());
-        saleItem.put("total", sale.getSalesAmount());
-        currentSaleItems.add(saleItem);
+        // Update totals
+        updateTotals();
     }
     
-    /**
-     * Custom renderer for item combo box
-     */
     /**
      * Custom renderer for item combo box
      */

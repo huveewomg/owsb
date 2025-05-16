@@ -1,22 +1,27 @@
 [
   {
-    "saleID": "SL016",
-    "date": "May 11, 2025, 12:00:00 AM",
-    "itemID": "IT004",
-    "itemName": "Cooking Oil 2L",
-    "quantity": 15,
-    "salesAmount": 228.75,
+    "saleID": "SL018",
+    "date": "May 15, 2025, 8:17:39 AM",
     "salesManagerID": "U002",
-    "notes": ""
-  },
-  {
-    "saleID": "SL017",
-    "date": "Apr 2, 2025, 12:00:00 AM",
-    "itemID": "IT004",
-    "itemName": "Cooking Oil 2L",
-    "quantity": 3,
-    "salesAmount": 45.75,
-    "salesManagerID": "U002",
-    "notes": ""
+    "notes": "",
+    "items": [
+      {
+        "itemID": "IT003",
+        "itemName": "Flour 1kg",
+        "quantity": 20,
+        "unitPrice": 6.5,
+        "profitRatio": 0.25,
+        "subtotal": 162.5
+      },
+      {
+        "itemID": "IT007",
+        "itemName": "Chicken 1kg",
+        "quantity": 15,
+        "unitPrice": 18.5,
+        "profitRatio": 0.17,
+        "subtotal": 324.68
+      }
+    ],
+    "totalAmount": 487.18
   }
 ]

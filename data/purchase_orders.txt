@@ -121,5 +121,35 @@
       }
     ],
     "totalValue": 230.25
+  },
+  {
+    "poID": "PO005",
+    "prID": "PR012",
+    "date": "May 16, 2025, 8:50:11 AM",
+    "deliveryDate": "May 30, 2025, 8:44:51 AM",
+    "purchaseManagerID": "U003",
+    "status": "PENDING",
+    "notes": "",
+    "items": [
+      {
+        "itemID": "IT004",
+        "itemName": "Cooking Oil 2L",
+        "quantity": 15,
+        "supplierID": "SUP003",
+        "supplierName": "Golden Foods Sdn Bhd",
+        "unitPrice": 15.25,
+        "totalCost": 228.75
+      },
+      {
+        "itemID": "IT007",
+        "itemName": "Chicken 1kg",
+        "quantity": 1,
+        "supplierID": "SUP005",
+        "supplierName": "Premium Poultry Supply",
+        "unitPrice": 18.5,
+        "totalCost": 18.5
+      }
+    ],
+    "totalValue": 247.25
   }
 ]

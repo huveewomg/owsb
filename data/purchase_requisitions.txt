@@ -113,5 +113,34 @@
       }
     ],
     "estimatedTotal": 230.25
+  },
+  {
+    "prID": "PR012",
+    "date": "May 16, 2025, 8:45:04 AM",
+    "requiredDate": "May 30, 2025, 8:44:51 AM",
+    "salesManagerID": "U002",
+    "status": "PROCESSED",
+    "notes": "",
+    "items": [
+      {
+        "itemID": "IT004",
+        "itemName": "Cooking Oil 2L",
+        "quantity": 15,
+        "requiredDate": "May 30, 2025, 8:44:57 AM",
+        "suggestedSupplierID": "SUP003",
+        "unitPrice": 15.25,
+        "estimatedCost": 228.75
+      },
+      {
+        "itemID": "IT007",
+        "itemName": "Chicken 1kg",
+        "quantity": 1,
+        "requiredDate": "May 30, 2025, 8:44:59 AM",
+        "suggestedSupplierID": "SUP005",
+        "unitPrice": 18.5,
+        "estimatedCost": 18.5
+      }
+    ],
+    "estimatedTotal": 247.25
   }
 ]

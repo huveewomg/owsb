@@ -1,4 +1,4 @@
-package com.owsb.model;
+package com.owsb.model.sales;
 
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;

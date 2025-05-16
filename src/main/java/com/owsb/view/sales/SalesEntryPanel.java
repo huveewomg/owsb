@@ -1,9 +1,9 @@
 package com.owsb.view.sales;
 
 import com.owsb.controller.SalesController;
-import com.owsb.model.Sale;
-import com.owsb.model.SaleItem;
 import com.owsb.model.inventory.Item;
+import com.owsb.model.sales.Sale;
+import com.owsb.model.sales.SaleItem;
 
 import javax.swing.*;
 import javax.swing.table.DefaultTableCellRenderer;

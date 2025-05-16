@@ -1,7 +1,7 @@
 package com.owsb;
 
 import com.owsb.controller.AuthController;
-import com.owsb.model.User;
+import com.owsb.model.user.User;
 import com.owsb.view.dashboard.AdminDashboard;
 import com.owsb.view.dashboard.FinanceManagerDashboard;
 import com.owsb.view.dashboard.InventoryManagerDashboard;

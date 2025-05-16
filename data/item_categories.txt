@@ -1,0 +1,5 @@
+[
+  "Groceries",
+  "Fresh Produce",
+  "Essentials"
+]

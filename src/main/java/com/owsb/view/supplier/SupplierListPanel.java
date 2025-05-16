@@ -32,11 +32,9 @@ public class SupplierListPanel extends JPanel {
     }
 
     private void initComponents() {
-        // Top panel with refresh button
-        JPanel topPanel = new JPanel(new FlowLayout(FlowLayout.LEFT));
-        refreshButton = new JButton("Refresh");
-        topPanel.add(refreshButton);
-        add(topPanel, BorderLayout.NORTH);
+        // Header panel
+        JPanel headerPanel = createHeaderPanel();
+        add(headerPanel, BorderLayout.NORTH);
 
         // Table model
         tableModel = new DefaultTableModel(
@@ -64,6 +62,22 @@ public class SupplierListPanel extends JPanel {
         viewButton.setEnabled(false);
         bottomPanel.add(viewButton);
         add(bottomPanel, BorderLayout.SOUTH);
+    }
+
+    /**
+     * Create header panel with title and refresh button
+     */
+    private JPanel createHeaderPanel() {
+        JPanel panel = new JPanel(new BorderLayout());
+        panel.setBorder(BorderFactory.createEmptyBorder(0, 0, 10, 0));
+        JLabel titleLabel = new JLabel("Suppliers");
+        titleLabel.setFont(new Font("Arial", Font.BOLD, 18));
+        JPanel buttonPanel = new JPanel(new FlowLayout(FlowLayout.RIGHT));
+        refreshButton = new JButton("Refresh");
+        buttonPanel.add(refreshButton);
+        panel.add(titleLabel, BorderLayout.WEST);
+        panel.add(buttonPanel, BorderLayout.EAST);
+        return panel;
     }
 
     private void addListeners() {

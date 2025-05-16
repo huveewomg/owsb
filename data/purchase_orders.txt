@@ -151,5 +151,45 @@
       }
     ],
     "totalValue": 247.25
+  },
+  {
+    "poID": "PO006",
+    "prID": "PR013",
+    "date": "May 16, 2025, 10:17:32 AM",
+    "deliveryDate": "May 30, 2025, 10:15:59 AM",
+    "purchaseManagerID": "U003",
+    "financeManagerID": "U005",
+    "status": "COMPLETED",
+    "notes": "",
+    "items": [
+      {
+        "itemID": "IT001",
+        "itemName": "Rice 5kg",
+        "quantity": 1,
+        "supplierID": "SUP001",
+        "supplierName": "ABC Groceries Sdn Bhd",
+        "unitPrice": 25.5,
+        "totalCost": 25.5
+      },
+      {
+        "itemID": "IT003",
+        "itemName": "Flour 1kg",
+        "quantity": 1,
+        "supplierID": "SUP002",
+        "supplierName": "XYZ Distributors",
+        "unitPrice": 6.5,
+        "totalCost": 6.5
+      },
+      {
+        "itemID": "IT008",
+        "itemName": "Soap Bar",
+        "quantity": 1,
+        "supplierID": "SUP006",
+        "supplierName": "Hygiene Essentials Co.",
+        "unitPrice": 3.25,
+        "totalCost": 3.25
+      }
+    ],
+    "totalValue": 35.25
   }
 ]

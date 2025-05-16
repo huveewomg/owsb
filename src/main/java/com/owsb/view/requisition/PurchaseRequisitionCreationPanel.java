@@ -5,7 +5,7 @@ import com.owsb.model.Item;
 import com.owsb.model.PRItem;
 import com.owsb.model.PurchaseRequisition;
 import com.owsb.model.Supplier;
-import com.owsb.model.PurchaseRequisition.Status;
+import com.owsb.util.Constants;
 
 import javax.swing.*;
 import javax.swing.table.DefaultTableCellRenderer;

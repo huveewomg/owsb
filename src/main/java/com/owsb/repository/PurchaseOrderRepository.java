@@ -1,7 +1,6 @@
 package com.owsb.repository;
 
 import com.owsb.model.PurchaseOrder;
-import com.owsb.model.PurchaseOrder.Status;
 import com.owsb.util.Constants;
 import com.owsb.util.FileUtils;
 
@@ -120,7 +119,7 @@ public class PurchaseOrderRepository implements Repository<PurchaseOrder> {
      * @param status Status to filter by
      * @return List of POs with the specified status
      */
-    public List<PurchaseOrder> findByStatus(Status status) {
+    public List<PurchaseOrder> findByStatus(Constants.PurchaseOrderStatus status) {
         return findAll().stream()
                 .filter(po -> po.getStatus() == status)
                 .collect(Collectors.toList());

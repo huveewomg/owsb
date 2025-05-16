@@ -1,5 +1,7 @@
 package com.owsb.model;
 
+import com.owsb.util.Constants;
+
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
@@ -11,31 +13,11 @@ import java.util.List;
  */
 public class PurchaseRequisition {
     
-    // Possible PR status values
-    public enum Status {
-        NEW("New"),
-        PENDING_APPROVAL("Pending Approval"),
-        APPROVED("Approved"),
-        REJECTED("Rejected"),
-        PROCESSED("Processed"),
-        COMPLETED("Completed");
-        
-        private final String displayName;
-        
-        Status(String displayName) {
-            this.displayName = displayName;
-        }
-        
-        public String getDisplayName() {
-            return displayName;
-        }
-    }
-    
     private String prID;
     private Date date;
     private Date requiredDate;
     private String salesManagerID;
-    private Status status;
+    private Constants.PurchaseRequisitionStatus status;
     private String notes;
     private List<PRItem> items;
     private double estimatedTotal;
@@ -50,7 +32,7 @@ public class PurchaseRequisition {
      * @param notes Optional notes
      */
     public PurchaseRequisition(String prID, Date date, Date requiredDate, String salesManagerID, 
-                              Status status, String notes) {
+                              Constants.PurchaseRequisitionStatus status, String notes) {
         this.prID = prID;
         this.date = date;
         this.requiredDate = requiredDate;
@@ -72,7 +54,7 @@ public class PurchaseRequisition {
      * @param items List of PR items
      */
     public PurchaseRequisition(String prID, Date date, Date requiredDate, String salesManagerID, 
-                              Status status, String notes, List<PRItem> items) {
+                              Constants.PurchaseRequisitionStatus status, String notes, List<PRItem> items) {
         this(prID, date, requiredDate, salesManagerID, status, notes);
         this.items = items;
         calculateEstimatedTotal();
@@ -99,11 +81,11 @@ public class PurchaseRequisition {
         return salesManagerID;
     }
     
-    public Status getStatus() {
+    public Constants.PurchaseRequisitionStatus getStatus() {
         return status;
     }
     
-    public void setStatus(Status status) {
+    public void setStatus(Constants.PurchaseRequisitionStatus status) {
         this.status = status;
     }
     

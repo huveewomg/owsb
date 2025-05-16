@@ -4,8 +4,8 @@ import com.owsb.controller.PurchaseOrderController;
 import com.owsb.model.POItem;
 import com.owsb.model.Payment;
 import com.owsb.model.PurchaseOrder;
-import com.owsb.model.PurchaseOrder.Status;
 import com.owsb.repository.PaymentRepository;
+import com.owsb.util.Constants;
 
 import javax.swing.*;
 import javax.swing.table.DefaultTableCellRenderer;
@@ -245,7 +245,7 @@ public class PaymentPanel extends JPanel {
      */
     private void loadApprovedPOs() {
         // Get POs that are pending payment
-        approvedPOs = poController.getPurchaseOrdersByStatus(Status.PENDING_PAYMENT);
+        approvedPOs = poController.getPurchaseOrdersByStatus(Constants.PurchaseOrderStatus.PENDING_PAYMENT);
         
         // Clear combo box
         poComboBox.removeAllItems();

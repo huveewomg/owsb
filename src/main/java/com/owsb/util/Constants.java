@@ -39,4 +39,45 @@ public class Constants {
     private Constants() {
         // This class should not be instantiated
     }
+
+    // Purchase Order Status Enum
+    public static enum PurchaseOrderStatus {
+        PENDING("Pending"),
+        APPROVED("Approved"),
+        PENDING_ARRIVAL("Pending Arrival"),
+        PENDING_PAYMENT("Pending Payment"),
+        COMPLETED("Completed"),
+        REJECTED("Rejected"),
+        CANCELLED("Cancelled");
+
+        private final String displayName;
+
+        PurchaseOrderStatus(String displayName) {
+            this.displayName = displayName;
+        }
+
+        public String getDisplayName() {
+            return displayName;
+        }
+    }
+
+    // Purchase Requisition Status Enum
+    public static enum PurchaseRequisitionStatus {
+        NEW("New"),
+        PENDING_APPROVAL("Pending Approval"),
+        APPROVED("Approved"),
+        REJECTED("Rejected"),
+        PROCESSED("Processed"),
+        COMPLETED("Completed");
+
+        private final String displayName;
+
+        PurchaseRequisitionStatus(String displayName) {
+            this.displayName = displayName;
+        }
+
+        public String getDisplayName() {
+            return displayName;
+        }
+    }
 }

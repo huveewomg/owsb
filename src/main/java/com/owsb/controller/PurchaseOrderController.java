@@ -4,7 +4,7 @@ import com.owsb.model.POItem;
 import com.owsb.model.PRItem;
 import com.owsb.model.PurchaseOrder;
 import com.owsb.model.PurchaseRequisition;
-import com.owsb.model.Supplier;
+import com.owsb.model.supplier.Supplier;
 import com.owsb.model.user.User;
 import com.owsb.repository.PurchaseOrderRepository;
 import com.owsb.repository.PurchaseRequisitionRepository;

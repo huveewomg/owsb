@@ -1,7 +1,7 @@
 package com.owsb.view.supplier;
 
 import com.owsb.controller.SupplierController;
-import com.owsb.model.Supplier;
+import com.owsb.model.supplier.Supplier;
 
 import javax.swing.*;
 import javax.swing.table.DefaultTableModel;

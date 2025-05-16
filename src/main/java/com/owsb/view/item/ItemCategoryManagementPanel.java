@@ -1,5 +1,6 @@
 package com.owsb.view.item;
 
+import com.owsb.util.Constants;
 import com.owsb.util.FileUtils;
 
 import javax.swing.*;
@@ -10,7 +11,7 @@ import java.lang.reflect.Type;
 import java.util.List;
 
 public class ItemCategoryManagementPanel extends JPanel {
-    private static final String CATEGORY_FILE = "data/item_categories.txt";
+    private static final String CATEGORY_FILE = Constants.ITEM_CATEGORY_FILE;
     private DefaultListModel<String> categoryListModel;
     private JList<String> categoryList;
     private JTextField categoryField;

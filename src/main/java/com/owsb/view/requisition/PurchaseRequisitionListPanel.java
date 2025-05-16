@@ -1,10 +1,10 @@
 package com.owsb.view.requisition;
 
 import com.owsb.controller.PurchaseRequisitionController;
-import com.owsb.model.PRItem;
-import com.owsb.model.PurchaseRequisition;
 import com.owsb.model.user.SalesManager;
 import com.owsb.model.user.User;
+import com.owsb.model.procurement.PRItem;
+import com.owsb.model.procurement.PurchaseRequisition;
 import com.owsb.model.user.PurchaseManager;
 import com.owsb.util.Constants;
 import com.owsb.util.UserRole;

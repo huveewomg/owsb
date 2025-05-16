@@ -1,9 +1,9 @@
 package com.owsb.view.inventory;
 
 import com.owsb.controller.PurchaseOrderController;
-import com.owsb.model.Item;
-import com.owsb.model.POItem;
-import com.owsb.model.PurchaseOrder;
+import com.owsb.model.inventory.Item;
+import com.owsb.model.procurement.POItem;
+import com.owsb.model.procurement.PurchaseOrder;
 import com.owsb.util.Constants;
 import com.owsb.repository.ItemRepository;
 

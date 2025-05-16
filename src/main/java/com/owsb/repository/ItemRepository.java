@@ -4,7 +4,7 @@ import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.google.gson.reflect.TypeToken;
 import com.owsb.dto.ItemDTO;
-import com.owsb.model.Item;
+import com.owsb.model.inventory.Item;
 import com.owsb.util.Constants;
 
 import java.io.File;

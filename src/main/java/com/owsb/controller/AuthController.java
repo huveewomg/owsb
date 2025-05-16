@@ -1,7 +1,7 @@
 package com.owsb.controller;
 
-import com.owsb.model.User;
-import com.owsb.model.UserFactory;
+import com.owsb.model.user.User;
+import com.owsb.model.user.UserFactory;
 import com.owsb.repository.UserRepository;
 import com.owsb.util.UserRole;
 

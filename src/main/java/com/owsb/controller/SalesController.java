@@ -1,9 +1,9 @@
 package com.owsb.controller;
 
-import com.owsb.model.Item;
-import com.owsb.model.Sale;
-import com.owsb.model.SaleItem;
-import com.owsb.model.User;
+import com.owsb.model.inventory.Item;
+import com.owsb.model.sales.Sale;
+import com.owsb.model.sales.SaleItem;
+import com.owsb.model.user.User;
 import com.owsb.repository.ItemRepository;
 import com.owsb.repository.SalesRepository;
 import com.owsb.util.Constants;

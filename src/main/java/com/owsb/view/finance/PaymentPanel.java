@@ -1,9 +1,9 @@
 package com.owsb.view.finance;
 
 import com.owsb.controller.PurchaseOrderController;
-import com.owsb.model.POItem;
-import com.owsb.model.Payment;
-import com.owsb.model.PurchaseOrder;
+import com.owsb.model.finance.Payment;
+import com.owsb.model.procurement.POItem;
+import com.owsb.model.procurement.PurchaseOrder;
 import com.owsb.repository.PaymentRepository;
 import com.owsb.util.Constants;
 

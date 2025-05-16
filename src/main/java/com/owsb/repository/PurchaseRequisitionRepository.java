@@ -1,7 +1,7 @@
 package com.owsb.repository;
 
-import com.owsb.model.PurchaseRequisition;
-import com.owsb.model.PRItem;
+import com.owsb.model.procurement.PRItem;
+import com.owsb.model.procurement.PurchaseRequisition;
 import com.owsb.util.Constants;
 import com.owsb.util.FileUtils;
 

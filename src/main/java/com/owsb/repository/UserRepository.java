@@ -4,8 +4,8 @@ import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.google.gson.reflect.TypeToken;
 import com.owsb.dto.UserDTO;
-import com.owsb.model.User;
-import com.owsb.model.UserFactory;
+import com.owsb.model.user.User;
+import com.owsb.model.user.UserFactory;
 import com.owsb.util.Constants;
 import com.owsb.util.UserRole;
 

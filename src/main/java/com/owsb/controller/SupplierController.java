@@ -1,6 +1,6 @@
 package com.owsb.controller;
 
-import com.owsb.model.Supplier;
+import com.owsb.model.supplier.Supplier;
 import com.owsb.repository.SupplierRepository;
 import java.util.List;
 

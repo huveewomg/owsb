@@ -1,8 +1,8 @@
 package com.owsb.controller;
 
-import com.owsb.model.Item;
-import com.owsb.model.User;
-import com.owsb.model.Supplier;
+import com.owsb.model.inventory.Item;
+import com.owsb.model.user.User;
+import com.owsb.model.supplier.Supplier;
 import com.owsb.repository.ItemRepository;
 import com.owsb.repository.SupplierRepository;
 import com.owsb.util.UserRole;

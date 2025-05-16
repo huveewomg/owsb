@@ -1,4 +1,4 @@
-package com.owsb.model;
+package com.owsb.model.inventory;
 
 import java.time.LocalDate;
 

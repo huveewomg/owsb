@@ -1,4 +1,4 @@
-package com.owsb.model;
+package com.owsb.model.procurement;
 
 /**
  * POItem class representing an item in a purchase order

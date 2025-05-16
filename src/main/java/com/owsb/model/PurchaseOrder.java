@@ -1,5 +1,6 @@
 package com.owsb.model;
 
+import com.owsb.util.Constants;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
@@ -11,33 +12,13 @@ import java.util.List;
  */
 public class PurchaseOrder {
     
-    public enum Status {
-        PENDING("Pending"),
-        APPROVED("Approved"), 
-        PENDING_ARRIVAL("Pending Arrival"),
-        PENDING_PAYMENT("Pending Payment"),
-        COMPLETED("Completed"),
-        REJECTED("Rejected"),
-        CANCELLED("Cancelled");
-        
-        private final String displayName;
-        
-        Status(String displayName) {
-            this.displayName = displayName;
-        }
-        
-        public String getDisplayName() {
-            return displayName;
-        }
-    }
-    
     private String poID;
     private String prID; // Reference to the Purchase Requisition
     private Date date;
     private Date deliveryDate;
     private String purchaseManagerID;
     private String financeManagerID; // For approval
-    private Status status;
+    private Constants.PurchaseOrderStatus status;
     private String notes;
     private List<POItem> items;
     private double totalValue;
@@ -53,7 +34,7 @@ public class PurchaseOrder {
      * @param notes Optional notes
      */
     public PurchaseOrder(String poID, String prID, Date date, Date deliveryDate, 
-                        String purchaseManagerID, Status status, String notes) {
+                        String purchaseManagerID, Constants.PurchaseOrderStatus status, String notes) {
         this.poID = poID;
         this.prID = prID;
         this.date = date;
@@ -78,7 +59,7 @@ public class PurchaseOrder {
      * @param items List of PO items
      */
     public PurchaseOrder(String poID, String prID, Date date, Date deliveryDate, 
-                        String purchaseManagerID, Status status, String notes, 
+                        String purchaseManagerID, Constants.PurchaseOrderStatus status, String notes, 
                         List<POItem> items) {
         this(poID, prID, date, deliveryDate, purchaseManagerID, status, notes);
         this.items = items;
@@ -118,11 +99,11 @@ public class PurchaseOrder {
         this.financeManagerID = financeManagerID;
     }
     
-    public Status getStatus() {
+    public Constants.PurchaseOrderStatus getStatus() {
         return status;
     }
     
-    public void setStatus(Status status) {
+    public void setStatus(Constants.PurchaseOrderStatus status) {
         this.status = status;
     }
     

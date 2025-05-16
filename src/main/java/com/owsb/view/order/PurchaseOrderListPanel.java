@@ -5,6 +5,7 @@ import com.owsb.model.POItem;
 import com.owsb.model.PurchaseOrder;
 import com.owsb.model.User;
 import com.owsb.model.user.FinanceManager;
+import com.owsb.util.Constants;
 
 import javax.swing.*;
 import javax.swing.table.DefaultTableCellRenderer;
@@ -168,14 +169,14 @@ public class PurchaseOrderListPanel extends JPanel {
      */
     private StatusFilter[] getStatusFilters() {
         return new StatusFilter[]{
-                new StatusFilter("All", null),
-                new StatusFilter("Pending", PurchaseOrder.Status.PENDING),
-                new StatusFilter("Pending Arrival", PurchaseOrder.Status.PENDING_ARRIVAL),
-                new StatusFilter("Pending Payment", PurchaseOrder.Status.PENDING_PAYMENT),
-                new StatusFilter("Approved", PurchaseOrder.Status.APPROVED),
-                new StatusFilter("Rejected", PurchaseOrder.Status.REJECTED),
-                new StatusFilter("Completed", PurchaseOrder.Status.COMPLETED),
-                new StatusFilter("Cancelled", PurchaseOrder.Status.CANCELLED)
+            new StatusFilter("All", null),
+            new StatusFilter("Pending", Constants.PurchaseOrderStatus.PENDING),
+            new StatusFilter("Pending Arrival", Constants.PurchaseOrderStatus.PENDING_ARRIVAL),
+            new StatusFilter("Pending Payment", Constants.PurchaseOrderStatus.PENDING_PAYMENT),
+            new StatusFilter("Approved", Constants.PurchaseOrderStatus.APPROVED),
+            new StatusFilter("Rejected", Constants.PurchaseOrderStatus.REJECTED),
+            new StatusFilter("Completed", Constants.PurchaseOrderStatus.COMPLETED),
+            new StatusFilter("Cancelled", Constants.PurchaseOrderStatus.CANCELLED)
         };
     }
     
@@ -184,22 +185,17 @@ public class PurchaseOrderListPanel extends JPanel {
      */
     private void addListeners() {
         // Status filter combo box listener
-        statusFilterComboBox.addActionListener(e -> filterPOs());
-        
+        statusFilterComboBox.addActionListener(evt -> filterPOs());
         // Refresh button listener
-        refreshButton.addActionListener(e -> loadPurchaseOrders());
-        
+        refreshButton.addActionListener(evt -> loadPurchaseOrders());
         // Table selection listener
-        poTable.getSelectionModel().addListSelectionListener(e -> {
+        poTable.getSelectionModel().addListSelectionListener(evt -> {
             int selectedRow = poTable.getSelectedRow();
             boolean hasSelection = selectedRow != -1;
-            
             viewButton.setEnabled(hasSelection);
-            
             // Enable/disable approve and reject buttons based on selection and status
             if (hasSelection && currentUser instanceof FinanceManager) {
                 String poId = (String) poTable.getValueAt(selectedRow, 0);
-                
                 // Find the PO in our list
                 PurchaseOrder selectedPO = null;
                 for (PurchaseOrder po : pos) {
@@ -208,11 +204,9 @@ public class PurchaseOrderListPanel extends JPanel {
                         break;
                     }
                 }
-                
                 if (selectedPO != null) {
                     // Only enable approve and reject for PENDING POs
-                    boolean canApprove = selectedPO.getStatus() == PurchaseOrder.Status.PENDING;
-                    
+                    boolean canApprove = selectedPO.getStatus() == Constants.PurchaseOrderStatus.PENDING;
                     approveButton.setEnabled(canApprove);
                     rejectButton.setEnabled(canApprove);
                 }
@@ -221,15 +215,12 @@ public class PurchaseOrderListPanel extends JPanel {
                 rejectButton.setEnabled(false);
             }
         });
-        
         // View button listener
-        viewButton.addActionListener(e -> viewPO());
-        
+        viewButton.addActionListener(evt -> viewPO());
         // Approve button listener
-        approveButton.addActionListener(e -> approvePO());
-        
+        approveButton.addActionListener(evt -> approvePO());
         // Reject button listener
-        rejectButton.addActionListener(e -> rejectPO());
+        rejectButton.addActionListener(evt -> rejectPO());
     }
     
     /**
@@ -266,8 +257,8 @@ public class PurchaseOrderListPanel extends JPanel {
         } else {
             // Filter by status
             filteredPOs = pos.stream()
-                    .filter(po -> po.getStatus() == filter.getStatus())
-                    .toList();
+                .filter(po -> po.getStatus() == filter.getStatus())
+                .toList();
         }
         
         // Add to table
@@ -541,20 +532,13 @@ public class PurchaseOrderListPanel extends JPanel {
      */
     private static class StatusFilter {
         private final String displayName;
-        private final PurchaseOrder.Status status;
-        
-        public StatusFilter(String displayName, PurchaseOrder.Status status) {
+        private final Constants.PurchaseOrderStatus status;
+        public StatusFilter(String displayName, Constants.PurchaseOrderStatus status) {
             this.displayName = displayName;
             this.status = status;
         }
-        
-        public PurchaseOrder.Status getStatus() {
-            return status;
-        }
-        
+        public Constants.PurchaseOrderStatus getStatus() { return status; }
         @Override
-        public String toString() {
-            return displayName;
-        }
+        public String toString() { return displayName; }
     }
 }

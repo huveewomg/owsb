@@ -4,7 +4,7 @@ import com.owsb.controller.PurchaseOrderController;
 import com.owsb.model.Item;
 import com.owsb.model.POItem;
 import com.owsb.model.PurchaseOrder;
-import com.owsb.model.PurchaseOrder.Status;
+import com.owsb.util.Constants;
 import com.owsb.repository.ItemRepository;
 
 import javax.swing.*;
@@ -173,7 +173,7 @@ public class StockUpdatePanel extends JPanel {
      */
     private void loadApprovedPOs() {
         // Get approved POs that are pending arrival
-        approvedPOs = poController.getPurchaseOrdersByStatus(Status.PENDING_ARRIVAL);
+        approvedPOs = poController.getPurchaseOrdersByStatus(Constants.PurchaseOrderStatus.PENDING_ARRIVAL);
         
         // Clear combo box
         poComboBox.removeAllItems();

@@ -8,7 +8,7 @@ import com.owsb.model.User;
 import com.owsb.repository.ItemRepository;
 import com.owsb.repository.PurchaseRequisitionRepository;
 import com.owsb.repository.SupplierRepository;
-import com.owsb.model.PurchaseRequisition.Status;
+import com.owsb.util.Constants;
 
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -81,7 +81,7 @@ public class PurchaseRequisitionController {
      * @param status Status to filter by
      * @return List of PRs with the specified status
      */
-    public List<PurchaseRequisition> getPurchaseRequisitionsByStatus(Status status) {
+    public List<PurchaseRequisition> getPurchaseRequisitionsByStatus(Constants.PurchaseRequisitionStatus status) {
         return prRepository.findByStatus(status);
     }
     
@@ -129,7 +129,7 @@ public class PurchaseRequisitionController {
                 new Date(), // Current date
                 requiredDate,
                 currentUser.getUserId(),
-                Status.NEW,
+                Constants.PurchaseRequisitionStatus.NEW,
                 notes,
                 items
         );
@@ -162,7 +162,7 @@ public class PurchaseRequisitionController {
         }
         
         // Check if PR can be updated (only if status is NEW)
-        if (pr.getStatus() != Status.NEW) {
+        if (pr.getStatus() != Constants.PurchaseRequisitionStatus.NEW) {
             return false;
         }
         
@@ -191,7 +191,7 @@ public class PurchaseRequisitionController {
         }
         
         // Check if PR can be deleted (only if status is NEW)
-        if (pr.getStatus() != Status.NEW) {
+        if (pr.getStatus() != Constants.PurchaseRequisitionStatus.NEW) {
             return false;
         }
         
@@ -212,12 +212,10 @@ public class PurchaseRequisitionController {
         }
         
         // Check if PR can be submitted (only if status is NEW)
-        if (pr.getStatus() != Status.NEW) {
+        if (pr.getStatus() != Constants.PurchaseRequisitionStatus.NEW) {
             return false;
         }
-        
-        // Update the status
-        pr.setStatus(Status.PENDING_APPROVAL);
+        pr.setStatus(Constants.PurchaseRequisitionStatus.PENDING_APPROVAL);
         
         // Save the updated purchase requisition
         return prRepository.update(pr);
@@ -229,7 +227,7 @@ public class PurchaseRequisitionController {
      * @param status New status
      * @return true if status changed successfully
      */
-    public boolean changePurchaseRequisitionStatus(String prId, Status status) {
+    public boolean changePurchaseRequisitionStatus(String prId, Constants.PurchaseRequisitionStatus status) {
         // Get the purchase requisition
         PurchaseRequisition pr = prRepository.findById(prId);
         if (pr == null) {
@@ -287,8 +285,8 @@ public class PurchaseRequisitionController {
      */
     public String checkExistingPendingPR(String itemId) {
         List<PurchaseRequisition> pendingPRs = new ArrayList<>();
-        pendingPRs.addAll(prRepository.findByStatus(Status.NEW));
-        pendingPRs.addAll(prRepository.findByStatus(Status.PENDING_APPROVAL));
+        pendingPRs.addAll(prRepository.findByStatus(Constants.PurchaseRequisitionStatus.NEW));
+        pendingPRs.addAll(prRepository.findByStatus(Constants.PurchaseRequisitionStatus.PENDING_APPROVAL));
         
         StringBuilder result = new StringBuilder();
         

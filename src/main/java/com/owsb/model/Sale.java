@@ -1,76 +1,59 @@
 package com.owsb.model;
 
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 
 /**
- * Sale class representing a daily item-wise sales entry
- * Demonstrates encapsulation by properly protecting data
+ * Sale class representing a combined sale with multiple items
+ * Demonstrates composition by containing SaleItem objects
  */
 public class Sale {
     private String saleID;
     private Date date;
-    private String itemID;
-    private String itemName; // For display purposes
-    private int quantity;
-    private double salesAmount;
     private String salesManagerID;
     private String notes;
+    private List<SaleItem> items;
+    private double totalAmount;
     
     /**
      * Constructor for Sale
      * @param saleID Sale ID
      * @param date Sale date
-     * @param itemID Item ID
-     * @param itemName Item name for display
-     * @param quantity Quantity sold
-     * @param salesAmount Total sales amount
      * @param salesManagerID ID of the sales manager
      * @param notes Optional notes
      */
-    public Sale(String saleID, Date date, String itemID, String itemName, 
-               int quantity, double salesAmount, String salesManagerID, String notes) {
+    public Sale(String saleID, Date date, String salesManagerID, String notes) {
         this.saleID = saleID;
         this.date = date;
-        this.itemID = itemID;
-        this.itemName = itemName;
-        this.quantity = quantity;
-        this.salesAmount = salesAmount;
         this.salesManagerID = salesManagerID;
         this.notes = notes;
+        this.items = new ArrayList<>();
+        this.totalAmount = 0.0;
     }
     
-    // Getters and setters with validation
+    /**
+     * Constructor with items
+     * @param saleID Sale ID
+     * @param date Sale date
+     * @param salesManagerID ID of the sales manager
+     * @param notes Optional notes
+     * @param items List of sale items
+     */
+    public Sale(String saleID, Date date, String salesManagerID, String notes, List<SaleItem> items) {
+        this(saleID, date, salesManagerID, notes);
+        this.items = new ArrayList<>(items);
+        calculateTotalAmount();
+    }
+    
+    // Getters and setters
     public String getSaleID() {
         return saleID;
     }
     
     public Date getDate() {
         return date;
-    }
-    
-    public String getItemID() {
-        return itemID;
-    }
-    
-    public String getItemName() {
-        return itemName;
-    }
-    
-    public int getQuantity() {
-        return quantity;
-    }
-    
-    public void setQuantity(int quantity) {
-        if (quantity <= 0) {
-            throw new IllegalArgumentException("Quantity must be positive");
-        }
-        this.quantity = quantity;
-        // Recalculate sales amount if needed
-    }
-    
-    public double getSalesAmount() {
-        return salesAmount;
     }
     
     public String getSalesManagerID() {
@@ -83,6 +66,88 @@ public class Sale {
     
     public void setNotes(String notes) {
         this.notes = notes;
+    }
+    
+    public List<SaleItem> getItems() {
+        return items;
+    }
+    
+    public void setItems(List<SaleItem> items) {
+        this.items = new ArrayList<>(items);
+        calculateTotalAmount();
+    }
+    
+    public double getTotalAmount() {
+        return totalAmount;
+    }
+    
+    /**
+     * Add an item to the sale
+     * @param item Item to add
+     */
+    public void addItem(SaleItem item) {
+        items.add(item);
+        calculateTotalAmount();
+    }
+    
+    /**
+     * Remove an item from the sale
+     * @param index Index of the item to remove
+     */
+    public void removeItem(int index) {
+        if (index >= 0 && index < items.size()) {
+            items.remove(index);
+            calculateTotalAmount();
+        }
+    }
+    
+    /**
+     * Get the item count
+     * @return Number of items in the sale
+     */
+    public int getItemCount() {
+        return items.size();
+    }
+    
+    /**
+     * Calculate the total sale amount
+     */
+    private void calculateTotalAmount() {
+        totalAmount = 0.0;
+        for (SaleItem item : items) {
+            totalAmount += item.getSubtotal();
+        }
+    }
+    
+    /**
+     * Get total cost price (without profit)
+     * @return Total cost price
+     */
+    public double getTotalCostPrice() {
+        double totalCost = 0.0;
+        for (SaleItem item : items) {
+            totalCost += item.getCostPrice();
+        }
+        return totalCost;
+    }
+    
+    /**
+     * Get total profit amount
+     * @return Total profit amount
+     */
+    public double getTotalProfitAmount() {
+        return totalAmount - getTotalCostPrice();
+    }
+    
+    /**
+     * Get the average profit ratio
+     * @return Average profit ratio
+     */
+    public double getAverageProfitRatio() {
+        if (getTotalCostPrice() == 0) {
+            return 0;
+        }
+        return getTotalProfitAmount() / getTotalCostPrice();
     }
     
     /**
@@ -102,11 +167,10 @@ public class Sale {
         return "Sale{" +
                 "saleID='" + saleID + '\'' +
                 ", date='" + getFormattedDate() + '\'' +
-                ", itemID='" + itemID + '\'' +
-                ", quantity=" + quantity +
-                ", salesAmount=" + salesAmount +
                 ", salesManagerID='" + salesManagerID + '\'' +
                 ", notes='" + notes + '\'' +
+                ", items=" + items +
+                ", totalAmount=" + totalAmount +
                 '}';
     }
 }

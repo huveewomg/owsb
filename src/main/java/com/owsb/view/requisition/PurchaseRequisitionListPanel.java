@@ -3,10 +3,10 @@ package com.owsb.view.requisition;
 import com.owsb.controller.PurchaseRequisitionController;
 import com.owsb.model.PRItem;
 import com.owsb.model.PurchaseRequisition;
-import com.owsb.model.PurchaseRequisition.Status;
 import com.owsb.model.User;
 import com.owsb.model.user.SalesManager;
 import com.owsb.model.user.PurchaseManager;
+import com.owsb.util.Constants;
 import com.owsb.util.UserRole;
 
 import javax.swing.*;
@@ -181,12 +181,13 @@ public class PurchaseRequisitionListPanel extends JPanel {
      */
     private StatusFilter[] getStatusFilters() {
         return new StatusFilter[]{
-                new StatusFilter("All", null),
-                new StatusFilter("New", Status.NEW),
-                new StatusFilter("Pending Approval", Status.PENDING_APPROVAL),
-                new StatusFilter("Approved", Status.APPROVED),
-                new StatusFilter("Rejected", Status.REJECTED),
-                new StatusFilter("Processed", Status.PROCESSED)
+            new StatusFilter("All", null),
+            new StatusFilter("New", Constants.PurchaseRequisitionStatus.NEW),
+            new StatusFilter("Pending Approval", Constants.PurchaseRequisitionStatus.PENDING_APPROVAL),
+            new StatusFilter("Approved", Constants.PurchaseRequisitionStatus.APPROVED),
+            new StatusFilter("Rejected", Constants.PurchaseRequisitionStatus.REJECTED),
+            new StatusFilter("Processed", Constants.PurchaseRequisitionStatus.PROCESSED),
+            new StatusFilter("Completed", Constants.PurchaseRequisitionStatus.COMPLETED)
         };
     }
     
@@ -222,7 +223,7 @@ public class PurchaseRequisitionListPanel extends JPanel {
                 
                 if (selectedPR != null) {
                     // Only enable edit and delete for NEW PRs created by the current user
-                    boolean canEdit = selectedPR.getStatus() == Status.NEW && 
+                    boolean canEdit = selectedPR.getStatus() == Constants.PurchaseRequisitionStatus.NEW && 
                                       selectedPR.getSalesManagerID().equals(currentUser.getUserId());
                     
                     editButton.setEnabled(canEdit);
@@ -249,7 +250,7 @@ public class PurchaseRequisitionListPanel extends JPanel {
                 
                 if (selectedPR != null) {
                     // Only enable create PO for PENDING_APPROVAL PRs
-                    boolean canCreatePO = selectedPR.getStatus() == Status.PENDING_APPROVAL;
+                    boolean canCreatePO = selectedPR.getStatus() == Constants.PurchaseRequisitionStatus.PENDING_APPROVAL;
                     
                     createPoButton.setEnabled(canCreatePO);
                 }
@@ -311,8 +312,8 @@ public class PurchaseRequisitionListPanel extends JPanel {
         } else {
             // Filter by status
             filteredPRs = prs.stream()
-                    .filter(pr -> pr.getStatus() == filter.getStatus())
-                    .toList();
+                .filter(pr -> pr.getStatus() == filter.getStatus())
+                .toList();
         }
         
         // Add to table
@@ -577,20 +578,13 @@ public class PurchaseRequisitionListPanel extends JPanel {
      */
     private static class StatusFilter {
         private final String displayName;
-        private final Status status;
-        
-        public StatusFilter(String displayName, Status status) {
+        private final Constants.PurchaseRequisitionStatus status;
+        public StatusFilter(String displayName, Constants.PurchaseRequisitionStatus status) {
             this.displayName = displayName;
             this.status = status;
         }
-        
-        public Status getStatus() {
-            return status;
-        }
-        
+        public Constants.PurchaseRequisitionStatus getStatus() { return status; }
         @Override
-        public String toString() {
-            return displayName;
-        }
+        public String toString() { return displayName; }
     }
 }

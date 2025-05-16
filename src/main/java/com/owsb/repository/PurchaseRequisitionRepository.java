@@ -124,7 +124,7 @@ public class PurchaseRequisitionRepository implements Repository<PurchaseRequisi
      * @param status Status to filter by
      * @return List of PRs with the specified status
      */
-    public List<PurchaseRequisition> findByStatus(PurchaseRequisition.Status status) {
+    public List<PurchaseRequisition> findByStatus(Constants.PurchaseRequisitionStatus status) {
         return findAll().stream()
                 .filter(pr -> pr.getStatus() == status)
                 .collect(Collectors.toList());

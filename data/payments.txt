@@ -58,5 +58,17 @@
     "financeManagerID": "U005",
     "status": "COMPLETED",
     "notes": "Thank"
+  },
+  {
+    "paymentID": "PAY006",
+    "date": "May 16, 2025, 10:19:40 AM",
+    "poID": "PO006",
+    "supplierID": "SUP001",
+    "amount": 35.25,
+    "paymentMethod": "BANK_TRANSFER",
+    "referenceNumber": "BA20250516893",
+    "financeManagerID": "U005",
+    "status": "COMPLETED",
+    "notes": ""
   }
 ]

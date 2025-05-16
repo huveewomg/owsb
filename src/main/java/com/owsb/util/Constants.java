@@ -21,6 +21,9 @@ public class Constants {
     public static final String PO_FILE = DATA_DIR + File.separator + "purchase_orders.txt";
     public static final String PAYMENTS_FILE = DATA_DIR + File.separator + "payments.txt";
     
+    // Business constants
+    public static final double DEFAULT_PROFIT_RATIO = 0.10; // 10%
+    
     // Ensure data directory exists
     static {
         File dataDir = new File(DATA_DIR);
@@ -35,5 +38,46 @@ public class Constants {
     // Private constructor to prevent instantiation
     private Constants() {
         // This class should not be instantiated
+    }
+
+    // Purchase Order Status Enum
+    public static enum PurchaseOrderStatus {
+        PENDING("Pending"),
+        APPROVED("Approved"),
+        PENDING_ARRIVAL("Pending Arrival"),
+        PENDING_PAYMENT("Pending Payment"),
+        COMPLETED("Completed"),
+        REJECTED("Rejected"),
+        CANCELLED("Cancelled");
+
+        private final String displayName;
+
+        PurchaseOrderStatus(String displayName) {
+            this.displayName = displayName;
+        }
+
+        public String getDisplayName() {
+            return displayName;
+        }
+    }
+
+    // Purchase Requisition Status Enum
+    public static enum PurchaseRequisitionStatus {
+        NEW("New"),
+        PENDING_APPROVAL("Pending Approval"),
+        APPROVED("Approved"),
+        REJECTED("Rejected"),
+        PROCESSED("Processed"),
+        COMPLETED("Completed");
+
+        private final String displayName;
+
+        PurchaseRequisitionStatus(String displayName) {
+            this.displayName = displayName;
+        }
+
+        public String getDisplayName() {
+            return displayName;
+        }
     }
 }

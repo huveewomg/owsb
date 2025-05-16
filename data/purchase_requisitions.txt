@@ -113,5 +113,72 @@
       }
     ],
     "estimatedTotal": 230.25
+  },
+  {
+    "prID": "PR012",
+    "date": "May 16, 2025, 8:45:04 AM",
+    "requiredDate": "May 30, 2025, 8:44:51 AM",
+    "salesManagerID": "U002",
+    "status": "PROCESSED",
+    "notes": "",
+    "items": [
+      {
+        "itemID": "IT004",
+        "itemName": "Cooking Oil 2L",
+        "quantity": 15,
+        "requiredDate": "May 30, 2025, 8:44:57 AM",
+        "suggestedSupplierID": "SUP003",
+        "unitPrice": 15.25,
+        "estimatedCost": 228.75
+      },
+      {
+        "itemID": "IT007",
+        "itemName": "Chicken 1kg",
+        "quantity": 1,
+        "requiredDate": "May 30, 2025, 8:44:59 AM",
+        "suggestedSupplierID": "SUP005",
+        "unitPrice": 18.5,
+        "estimatedCost": 18.5
+      }
+    ],
+    "estimatedTotal": 247.25
+  },
+  {
+    "prID": "PR013",
+    "date": "May 16, 2025, 10:16:16 AM",
+    "requiredDate": "May 30, 2025, 10:15:59 AM",
+    "salesManagerID": "U002",
+    "status": "COMPLETED",
+    "notes": "TEST",
+    "items": [
+      {
+        "itemID": "IT001",
+        "itemName": "Rice 5kg",
+        "quantity": 1,
+        "requiredDate": "May 30, 2025, 10:16:10 AM",
+        "suggestedSupplierID": "SUP001",
+        "unitPrice": 25.5,
+        "estimatedCost": 25.5
+      },
+      {
+        "itemID": "IT003",
+        "itemName": "Flour 1kg",
+        "quantity": 1,
+        "requiredDate": "May 30, 2025, 10:16:13 AM",
+        "suggestedSupplierID": "SUP002",
+        "unitPrice": 6.5,
+        "estimatedCost": 6.5
+      },
+      {
+        "itemID": "IT008",
+        "itemName": "Soap Bar",
+        "quantity": 1,
+        "requiredDate": "May 30, 2025, 10:16:15 AM",
+        "suggestedSupplierID": "SUP006",
+        "unitPrice": 3.25,
+        "estimatedCost": 3.25
+      }
+    ],
+    "estimatedTotal": 35.25
   }
 ]

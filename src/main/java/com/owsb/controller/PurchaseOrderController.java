@@ -9,10 +9,9 @@ import com.owsb.model.User;
 import com.owsb.repository.PurchaseOrderRepository;
 import com.owsb.repository.PurchaseRequisitionRepository;
 import com.owsb.repository.SupplierRepository;
-import com.owsb.model.PurchaseOrder.Status;
+import com.owsb.util.Constants;
 
 import java.util.ArrayList;
-import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -66,7 +65,7 @@ public class PurchaseOrderController {
      * @param status Status to filter by
      * @return List of POs with the specified status
      */
-    public List<PurchaseOrder> getPurchaseOrdersByStatus(Status status) {
+    public List<PurchaseOrder> getPurchaseOrdersByStatus(Constants.PurchaseOrderStatus status) {
         return poRepository.findByStatus(status);
     }
     
@@ -109,7 +108,7 @@ public class PurchaseOrderController {
         }
         
         // Check if PR is in PENDING_APPROVAL status
-        if (pr.getStatus() != PurchaseRequisition.Status.PENDING_APPROVAL) {
+        if (pr.getStatus() != Constants.PurchaseRequisitionStatus.PENDING_APPROVAL) {
             return false;
         }
         
@@ -140,7 +139,7 @@ public class PurchaseOrderController {
                 new Date(), // Current date
                 deliveryDate,
                 currentUser.getUserId(),
-                Status.PENDING, // Initial status
+                Constants.PurchaseOrderStatus.PENDING, // Initial status
                 notes,
                 poItems
         );
@@ -150,7 +149,7 @@ public class PurchaseOrderController {
         
         if (saved) {
             // Update the PR status to PROCESSED
-            pr.setStatus(PurchaseRequisition.Status.PROCESSED);
+            pr.setStatus(Constants.PurchaseRequisitionStatus.PROCESSED);
             prRepository.update(pr);
         }
         
@@ -180,7 +179,7 @@ public class PurchaseOrderController {
         }
         
         // Check if PO can be updated (only if status is PENDING)
-        if (po.getStatus() != Status.PENDING) {
+        if (po.getStatus() != Constants.PurchaseOrderStatus.PENDING) {
             return false;
         }
         
@@ -211,12 +210,12 @@ public class PurchaseOrderController {
         }
         
         // Check if PO can be approved (only if status is PENDING)
-        if (po.getStatus() != Status.PENDING) {
+        if (po.getStatus() != Constants.PurchaseOrderStatus.PENDING) {
             return false;
         }
         
         // Update the PO
-        po.setStatus(Status.PENDING_ARRIVAL);
+        po.setStatus(Constants.PurchaseOrderStatus.PENDING_ARRIVAL);
         po.setFinanceManagerID(currentUser.getUserId());
         
         // Save the updated PO
@@ -242,12 +241,12 @@ public class PurchaseOrderController {
         }
         
         // Check if PO can be rejected (only if status is PENDING)
-        if (po.getStatus() != Status.PENDING) {
+        if (po.getStatus() != Constants.PurchaseOrderStatus.PENDING) {
             return false;
         }
         
         // Update the PO
-        po.setStatus(Status.REJECTED);
+        po.setStatus(Constants.PurchaseOrderStatus.REJECTED);
         po.setFinanceManagerID(currentUser.getUserId());
         po.setNotes(po.getNotes() + "\n[REJECTED] " + reason);
         
@@ -256,7 +255,7 @@ public class PurchaseOrderController {
         if (prId != null && !prId.isEmpty()) {
             PurchaseRequisition pr = prRepository.findById(prId);
             if (pr != null) {
-                pr.setStatus(PurchaseRequisition.Status.REJECTED);
+                pr.setStatus(Constants.PurchaseRequisitionStatus.REJECTED);
                 prRepository.update(pr);
             }
         }
@@ -278,12 +277,12 @@ public class PurchaseOrderController {
         }
         
         // Check if PO can be cancelled (only if status is PENDING)
-        if (po.getStatus() != Status.PENDING) {
+        if (po.getStatus() != Constants.PurchaseOrderStatus.PENDING) {
             return false;
         }
         
         // Update the PO
-        po.setStatus(Status.CANCELLED);
+        po.setStatus(Constants.PurchaseOrderStatus.CANCELLED);
         
         // Save the updated PO
         return poRepository.update(po);
@@ -302,12 +301,12 @@ public class PurchaseOrderController {
         }
         
         // Check if PO can be marked as received (only if status is PENDING_ARRIVAL)
-        if (po.getStatus() != Status.PENDING_ARRIVAL) {
+        if (po.getStatus() != Constants.PurchaseOrderStatus.PENDING_ARRIVAL) {
             return false;
         }
         
         // Update the PO
-        po.setStatus(Status.PENDING_PAYMENT);
+        po.setStatus(Constants.PurchaseOrderStatus.PENDING_PAYMENT);
         
         // Save the updated PO
         return poRepository.update(po);
@@ -326,19 +325,19 @@ public class PurchaseOrderController {
         }
         
         // Check if PO can be marked as completed (only if status is PENDING_PAYMENT)
-        if (po.getStatus() != Status.PENDING_PAYMENT) {
+        if (po.getStatus() != Constants.PurchaseOrderStatus.PENDING_PAYMENT) {
             return false;
         }
         
         // Update the PO
-        po.setStatus(Status.COMPLETED);
+        po.setStatus(Constants.PurchaseOrderStatus.COMPLETED);
         
         // Also update the related PR to COMPLETED
         String prId = po.getPrID();
         if (prId != null && !prId.isEmpty()) {
             PurchaseRequisition pr = prRepository.findById(prId);
             if (pr != null) {
-                pr.setStatus(PurchaseRequisition.Status.COMPLETED);
+                pr.setStatus(Constants.PurchaseRequisitionStatus.COMPLETED);
                 prRepository.update(pr);
             }
         }
@@ -380,6 +379,6 @@ public class PurchaseOrderController {
      * @return List of PRs with PENDING_APPROVAL status
      */
     public List<PurchaseRequisition> getPendingApprovalPRs() {
-        return prRepository.findByStatus(PurchaseRequisition.Status.PENDING_APPROVAL);
+        return prRepository.findByStatus(Constants.PurchaseRequisitionStatus.PENDING_APPROVAL);
     }
 }

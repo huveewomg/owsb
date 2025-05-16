@@ -122,11 +122,12 @@ public class SalesRepository implements Repository<Sale> {
     /**
      * Find sales by item
      * @param itemId Item ID to search for
-     * @return List of sales for that item
+     * @return List of sales containing that item
      */
     public List<Sale> findByItem(String itemId) {
         return findAll().stream()
-                .filter(sale -> sale.getItemID().equals(itemId))
+                .filter(sale -> sale.getItems().stream()
+                        .anyMatch(item -> item.getItemID().equals(itemId)))
                 .collect(Collectors.toList());
     }
     
@@ -158,7 +159,6 @@ public class SalesRepository implements Repository<Sale> {
      */
     private boolean saveList(List<Sale> sales) {
         try {
-            // FileUtils.createBackup(Constants.SALES_FILE);
             FileUtils.writeListToJson(Constants.SALES_FILE, sales);
             return true;
         } catch (IOException e) {

@@ -202,7 +202,7 @@
     "category": "Essentials",
     "supplierID": "SUP006",
     "dateAdded": "2025-03-15",
-    "currentStock": 125,
+    "currentStock": 10,
     "minimumStock": 50,
     "maximumStock": 180,
     "lastUpdated": "2025-05-10"
@@ -215,7 +215,7 @@
     "category": "Fresh Produce",
     "supplierID": "SUP005",
     "dateAdded": "2025-03-20",
-    "currentStock": 80,
+    "currentStock": 34,
     "minimumStock": 35,
     "maximumStock": 120,
     "lastUpdated": "2025-05-12"

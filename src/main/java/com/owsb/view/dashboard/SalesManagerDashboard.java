@@ -2,6 +2,7 @@ package com.owsb.view.dashboard;
 
 import com.owsb.controller.AuthController;
 import com.owsb.controller.ItemController;
+import com.owsb.controller.MessageController;
 import com.owsb.controller.PurchaseRequisitionController;
 import com.owsb.controller.SalesController;
 import com.owsb.controller.SupplierController;
@@ -9,6 +10,7 @@ import com.owsb.controller.PurchaseOrderController;
 import com.owsb.model.user.SalesManager;
 import com.owsb.model.user.User;
 import com.owsb.view.item.ItemManagementPanel;
+import com.owsb.view.message.MessagePanel;
 import com.owsb.view.requisition.PurchaseRequisitionPanel;
 import com.owsb.view.sales.SalesEntryPanel;
 import com.owsb.view.supplier.SupplierManagementPanel;
@@ -29,6 +31,7 @@ public class SalesManagerDashboard extends BaseDashboard {
     private SalesEntryPanel salesPanel;
     private PurchaseRequisitionPanel requisitionPanel;
     private PurchaseOrderPanel purchaseOrderPanel;
+    private MessagePanel messagePanel;
     
     // Controllers - using composition to implement functionality
     private final ItemController itemController;
@@ -36,6 +39,7 @@ public class SalesManagerDashboard extends BaseDashboard {
     private final SalesController salesController;
     private final PurchaseRequisitionController prController;
     private final PurchaseOrderController poController;
+    private final MessageController messageController;
     
     /**
      * Constructor for SalesManagerDashboard
@@ -53,13 +57,20 @@ public class SalesManagerDashboard extends BaseDashboard {
         // Initialize controllers
         this.itemController = new ItemController();
         this.itemController.setCurrentUser(user);
+        
         this.supplierController = new SupplierController();
+        
         this.salesController = new SalesController();
         this.salesController.setCurrentUser(user);
+        
         this.prController = new PurchaseRequisitionController();
         this.prController.setCurrentUser(user);
+        
         this.poController = new PurchaseOrderController();
         this.poController.setCurrentUser(user);
+        
+        this.messageController = new MessageController();
+        this.messageController.setCurrentUser(user);
         
         // Initialize UI components
         initPanels();
@@ -70,6 +81,7 @@ public class SalesManagerDashboard extends BaseDashboard {
         addMenuButton("Daily Sales Entry", e -> showSalesPanel());
         addMenuButton("Purchase Requisitions", e -> showRequisitionPanel());
         addMenuButton("View Purchase Orders", e -> showPurchaseOrdersPanel());
+        addMenuButton("Messages", e -> showMessagesPanel());
     }
     
     /**
@@ -101,6 +113,7 @@ public class SalesManagerDashboard extends BaseDashboard {
         salesPanel = new SalesEntryPanel(salesController);
         requisitionPanel = new PurchaseRequisitionPanel(prController, currentUser);
         purchaseOrderPanel = new PurchaseOrderPanel(poController, currentUser);
+        messagePanel = new MessagePanel(messageController, prController, currentUser);
     }
     
     /**
@@ -141,5 +154,24 @@ public class SalesManagerDashboard extends BaseDashboard {
     private void showPurchaseOrdersPanel() {
         setContent(purchaseOrderPanel);
         setStatus("Viewing Purchase Orders");
+    }
+    
+    /**
+     * Show messages panel
+     */
+    private void showMessagesPanel() {
+        setContent(messagePanel);
+        setStatus("Messages");
+        
+        // Refresh messages when showing the panel
+        messagePanel.loadMessages();
+    }
+
+    /**
+     * Override navigateToPRPanel to navigate to the PR panel
+     */
+    @Override
+    public void navigateToPRPanel() {
+        showRequisitionPanel();
     }
 }

@@ -172,10 +172,6 @@ public class PurchaseRequisitionListPanel extends JPanel {
         JPanel panel = new JPanel(new BorderLayout());
         panel.setBorder(BorderFactory.createEmptyBorder(0, 0, 10, 0));
 
-        // Title label
-        JLabel titleLabel = new JLabel("Purchase Requisitions");
-        titleLabel.setFont(new Font("Arial", Font.BOLD, 18));
-        panel.add(titleLabel, BorderLayout.WEST);
 
         // Filter and refresh controls
         JPanel controlsPanel = new JPanel(new FlowLayout(FlowLayout.RIGHT));

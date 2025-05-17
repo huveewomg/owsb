@@ -223,4 +223,17 @@ public abstract class BaseDashboard extends JFrame {
      * Each dashboard implementation must provide this
      */
     protected abstract void initRoleComponents();
+    
+    /**
+     * Navigate to the Purchase Requisition panel
+     * This is a placeholder that should be overridden by dashboards that have a PR panel
+     */
+    public void navigateToPRPanel() {
+        // Default implementation does nothing
+        // This should be overridden by dashboards that have a PR panel
+        JOptionPane.showMessageDialog(this, 
+            "Navigation to Purchase Requisition panel is not implemented for this dashboard.",
+            "Navigation Error",
+            JOptionPane.WARNING_MESSAGE);
+    }
 }

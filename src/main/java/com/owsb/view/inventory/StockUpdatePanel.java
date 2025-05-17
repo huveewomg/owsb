@@ -83,6 +83,12 @@ public class StockUpdatePanel extends JPanel {
         setLayout(new BorderLayout(10, 10));
         setBorder(BorderFactory.createEmptyBorder(10, 10, 10, 10));
         
+        // Add header title
+        JLabel titleLabel = new JLabel("Inventory Stock Update", JLabel.CENTER);
+        titleLabel.setFont(new Font("Arial", Font.BOLD, 18));
+        titleLabel.setBorder(BorderFactory.createEmptyBorder(0, 0, 10, 0));
+        add(titleLabel, BorderLayout.NORTH);
+        
         // Initialize tabbed pane
         tabbedPane = new JTabbedPane();
         

@@ -8,6 +8,7 @@ import com.owsb.controller.PurchaseRequisitionController;
 import com.owsb.model.user.InventoryManager;
 import com.owsb.model.user.User;
 import com.owsb.view.inventory.LowStockAlertsPanel;
+import com.owsb.view.inventory.StockReportsPanel;
 import com.owsb.view.inventory.StockUpdatePanel;
 import com.owsb.view.item.ItemListPanel;
 import com.owsb.view.message.MessagePanel;
@@ -32,7 +33,7 @@ public class InventoryManagerDashboard extends BaseDashboard {
     private ItemListPanel viewItemsPanel;
     private LowStockAlertsPanel lowStockPanel;
     private StockUpdatePanel updateStockPanel;
-    private JPanel stockReportsPanel;
+    private StockReportsPanel stockReportsPanel;
     private PurchaseOrderPanel viewPOPanel;
     private MessagePanel messagePanel;
     
@@ -104,22 +105,7 @@ public class InventoryManagerDashboard extends BaseDashboard {
         lowStockPanel = new LowStockAlertsPanel(itemController, currentUser);
         
         // Stock Reports panel
-        stockReportsPanel = new JPanel(new BorderLayout());
-        stockReportsPanel.setBorder(BorderFactory.createEmptyBorder(10, 10, 10, 10));
-        
-        JLabel reportsLabel = new JLabel("Stock Reports", JLabel.CENTER);
-        reportsLabel.setFont(new Font("Arial", Font.BOLD, 18));
-        stockReportsPanel.add(reportsLabel, BorderLayout.NORTH);
-        
-        JPanel reportsButtonPanel = new JPanel(new GridLayout(4, 1, 10, 10));
-        reportsButtonPanel.setBorder(BorderFactory.createEmptyBorder(20, 50, 20, 50));
-        
-        reportsButtonPanel.add(new JButton("Current Stock Report"));
-        reportsButtonPanel.add(new JButton("Low Stock Report"));
-        reportsButtonPanel.add(new JButton("Stock Movement Report"));
-        reportsButtonPanel.add(new JButton("Inventory Valuation Report"));
-        
-        stockReportsPanel.add(reportsButtonPanel, BorderLayout.CENTER);
+        stockReportsPanel = new StockReportsPanel(itemController, currentUser);
         
         // View Purchase Orders panel
         viewPOPanel = new PurchaseOrderPanel(poController, currentUser);

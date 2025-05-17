@@ -88,6 +88,13 @@ public class SupplierListPanel extends JPanel {
         viewButton.addActionListener(e -> viewSupplier());
     }
 
+    /**
+     * Loads the list of suppliers into the table.
+     * <p>
+     * This method clears the current table data, fetches the list of suppliers
+     * from the {@link SupplierController}, and populates the table with the
+     * supplier details. It also disables the "View" button after loading.
+     */
     public void loadSuppliers() {
         tableModel.setRowCount(0);
         suppliers = supplierController.getAllSuppliers();

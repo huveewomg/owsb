@@ -1,12 +1,16 @@
 package com.owsb.view.dashboard;
 
 import com.owsb.controller.AuthController;
+import com.owsb.controller.ItemController;
 import com.owsb.controller.PurchaseOrderController;
 import com.owsb.controller.PurchaseRequisitionController;
+import com.owsb.controller.SupplierController;
 import com.owsb.model.user.PurchaseManager;
 import com.owsb.model.user.User;
+import com.owsb.view.item.ItemListPanel;
 import com.owsb.view.order.PurchaseOrderPanel;
 import com.owsb.view.requisition.PurchaseRequisitionListPanel;
+import com.owsb.view.supplier.SupplierListPanel;
 
 import javax.swing.*;
 import java.awt.*;
@@ -22,10 +26,12 @@ public class PurchaseManagerDashboard extends BaseDashboard implements PropertyC
     // Controllers
     private final PurchaseRequisitionController prController;
     private final PurchaseOrderController poController;
+    private final ItemController itemController;
+    private final SupplierController supplierController;
     
     // Panels
     private JPanel viewItemsPanel;
-    private JPanel viewSuppliersPanel;
+    private SupplierListPanel viewSuppliersPanel;
     private PurchaseRequisitionListPanel viewRequisitionsPanel;
     private PurchaseOrderPanel purchaseOrderPanel;
     
@@ -48,6 +54,12 @@ public class PurchaseManagerDashboard extends BaseDashboard implements PropertyC
         
         this.poController = new PurchaseOrderController();
         this.poController.setCurrentUser(user);
+        
+        this.itemController = new ItemController();
+        this.itemController.setCurrentUser(user);
+        
+        this.supplierController = new SupplierController();
+        this.supplierController.setCurrentUser(user);
         
         // Initialize panels
         initPanels();
@@ -79,22 +91,11 @@ public class PurchaseManagerDashboard extends BaseDashboard implements PropertyC
      * Initialize panel placeholders
      */
     private void initPanels() {
-        // View Items panel - Simple panel with table (replace with actual ItemPanel if available)
-        viewItemsPanel = createSimplePanel("View Items", 
-            new String[]{"Item Code", "Item Name", "Current Stock"},
-            new Object[][]{
-                {"IT001", "Rice 5kg", 100},
-                {"IT002", "Sugar 1kg", 150},
-                {"IT003", "Flour 1kg", 80}
-            });
+        // View Items panel - Use ItemListPanel
+        viewItemsPanel = new ItemListPanel(itemController, currentUser);
         
-        // View Suppliers panel - Simple panel with table (replace with actual SupplierPanel if available)
-        viewSuppliersPanel = createSimplePanel("View Suppliers", 
-            new String[]{"Supplier Code", "Supplier Name", "Contact"},
-            new Object[][]{
-                {"SUP001", "ABC Groceries", "John (123-456-7890)"},
-                {"SUP002", "XYZ Distributors", "Mary (098-765-4321)"}
-            });
+        // View Suppliers panel - Use SupplierListPanel
+        viewSuppliersPanel = new SupplierListPanel(supplierController, currentUser);
         
         // Purchase Requisition List Panel - Only for viewing
         viewRequisitionsPanel = new PurchaseRequisitionListPanel(prController, currentUser);
@@ -102,29 +103,6 @@ public class PurchaseManagerDashboard extends BaseDashboard implements PropertyC
         
         // Purchase Order Panel
         purchaseOrderPanel = new PurchaseOrderPanel(poController, currentUser);
-    }
-    
-    /**
-     * Create a simple panel with a table
-     * @param title Panel title
-     * @param columnNames Column names for table
-     * @param data Table data
-     * @return Panel with table
-     */
-    private JPanel createSimplePanel(String title, String[] columnNames, Object[][] data) {
-        JPanel panel = new JPanel(new BorderLayout());
-        panel.setBorder(BorderFactory.createEmptyBorder(10, 10, 10, 10));
-        
-        JLabel label = new JLabel(title, JLabel.CENTER);
-        label.setFont(new Font("Arial", Font.BOLD, 18));
-        panel.add(label, BorderLayout.NORTH);
-        
-        JTable table = new JTable(data, columnNames);
-        table.setDefaultEditor(Object.class, null); // Make the table non-editable
-        JScrollPane scrollPane = new JScrollPane(table);
-        panel.add(scrollPane, BorderLayout.CENTER);
-        
-        return panel;
     }
     
     // Methods to show different panels

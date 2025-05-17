@@ -84,17 +84,7 @@ public class PurchaseRequisitionListPanel extends JPanel {
      */
     private void initComponents() {
         // Top panel - Filters and refresh button
-        topPanel = new JPanel(new FlowLayout(FlowLayout.LEFT));
-        
-        JLabel statusFilterLabel = new JLabel("Status:");
-        statusFilterComboBox = new JComboBox<>(getStatusFilters());
-        
-        refreshButton = new JButton("Refresh");
-        
-        topPanel.add(statusFilterLabel);
-        topPanel.add(statusFilterComboBox);
-        topPanel.add(Box.createHorizontalStrut(20));
-        topPanel.add(refreshButton);
+        topPanel = createHeaderPanel();
         
         // Center panel - PR table
         centerPanel = new JPanel(new BorderLayout());
@@ -175,6 +165,32 @@ public class PurchaseRequisitionListPanel extends JPanel {
         add(bottomPanel, BorderLayout.SOUTH);
     }
     
+    /**
+     * Create header panel with title, status filter and refresh button
+     */
+    private JPanel createHeaderPanel() {
+        JPanel panel = new JPanel(new BorderLayout());
+        panel.setBorder(BorderFactory.createEmptyBorder(0, 0, 10, 0));
+
+        // Title label
+        JLabel titleLabel = new JLabel("Purchase Requisitions");
+        titleLabel.setFont(new Font("Arial", Font.BOLD, 18));
+        panel.add(titleLabel, BorderLayout.WEST);
+
+        // Filter and refresh controls
+        JPanel controlsPanel = new JPanel(new FlowLayout(FlowLayout.RIGHT));
+        JLabel statusFilterLabel = new JLabel("Status:");
+        statusFilterComboBox = new JComboBox<>(getStatusFilters());
+        refreshButton = new JButton("Refresh");
+        controlsPanel.add(statusFilterLabel);
+        controlsPanel.add(statusFilterComboBox);
+        controlsPanel.add(Box.createHorizontalStrut(20));
+        controlsPanel.add(refreshButton);
+        panel.add(controlsPanel, BorderLayout.EAST);
+
+        return panel;
+    }
+
     /**
      * Get status filters for combo box
      * @return Array of status filters

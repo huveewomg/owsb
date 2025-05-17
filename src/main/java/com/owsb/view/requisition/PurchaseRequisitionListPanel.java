@@ -29,6 +29,7 @@ public class PurchaseRequisitionListPanel extends JPanel {
     private JPanel topPanel;
     private JPanel centerPanel;
     private JPanel bottomPanel;
+    private JLabel titleLabel;
     
     private JTable prTable;
     private DefaultTableModel tableModel;
@@ -169,9 +170,13 @@ public class PurchaseRequisitionListPanel extends JPanel {
      * Create header panel with title, status filter and refresh button
      */
     private JPanel createHeaderPanel() {
-        JPanel panel = new JPanel(new BorderLayout());
+        JPanel panel = new JPanel(new BorderLayout(0, 10));
         panel.setBorder(BorderFactory.createEmptyBorder(0, 0, 10, 0));
 
+        titleLabel = new JLabel("Purchase Requisitions", JLabel.CENTER);
+        titleLabel.setFont(new Font("Arial", Font.BOLD, 20));
+        titleLabel.setBorder(BorderFactory.createEmptyBorder(5, 0, 5, 0));
+        panel.add(titleLabel, BorderLayout.NORTH);
 
         // Filter and refresh controls
         JPanel controlsPanel = new JPanel(new FlowLayout(FlowLayout.RIGHT));

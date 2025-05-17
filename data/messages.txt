@@ -1,23 +1,12 @@
 [
   {
-    "messageID": "MSG002",
+    "messageID": "MSG004",
     "senderID": "U004",
     "senderName": "Alex Inventory",
     "receiverRole": "SALES_MANAGER",
     "subject": "CRITICAL Stock Alert: Hand Sanitizer 200ml (IT017)",
     "content": "Attention Sales Manager,\n\nThis is an automated stock alert notification.\n\nItem: Hand Sanitizer 200ml (IT017)\nCurrent Stock: 10\nMinimum Stock Level: 50\nStatus: CRITICAL\nRecommended Reorder Quantity: 170\n\nPlease consider creating a Purchase Requisition for this item.\n\nRegards,\nAlex Inventory\nInventory Manager",
-    "timestamp": "2025-05-17 15:16:56",
-    "isRead": true,
-    "relatedItemID": "IT017"
-  },
-  {
-    "messageID": "MSG003",
-    "senderID": "U004",
-    "senderName": "Alex Inventory",
-    "receiverRole": "SALES_MANAGER",
-    "subject": "CRITICAL Stock Alert: Hand Sanitizer 200ml (IT017)",
-    "content": "Attention Sales Manager,\n\nThis is an automated stock alert notification.\n\nItem: Hand Sanitizer 200ml (IT017)\nCurrent Stock: 10\nMinimum Stock Level: 50\nStatus: CRITICAL\nRecommended Reorder Quantity: 170\n\nPlease consider creating a Purchase Requisition for this item.\n\nRegards,\nAlex Inventory\nInventory Manager",
-    "timestamp": "2025-05-17 16:21:12",
+    "timestamp": "2025-05-17 17:13:42",
     "isRead": true,
     "relatedItemID": "IT017"
   }

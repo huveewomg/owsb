@@ -30,10 +30,10 @@ public class LowStockAlertsPanel extends JPanel {
     private List<Item> lowStockItems;
     private final NumberFormat currencyFormat = NumberFormat.getCurrencyInstance();
 
-    public LowStockAlertsPanel(ItemController itemController, User currentUser) {
+    public LowStockAlertsPanel(ItemController itemController, MessageController messageController, User currentUser) {
         this.itemController = itemController;
+        this.messageController = messageController;
         this.currentUser = currentUser;
-        this.messageController = new MessageController();
         this.messageController.setCurrentUser(currentUser);
         
         setLayout(new BorderLayout(10, 10));

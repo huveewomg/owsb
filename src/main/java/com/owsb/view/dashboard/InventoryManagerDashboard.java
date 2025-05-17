@@ -102,7 +102,7 @@ public class InventoryManagerDashboard extends BaseDashboard {
         updateStockPanel = new StockUpdatePanel(poController, itemController);
         
         // Low Stock Alerts panel - use the new LowStockAlertsPanel
-        lowStockPanel = new LowStockAlertsPanel(itemController, currentUser);
+        lowStockPanel = new LowStockAlertsPanel(itemController, messageController, currentUser);
         
         // Stock Reports panel
         stockReportsPanel = new StockReportsPanel(itemController, currentUser);
@@ -141,6 +141,7 @@ public class InventoryManagerDashboard extends BaseDashboard {
     }
     
     private void showMessagesPanel() {
+        messagePanel.loadMessages();
         setContent(messagePanel);
         setStatus("Messages");
     }

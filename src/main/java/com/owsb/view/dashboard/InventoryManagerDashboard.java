@@ -98,7 +98,7 @@ public class InventoryManagerDashboard extends BaseDashboard {
         viewItemsPanel = new ItemListPanel(itemController, currentUser);
         
         // Update Stock panel
-        updateStockPanel = new StockUpdatePanel(poController);
+        updateStockPanel = new StockUpdatePanel(poController, itemController);
         
         // Low Stock Alerts panel - use the new LowStockAlertsPanel
         lowStockPanel = new LowStockAlertsPanel(itemController, currentUser);

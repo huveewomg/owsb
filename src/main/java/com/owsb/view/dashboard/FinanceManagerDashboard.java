@@ -3,8 +3,10 @@ package com.owsb.view.dashboard;
 import com.owsb.controller.AuthController;
 import com.owsb.controller.PurchaseOrderController;
 import com.owsb.controller.PurchaseRequisitionController;
+import com.owsb.controller.SalesController;
 import com.owsb.model.user.FinanceManager;
 import com.owsb.model.user.User;
+import com.owsb.view.finance.FinancialReportsPanel;
 import com.owsb.view.finance.PaymentHistoryPanel;
 import com.owsb.view.finance.PaymentPanel;
 import com.owsb.view.order.PurchaseOrderPanel;
@@ -22,12 +24,13 @@ public class FinanceManagerDashboard extends BaseDashboard {
     // Controllers
     private final PurchaseRequisitionController prController;
     private final PurchaseOrderController poController;
+    private final SalesController salesController;
     
     // Specific panels for Finance Manager
     private PurchaseOrderPanel approvePOPanel;
     private PaymentPanel paymentsPanel;
     private PaymentHistoryPanel paymentHistoryPanel;
-    private JPanel financialReportsPanel;
+    private FinancialReportsPanel financialReportsPanel;
     private PurchaseRequisitionListPanel viewPRPanel;
     
     /**
@@ -49,6 +52,9 @@ public class FinanceManagerDashboard extends BaseDashboard {
         
         this.poController = new PurchaseOrderController();
         this.poController.setCurrentUser(user);
+        
+        this.salesController = new SalesController();
+        this.salesController.setCurrentUser(user);
         
         // Initialize panels
         initPanels();
@@ -90,23 +96,8 @@ public class FinanceManagerDashboard extends BaseDashboard {
         // Payment History panel - Use PaymentHistoryPanel
         paymentHistoryPanel = new PaymentHistoryPanel();
         
-        // Financial Reports panel
-        financialReportsPanel = new JPanel(new BorderLayout());
-        financialReportsPanel.setBorder(BorderFactory.createEmptyBorder(10, 10, 10, 10));
-        
-        JLabel reportsLabel = new JLabel("Financial Reports", JLabel.CENTER);
-        reportsLabel.setFont(new Font("Arial", Font.BOLD, 18));
-        financialReportsPanel.add(reportsLabel, BorderLayout.NORTH);
-        
-        JPanel reportsButtonPanel = new JPanel(new GridLayout(4, 1, 10, 10));
-        reportsButtonPanel.setBorder(BorderFactory.createEmptyBorder(20, 50, 20, 50));
-        
-        reportsButtonPanel.add(new JButton("Purchase Summary Report"));
-        reportsButtonPanel.add(new JButton("Payment History Report"));
-        reportsButtonPanel.add(new JButton("Supplier Payment Report"));
-        reportsButtonPanel.add(new JButton("Budget vs. Actual Report"));
-        
-        financialReportsPanel.add(reportsButtonPanel, BorderLayout.CENTER);
+        // Financial Reports panel - Use our new FinancialReportsPanel
+        financialReportsPanel = new FinancialReportsPanel(poController, salesController, currentUser);
         
         // View Purchase Requisitions panel - Use PurchaseRequisitionListPanel
         viewPRPanel = new PurchaseRequisitionListPanel(prController, currentUser);

@@ -91,7 +91,10 @@ public class PaymentPanel extends JPanel {
      * Initialize components
      */
     private void initComponents() {
+        // Create a container for the title and payment form
         JPanel headerPanel = new JPanel(new BorderLayout(0, 10));
+        
+        // Title label
         titleLabel = new JLabel("Process Payments", JLabel.CENTER);
         titleLabel.setFont(new Font("Arial", Font.BOLD, 20));
         titleLabel.setBorder(BorderFactory.createEmptyBorder(5, 0, 10, 0));
@@ -190,6 +193,8 @@ public class PaymentPanel extends JPanel {
         topPanel.add(notesScrollPane, gbc);
         
         headerPanel.add(topPanel, BorderLayout.CENTER);
+        
+        // Add the header panel to the main panel
         add(headerPanel, BorderLayout.NORTH);
         // Center panel - Items table
         centerPanel = new JPanel(new BorderLayout());
@@ -230,6 +235,7 @@ public class PaymentPanel extends JPanel {
         bottomPanel.add(processButton);
         
         // Add panels to main panel
+        // headerPanel is already added to NORTH position
         add(centerPanel, BorderLayout.CENTER);
         add(bottomPanel, BorderLayout.SOUTH);
     }

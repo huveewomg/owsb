@@ -25,6 +25,13 @@
       <version>2.10.1</version>
     </dependency>
     
+    <!-- JFreeChart for creating charts and graphs -->
+    <dependency>
+      <groupId>org.jfree</groupId>
+      <artifactId>jfreechart</artifactId>
+      <version>1.5.4</version>
+    </dependency>
+    
     <dependency>
       <groupId>junit</groupId>
       <artifactId>junit</artifactId>

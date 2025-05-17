@@ -198,7 +198,8 @@
     "date": "May 16, 2025, 6:19:53 PM",
     "deliveryDate": "May 30, 2025, 5:48:36 PM",
     "purchaseManagerID": "U003",
-    "status": "PENDING",
+    "financeManagerID": "U005",
+    "status": "PENDING_PAYMENT",
     "notes": "",
     "items": [
       {

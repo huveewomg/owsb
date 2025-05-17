@@ -1,11 +1,17 @@
 package com.owsb.view.dashboard;
 
 import com.owsb.controller.AuthController;
+import com.owsb.controller.ItemController;
+import com.owsb.controller.MessageController;
 import com.owsb.controller.PurchaseOrderController;
 import com.owsb.controller.PurchaseRequisitionController;
 import com.owsb.model.user.InventoryManager;
 import com.owsb.model.user.User;
+import com.owsb.view.inventory.LowStockAlertsPanel;
+import com.owsb.view.inventory.StockReportsPanel;
 import com.owsb.view.inventory.StockUpdatePanel;
+import com.owsb.view.item.ItemListPanel;
+import com.owsb.view.message.MessagePanel;
 import com.owsb.view.order.PurchaseOrderPanel;
 
 import javax.swing.*;
@@ -20,13 +26,16 @@ public class InventoryManagerDashboard extends BaseDashboard {
     // Controllers
     private final PurchaseRequisitionController prController;
     private final PurchaseOrderController poController;
+    private final ItemController itemController;
+    private final MessageController messageController;
     
     // Specific panels for Inventory Manager
-    private JPanel viewItemsPanel;
+    private ItemListPanel viewItemsPanel;
+    private LowStockAlertsPanel lowStockPanel;
     private StockUpdatePanel updateStockPanel;
-    private JPanel lowStockPanel;
-    private JPanel stockReportsPanel;
+    private StockReportsPanel stockReportsPanel;
     private PurchaseOrderPanel viewPOPanel;
+    private MessagePanel messagePanel;
     
     /**
      * Constructor for InventoryManagerDashboard
@@ -47,6 +56,12 @@ public class InventoryManagerDashboard extends BaseDashboard {
         
         this.poController = new PurchaseOrderController();
         this.poController.setCurrentUser(user);
+        
+        this.itemController = new ItemController();
+        this.itemController.setCurrentUser(user);
+        
+        this.messageController = new MessageController();
+        this.messageController.setCurrentUser(user);
         
         // Initialize panels
         initPanels();
@@ -73,74 +88,30 @@ public class InventoryManagerDashboard extends BaseDashboard {
         addMenuButton("Low Stock Alerts", e -> showLowStockPanel());
         addMenuButton("Stock Reports", e -> showStockReportsPanel());
         addMenuButton("View Purchase Orders", e -> showViewPOPanel());
+        addMenuButton("Messages", e -> showMessagesPanel());
     }
     
     /**
      * Initialize panel placeholders
      */
     private void initPanels() {
-        // View Items panel with stock details
-        viewItemsPanel = createSimplePanel("View Items", 
-            new String[]{"Item Code", "Item Name", "Current Stock", "Min Stock Level", "Status"},
-            new Object[][]{
-                {"IT001", "Rice 5kg", 100, 20, "OK"},
-                {"IT002", "Sugar 1kg", 150, 30, "OK"},
-                {"IT003", "Flour 1kg", 15, 20, "LOW"}
-            });
+        // View Items panel - use the ItemListPanel
+        viewItemsPanel = new ItemListPanel(itemController, currentUser);
         
-        updateStockPanel = new StockUpdatePanel(poController);
+        // Update Stock panel
+        updateStockPanel = new StockUpdatePanel(poController, itemController);
         
-        // Low Stock Alerts panel
-        lowStockPanel = createSimplePanel("Low Stock Alerts", 
-            new String[]{"Item Code", "Item Name", "Current Stock", "Min Stock Level", "Status"},
-            new Object[][]{
-                {"IT003", "Flour 1kg", 15, 20, "LOW"},
-                {"IT005", "Cooking Oil 2L", 8, 10, "LOW"},
-                {"IT008", "Salt 500g", 5, 10, "CRITICAL"}
-            });
+        // Low Stock Alerts panel - use the new LowStockAlertsPanel
+        lowStockPanel = new LowStockAlertsPanel(itemController, messageController, currentUser);
         
         // Stock Reports panel
-        stockReportsPanel = new JPanel(new BorderLayout());
-        stockReportsPanel.setBorder(BorderFactory.createEmptyBorder(10, 10, 10, 10));
+        stockReportsPanel = new StockReportsPanel(itemController, currentUser);
         
-        JLabel reportsLabel = new JLabel("Stock Reports", JLabel.CENTER);
-        reportsLabel.setFont(new Font("Arial", Font.BOLD, 18));
-        stockReportsPanel.add(reportsLabel, BorderLayout.NORTH);
-        
-        JPanel reportsButtonPanel = new JPanel(new GridLayout(4, 1, 10, 10));
-        reportsButtonPanel.setBorder(BorderFactory.createEmptyBorder(20, 50, 20, 50));
-        
-        reportsButtonPanel.add(new JButton("Current Stock Report"));
-        reportsButtonPanel.add(new JButton("Low Stock Report"));
-        reportsButtonPanel.add(new JButton("Stock Movement Report"));
-        reportsButtonPanel.add(new JButton("Inventory Valuation Report"));
-        
-        stockReportsPanel.add(reportsButtonPanel, BorderLayout.CENTER);
-        
+        // View Purchase Orders panel
         viewPOPanel = new PurchaseOrderPanel(poController, currentUser);
-    }
-    
-    /**
-     * Create a simple panel with a table
-     * @param title Panel title
-     * @param columnNames Column names for table
-     * @param data Table data
-     * @return Panel with table
-     */
-    private JPanel createSimplePanel(String title, String[] columnNames, Object[][] data) {
-        JPanel panel = new JPanel(new BorderLayout());
-        panel.setBorder(BorderFactory.createEmptyBorder(10, 10, 10, 10));
         
-        JLabel label = new JLabel(title, JLabel.CENTER);
-        label.setFont(new Font("Arial", Font.BOLD, 18));
-        panel.add(label, BorderLayout.NORTH);
-        
-        JTable table = new JTable(data, columnNames);
-        table.setDefaultEditor(Object.class, null); // Make the table non-editable
-        JScrollPane scrollPane = new JScrollPane(table);
-        panel.add(scrollPane, BorderLayout.CENTER);
-        
-        return panel;
+        // Messages panel
+        messagePanel = new MessagePanel(messageController, prController, currentUser);
     }
     
     // Methods to show different panels
@@ -167,5 +138,11 @@ public class InventoryManagerDashboard extends BaseDashboard {
     private void showViewPOPanel() {
         setContent(viewPOPanel);
         setStatus("Viewing Purchase Orders");
+    }
+    
+    private void showMessagesPanel() {
+        messagePanel.loadMessages();
+        setContent(messagePanel);
+        setStatus("Messages");
     }
 }

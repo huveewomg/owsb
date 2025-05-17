@@ -7,10 +7,10 @@
     "category": "Groceries",
     "supplierID": "SUP001",
     "dateAdded": "2025-01-15",
-    "currentStock": 151,
+    "currentStock": 152,
     "minimumStock": 50,
     "maximumStock": 200,
-    "lastUpdated": "2025-05-16"
+    "lastUpdated": "2025-05-17"
   },
   {
     "itemID": "IT002",
@@ -120,7 +120,7 @@
     "itemID": "IT011",
     "name": "test",
     "description": "12",
-    "unitPrice": 12,
+    "unitPrice": 12.0,
     "category": "Groceries",
     "supplierID": "SUP001",
     "dateAdded": "2025-05-10",
@@ -137,10 +137,10 @@
     "category": "Groceries",
     "supplierID": "SUP001",
     "dateAdded": "2025-02-15",
-    "currentStock": 75,
+    "currentStock": 76,
     "minimumStock": 30,
     "maximumStock": 120,
-    "lastUpdated": "2025-04-15"
+    "lastUpdated": "2025-05-17"
   },
   {
     "itemID": "IT013",
@@ -202,7 +202,7 @@
     "category": "Essentials",
     "supplierID": "SUP006",
     "dateAdded": "2025-03-15",
-    "currentStock": 125,
+    "currentStock": 10,
     "minimumStock": 50,
     "maximumStock": 180,
     "lastUpdated": "2025-05-10"
@@ -215,7 +215,7 @@
     "category": "Fresh Produce",
     "supplierID": "SUP005",
     "dateAdded": "2025-03-20",
-    "currentStock": 80,
+    "currentStock": 34,
     "minimumStock": 35,
     "maximumStock": 120,
     "lastUpdated": "2025-05-12"
@@ -228,9 +228,9 @@
     "category": "Fresh Produce",
     "supplierID": "SUP009",
     "dateAdded": "2025-03-25",
-    "currentStock": 40,
+    "currentStock": 41,
     "minimumStock": 15,
     "maximumStock": 60,
-    "lastUpdated": "2025-05-08"
+    "lastUpdated": "2025-05-17"
   }
 ]

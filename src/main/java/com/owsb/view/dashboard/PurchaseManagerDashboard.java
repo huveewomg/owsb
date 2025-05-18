@@ -98,7 +98,7 @@ public class PurchaseManagerDashboard extends BaseDashboard implements PropertyC
         viewSuppliersPanel = new SupplierListPanel(supplierController, currentUser);
         
         // Purchase Requisition List Panel - Only for viewing
-        viewRequisitionsPanel = new PurchaseRequisitionListPanel(prController, currentUser);
+        viewRequisitionsPanel = new PurchaseRequisitionListPanel(prController, currentUser, true);
         viewRequisitionsPanel.addPropertyChangeListener(this);
         
         // Purchase Order Panel

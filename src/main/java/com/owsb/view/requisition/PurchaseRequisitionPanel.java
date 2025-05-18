@@ -57,7 +57,7 @@ public class PurchaseRequisitionPanel extends JPanel implements PropertyChangeLi
         creationPanel.addPropertyChangeListener(this);
         
         // Create PR list panel
-        listPanel = new PurchaseRequisitionListPanel(prController, currentUser);
+        listPanel = new PurchaseRequisitionListPanel(prController, currentUser, false);
         listPanel.addPropertyChangeListener(this);
         
         // Add panels to card panel

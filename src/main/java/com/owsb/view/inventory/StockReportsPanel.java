@@ -49,6 +49,13 @@ public class StockReportsPanel extends JPanel {
      * Initialize panel components
      */
     private void initComponents() {
+        // Title label
+        JLabel titleLabel = new JLabel("Stock Reports");
+        titleLabel.setFont(new Font("Arial", Font.BOLD, 22));
+        titleLabel.setAlignmentX(Component.CENTER_ALIGNMENT);
+        titleLabel.setHorizontalAlignment(SwingConstants.CENTER);
+        titleLabel.setBorder(BorderFactory.createEmptyBorder(15, 0, 5, 0));
+
         // Top control panel
         JPanel controlPanel = new JPanel(new BorderLayout());
         controlPanel.setBorder(BorderFactory.createEmptyBorder(10, 10, 10, 10));
@@ -108,8 +115,16 @@ public class StockReportsPanel extends JPanel {
         filterPanel.add(printButton);
         
         controlPanel.add(filterPanel, BorderLayout.EAST);
-        add(controlPanel, BorderLayout.NORTH);
         
+        // Header panel with vertical layout for title and controls
+        JPanel headerPanel = new JPanel();
+        headerPanel.setLayout(new BoxLayout(headerPanel, BoxLayout.Y_AXIS));
+        headerPanel.add(Box.createVerticalStrut(5));
+        headerPanel.add(titleLabel);
+        headerPanel.add(Box.createVerticalStrut(5));
+        headerPanel.add(controlPanel);
+        add(headerPanel, BorderLayout.NORTH);
+
         // Center panel with table and chart
         JPanel centerPanel = new JPanel(new GridLayout(2, 1));
         

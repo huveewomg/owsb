@@ -26,6 +26,7 @@ public class PaymentPanel extends JPanel {
     private JPanel topPanel;
     private JPanel centerPanel;
     private JPanel bottomPanel;
+    private JLabel titleLabel;
     
     private JComboBox<String> poComboBox;
     private JButton loadButton;
@@ -90,6 +91,15 @@ public class PaymentPanel extends JPanel {
      * Initialize components
      */
     private void initComponents() {
+        // Create a container for the title and payment form
+        JPanel headerPanel = new JPanel(new BorderLayout(0, 10));
+        
+        // Title label
+        titleLabel = new JLabel("Process Payments", JLabel.CENTER);
+        titleLabel.setFont(new Font("Arial", Font.BOLD, 20));
+        titleLabel.setBorder(BorderFactory.createEmptyBorder(5, 0, 10, 0));
+        headerPanel.add(titleLabel, BorderLayout.NORTH);
+        
         // Top panel - PO selection and payment details
         topPanel = new JPanel(new GridBagLayout());
         GridBagConstraints gbc = new GridBagConstraints();
@@ -182,6 +192,10 @@ public class PaymentPanel extends JPanel {
         gbc.gridwidth = 2;
         topPanel.add(notesScrollPane, gbc);
         
+        headerPanel.add(topPanel, BorderLayout.CENTER);
+        
+        // Add the header panel to the main panel
+        add(headerPanel, BorderLayout.NORTH);
         // Center panel - Items table
         centerPanel = new JPanel(new BorderLayout());
         centerPanel.setBorder(BorderFactory.createTitledBorder("Purchase Order Items"));
@@ -221,7 +235,7 @@ public class PaymentPanel extends JPanel {
         bottomPanel.add(processButton);
         
         // Add panels to main panel
-        add(topPanel, BorderLayout.NORTH);
+        // headerPanel is already added to NORTH position
         add(centerPanel, BorderLayout.CENTER);
         add(bottomPanel, BorderLayout.SOUTH);
     }

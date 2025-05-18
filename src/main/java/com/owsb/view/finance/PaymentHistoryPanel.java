@@ -21,6 +21,7 @@ public class PaymentHistoryPanel extends JPanel {
     private JPanel topPanel;
     private JPanel centerPanel;
     private JPanel bottomPanel;
+    private JLabel titleLabel;
     
     private JComboBox<StatusFilter> statusFilterComboBox;
     private JButton refreshButton;
@@ -64,6 +65,12 @@ public class PaymentHistoryPanel extends JPanel {
      * Initialize components
      */
     private void initComponents() {
+        JPanel headerPanel = new JPanel(new BorderLayout(0, 10));
+        titleLabel = new JLabel("Payment History", JLabel.CENTER);
+        titleLabel.setFont(new Font("Arial", Font.BOLD, 20));
+        titleLabel.setBorder(BorderFactory.createEmptyBorder(5, 0, 5, 0));
+        headerPanel.add(titleLabel, BorderLayout.NORTH);
+        
         // Top panel - Filters and refresh button
         topPanel = new JPanel(new FlowLayout(FlowLayout.LEFT));
         
@@ -76,6 +83,9 @@ public class PaymentHistoryPanel extends JPanel {
         topPanel.add(statusFilterComboBox);
         topPanel.add(Box.createHorizontalStrut(20));
         topPanel.add(refreshButton);
+        
+        headerPanel.add(topPanel, BorderLayout.CENTER);
+        add(headerPanel, BorderLayout.NORTH);
         
         // Center panel - Payments table
         centerPanel = new JPanel(new BorderLayout());
@@ -130,7 +140,6 @@ public class PaymentHistoryPanel extends JPanel {
         bottomPanel.add(viewButton);
         
         // Add panels to main panel
-        add(topPanel, BorderLayout.NORTH);
         add(centerPanel, BorderLayout.CENTER);
         add(bottomPanel, BorderLayout.SOUTH);
     }

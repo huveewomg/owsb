@@ -4,6 +4,7 @@ import com.owsb.controller.ItemController;
 import com.owsb.controller.SupplierController;
 import com.owsb.model.inventory.Item;
 import com.owsb.model.supplier.Supplier;
+import com.owsb.view.PanelHeaderUtils;
 
 import javax.swing.*;
 import javax.swing.table.DefaultTableModel;
@@ -53,8 +54,7 @@ public class SupplierManagementPanel extends JPanel {
         setBorder(BorderFactory.createEmptyBorder(10, 10, 10, 10));
         
         // Create header
-        JLabel headerLabel = new JLabel("Supplier Management", JLabel.CENTER);
-        headerLabel.setFont(new Font("Arial", Font.BOLD, 18));
+        JLabel headerLabel = PanelHeaderUtils.createHeaderLabel("Supplier Management");
         add(headerLabel, BorderLayout.NORTH);
         
         // Create main content panel with supplier details and item management

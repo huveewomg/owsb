@@ -7,6 +7,7 @@ import com.owsb.model.procurement.PRItem;
 import com.owsb.model.procurement.PurchaseRequisition;
 import com.owsb.model.supplier.Supplier;
 import com.owsb.repository.SupplierRepository;
+import com.owsb.view.PanelHeaderUtils;
 
 import javax.swing.*;
 import javax.swing.table.DefaultTableCellRenderer;
@@ -90,6 +91,10 @@ public class PurchaseOrderGenerationPanel extends JPanel {
      * Initialize components
      */
     private void initComponents() {
+        // Add a main title/header using PanelHeaderUtils
+        JLabel mainTitle = PanelHeaderUtils.createHeaderLabel("Generate Purchase Order");
+        add(mainTitle, BorderLayout.NORTH);
+        
         // Header panel - PR details and delivery date
         headerPanel = new JPanel(new GridLayout(0, 4, 10, 5));
         headerPanel.setBorder(BorderFactory.createTitledBorder("Purchase Requisition Details"));
@@ -201,7 +206,7 @@ public class PurchaseOrderGenerationPanel extends JPanel {
         buttonPanel.add(actionButtonPanel, BorderLayout.EAST);
         
         // Add panels to main panel
-        add(headerPanel, BorderLayout.NORTH);
+        // add(headerPanel, BorderLayout.NORTH); // Already have mainTitle
         add(itemsPanel, BorderLayout.CENTER);
         add(notesPanel, BorderLayout.SOUTH);
         add(buttonPanel, BorderLayout.SOUTH);

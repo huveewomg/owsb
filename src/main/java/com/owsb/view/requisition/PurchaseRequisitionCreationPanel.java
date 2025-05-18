@@ -6,6 +6,7 @@ import com.owsb.model.procurement.PRItem;
 import com.owsb.model.procurement.PurchaseRequisition;
 import com.owsb.model.supplier.Supplier;
 import com.owsb.util.Constants;
+import com.owsb.view.PanelHeaderUtils;
 
 import javax.swing.*;
 import javax.swing.table.DefaultTableCellRenderer;
@@ -88,6 +89,10 @@ public class PurchaseRequisitionCreationPanel extends JPanel {
      * Initialize components
      */
     private void initComponents() {
+        // Add a main title/header using PanelHeaderUtils
+        JLabel mainTitle = PanelHeaderUtils.createHeaderLabel("Create Purchase Requisition");
+        add(mainTitle, BorderLayout.NORTH);
+        
         // Top panel - Required date and urgent checkbox
         topPanel = new JPanel(new GridBagLayout());
         GridBagConstraints gbc = new GridBagConstraints();

@@ -3,6 +3,7 @@ package com.owsb.view.inventory;
 import com.owsb.controller.ItemController;
 import com.owsb.model.inventory.Item;
 import com.owsb.model.user.User;
+import com.owsb.view.PanelHeaderUtils;
 import org.jfree.chart.ChartFactory;
 import org.jfree.chart.ChartPanel;
 import org.jfree.chart.JFreeChart;
@@ -50,8 +51,7 @@ public class StockReportsPanel extends JPanel {
      */
     private void initComponents() {
         // Title label
-        JLabel titleLabel = new JLabel("Stock Reports");
-        titleLabel.setFont(new Font("Arial", Font.BOLD, 22));
+        JLabel titleLabel = PanelHeaderUtils.createHeaderLabel("Stock Reports");
         titleLabel.setAlignmentX(Component.CENTER_ALIGNMENT);
         titleLabel.setHorizontalAlignment(SwingConstants.CENTER);
         titleLabel.setBorder(BorderFactory.createEmptyBorder(15, 0, 5, 0));

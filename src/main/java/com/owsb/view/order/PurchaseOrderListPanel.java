@@ -6,6 +6,7 @@ import com.owsb.model.procurement.PurchaseOrder;
 import com.owsb.model.user.FinanceManager;
 import com.owsb.model.user.User;
 import com.owsb.util.Constants;
+import com.owsb.view.PanelHeaderUtils;
 
 import javax.swing.*;
 import javax.swing.table.DefaultTableCellRenderer;
@@ -79,18 +80,19 @@ public class PurchaseOrderListPanel extends JPanel {
      * Initialize components
      */
     private void initComponents() {
-        // Top panel - Filters and refresh button
-        topPanel = new JPanel(new FlowLayout(FlowLayout.LEFT));
-        
+        // Top panel - Title and filters
+        topPanel = new JPanel(new BorderLayout());
+        JLabel titleLabel = PanelHeaderUtils.createHeaderLabel("Purchase Orders List");
+        JPanel filterPanel = new JPanel(new FlowLayout(FlowLayout.LEFT));
         JLabel statusFilterLabel = new JLabel("Status:");
         statusFilterComboBox = new JComboBox<>(getStatusFilters());
-        
         refreshButton = new JButton("Refresh");
-        
-        topPanel.add(statusFilterLabel);
-        topPanel.add(statusFilterComboBox);
-        topPanel.add(Box.createHorizontalStrut(20));
-        topPanel.add(refreshButton);
+        filterPanel.add(statusFilterLabel);
+        filterPanel.add(statusFilterComboBox);
+        filterPanel.add(Box.createHorizontalStrut(20));
+        filterPanel.add(refreshButton);
+        topPanel.add(titleLabel, BorderLayout.WEST);
+        topPanel.add(filterPanel, BorderLayout.EAST);
         
         // Center panel - PO table
         centerPanel = new JPanel(new BorderLayout());

@@ -3,6 +3,7 @@ package com.owsb.view.user;
 import com.owsb.controller.AuthController;
 import com.owsb.model.user.User;
 import com.owsb.util.UserRole;
+import com.owsb.view.PanelHeaderUtils;
 
 import javax.swing.*;
 import javax.swing.table.DefaultTableModel;
@@ -47,6 +48,10 @@ public class UserManagementPanel extends JPanel {
         // Set up panel
         setLayout(new BorderLayout());
         setBorder(BorderFactory.createEmptyBorder(10, 10, 10, 10));
+        
+        // Add header
+        JLabel headerLabel = PanelHeaderUtils.createHeaderLabel("User Management");
+        add(headerLabel, BorderLayout.NORTH);
         
         // Create form panel
         JPanel formPanel = createFormPanel();

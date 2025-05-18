@@ -8,6 +8,7 @@ import com.owsb.model.procurement.PurchaseOrder;
 import com.owsb.util.Constants;
 import com.owsb.util.SupplierUtils;
 import com.owsb.repository.ItemRepository;
+import com.owsb.view.PanelHeaderUtils;
 
 import javax.swing.*;
 import javax.swing.table.DefaultTableCellRenderer;
@@ -84,9 +85,7 @@ public class StockUpdatePanel extends JPanel {
         setBorder(BorderFactory.createEmptyBorder(10, 10, 10, 10));
         
         // Add header title
-        JLabel titleLabel = new JLabel("Inventory Stock Update", JLabel.CENTER);
-        titleLabel.setFont(new Font("Arial", Font.BOLD, 18));
-        titleLabel.setBorder(BorderFactory.createEmptyBorder(0, 0, 10, 0));
+        JLabel titleLabel = PanelHeaderUtils.createHeaderLabel("Inventory Stock Update");
         add(titleLabel, BorderLayout.NORTH);
         
         // Initialize tabbed pane

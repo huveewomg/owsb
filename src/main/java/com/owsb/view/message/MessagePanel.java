@@ -6,6 +6,7 @@ import com.owsb.model.message.Message;
 import com.owsb.model.user.User;
 import com.owsb.util.UserRole;
 import com.owsb.view.dashboard.BaseDashboard;
+import com.owsb.view.PanelHeaderUtils;
 
 import javax.swing.*;
 import javax.swing.table.DefaultTableCellRenderer;
@@ -146,20 +147,14 @@ public class MessagePanel extends JPanel {
     private JPanel createHeaderPanel() {
         JPanel panel = new JPanel(new BorderLayout());
         panel.setBorder(BorderFactory.createEmptyBorder(0, 0, 10, 0));
-        
-        JLabel titleLabel = new JLabel("Messages");
-        titleLabel.setFont(new Font("Arial", Font.BOLD, 18));
-        
+        JLabel titleLabel = PanelHeaderUtils.createHeaderLabel("Messages");
         JPanel buttonPanel = new JPanel(new FlowLayout(FlowLayout.RIGHT));
         refreshButton = new JButton("Refresh");
         markAllReadButton = new JButton("Mark All Read");
-        
         buttonPanel.add(markAllReadButton);
         buttonPanel.add(refreshButton);
-        
         panel.add(titleLabel, BorderLayout.WEST);
         panel.add(buttonPanel, BorderLayout.EAST);
-        
         return panel;
     }
     

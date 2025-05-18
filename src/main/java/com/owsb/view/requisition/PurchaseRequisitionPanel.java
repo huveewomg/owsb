@@ -2,6 +2,7 @@ package com.owsb.view.requisition;
 
 import com.owsb.controller.PurchaseRequisitionController;
 import com.owsb.model.user.User;
+import com.owsb.view.PanelHeaderUtils;
 
 import javax.swing.*;
 import java.awt.*;
@@ -79,27 +80,16 @@ public class PurchaseRequisitionPanel extends JPanel implements PropertyChangeLi
     private JPanel createHeaderPanel() {
         JPanel panel = new JPanel(new BorderLayout());
         panel.setBorder(BorderFactory.createEmptyBorder(0, 0, 10, 0));
-        
-        // Create title label
-        JLabel titleLabel = new JLabel("Purchase Requisitions");
-        titleLabel.setFont(new Font("Arial", Font.BOLD, 18));
-        
-        // Create button panel
+        JLabel titleLabel = PanelHeaderUtils.createHeaderLabel("Purchase Requisitions");
         JPanel buttonPanel = new JPanel(new FlowLayout(FlowLayout.RIGHT));
-        
         JButton newButton = new JButton("New Requisition");
         JButton listButton = new JButton("View All Requisitions");
-        
         newButton.addActionListener(e -> showCreationPanel(null));
         listButton.addActionListener(e -> showListPanel());
-        
         buttonPanel.add(newButton);
         buttonPanel.add(listButton);
-        
-        // Add components to panel
         panel.add(titleLabel, BorderLayout.WEST);
         panel.add(buttonPanel, BorderLayout.EAST);
-        
         return panel;
     }
     

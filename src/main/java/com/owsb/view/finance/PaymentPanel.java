@@ -6,6 +6,7 @@ import com.owsb.model.procurement.POItem;
 import com.owsb.model.procurement.PurchaseOrder;
 import com.owsb.repository.PaymentRepository;
 import com.owsb.util.Constants;
+import com.owsb.view.PanelHeaderUtils;
 
 import javax.swing.*;
 import javax.swing.table.DefaultTableCellRenderer;
@@ -93,12 +94,11 @@ public class PaymentPanel extends JPanel {
     private void initComponents() {
         // Create a container for the title and payment form
         JPanel headerPanel = new JPanel(new BorderLayout(0, 10));
-        
-        // Title label
         titleLabel = new JLabel("Process Payments", JLabel.CENTER);
         titleLabel.setFont(new Font("Arial", Font.BOLD, 20));
         titleLabel.setBorder(BorderFactory.createEmptyBorder(5, 0, 10, 0));
         headerPanel.add(titleLabel, BorderLayout.NORTH);
+        
         
         // Top panel - PO selection and payment details
         topPanel = new JPanel(new GridBagLayout());

@@ -2,6 +2,7 @@ package com.owsb.view.item;
 
 import com.owsb.util.Constants;
 import com.owsb.util.FileUtils;
+import com.owsb.view.PanelHeaderUtils;
 
 import javax.swing.*;
 import java.awt.*;
@@ -18,7 +19,10 @@ public class ItemCategoryManagementPanel extends JPanel {
 
     public ItemCategoryManagementPanel() {
         setLayout(new BorderLayout());
-        setBorder(BorderFactory.createTitledBorder("Manage Item Categories"));
+        // Add a main title/header using PanelHeaderUtils
+        JLabel mainTitle = PanelHeaderUtils.createHeaderLabel("Manage Item Categories");
+        add(mainTitle, BorderLayout.NORTH);
+        setBorder(BorderFactory.createTitledBorder(""));// Remove old border title
 
         categoryListModel = new DefaultListModel<>();
         categoryList = new JList<>(categoryListModel);

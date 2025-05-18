@@ -51,7 +51,6 @@ public class UserManagementPanel extends JPanel {
         
         // Add header
         JLabel headerLabel = PanelHeaderUtils.createHeaderLabel("User Management");
-        add(headerLabel, BorderLayout.NORTH);
         
         // Create form panel
         JPanel formPanel = createFormPanel();
@@ -67,7 +66,13 @@ public class UserManagementPanel extends JPanel {
         topPanel.add(formPanel, BorderLayout.CENTER);
         topPanel.add(buttonPanel, BorderLayout.SOUTH);
         
-        add(topPanel, BorderLayout.NORTH);
+        // Combine header and topPanel vertically
+        JPanel northPanel = new JPanel();
+        northPanel.setLayout(new BoxLayout(northPanel, BoxLayout.Y_AXIS));
+        northPanel.add(headerLabel);
+        northPanel.add(topPanel);
+        
+        add(northPanel, BorderLayout.NORTH);
         add(tablePanel, BorderLayout.CENTER);
         
         // Initial data load

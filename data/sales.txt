@@ -1,7 +1,7 @@
 [
   {
     "saleID": "SL018",
-    "date": "May 15, 2025, 8:17:39 AM",
+    "date": "May 15, 2025, 08:17:39 AM",
     "salesManagerID": "U002",
     "notes": "",
     "items": [
@@ -51,7 +51,7 @@
   },
   {
     "saleID": "SL020",
-    "date": "May 17, 2025, 14:15:00 PM",
+    "date": "May 17, 2025, 02:15:00 PM",
     "salesManagerID": "U003",
     "notes": "",
     "items": [
@@ -101,7 +101,7 @@
   },
   {
     "saleID": "SL022",
-    "date": "May 18, 2025, 13:20:00 PM",
+    "date": "May 18, 2025, 01:20:00 PM",
     "salesManagerID": "U002",
     "notes": "",
     "items": [

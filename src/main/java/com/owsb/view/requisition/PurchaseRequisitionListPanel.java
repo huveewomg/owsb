@@ -62,6 +62,15 @@ public class PurchaseRequisitionListPanel extends JPanel {
      * Constructor for PurchaseRequisitionListPanel
      * @param prController Purchase requisition controller
      * @param currentUser Current user
+     */
+    public PurchaseRequisitionListPanel(PurchaseRequisitionController prController, User currentUser) {
+        this(prController, currentUser, true); // Default showTitle to true
+    }
+
+    /**
+     * Constructor for PurchaseRequisitionListPanel
+     * @param prController Purchase requisition controller
+     * @param currentUser Current user
      * @param showTitle Whether to show the title label
      */
     public PurchaseRequisitionListPanel(PurchaseRequisitionController prController, User currentUser, boolean showTitle) {

@@ -2,6 +2,7 @@ package com.owsb.view.finance;
 
 import com.owsb.model.finance.Payment;
 import com.owsb.repository.PaymentRepository;
+import com.owsb.view.PanelHeaderUtils;
 
 import javax.swing.*;
 import javax.swing.table.DefaultTableCellRenderer;
@@ -66,9 +67,7 @@ public class PaymentHistoryPanel extends JPanel {
      */
     private void initComponents() {
         JPanel headerPanel = new JPanel(new BorderLayout(0, 10));
-        titleLabel = new JLabel("Payment History", JLabel.CENTER);
-        titleLabel.setFont(new Font("Arial", Font.BOLD, 20));
-        titleLabel.setBorder(BorderFactory.createEmptyBorder(5, 0, 5, 0));
+        JLabel titleLabel = PanelHeaderUtils.createHeaderLabel("Payment History");
         headerPanel.add(titleLabel, BorderLayout.NORTH);
         
         // Top panel - Filters and refresh button

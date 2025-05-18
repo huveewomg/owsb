@@ -8,6 +8,7 @@ import com.owsb.model.procurement.PurchaseRequisition;
 import com.owsb.model.user.PurchaseManager;
 import com.owsb.util.Constants;
 import com.owsb.util.UserRole;
+import com.owsb.view.PanelHeaderUtils;
 
 import javax.swing.*;
 import javax.swing.table.DefaultTableCellRenderer;
@@ -185,9 +186,7 @@ public class PurchaseRequisitionListPanel extends JPanel {
     private JPanel createFilterPanel() {
         JPanel panel = new JPanel(new BorderLayout());
         if (showTitle) {
-            JLabel titleLabel = new JLabel("Purchase Requisitions", JLabel.CENTER);
-            titleLabel.setFont(new Font("Arial", Font.BOLD, 20));
-            titleLabel.setBorder(BorderFactory.createEmptyBorder(5, 0, 5, 0));
+            JLabel titleLabel = PanelHeaderUtils.createHeaderLabel("Purchase Requisitions");
             panel.add(titleLabel, BorderLayout.NORTH);
         }
         JPanel controlsPanel = new JPanel(new FlowLayout(FlowLayout.RIGHT));

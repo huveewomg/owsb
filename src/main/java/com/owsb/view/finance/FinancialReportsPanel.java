@@ -9,6 +9,7 @@ import com.owsb.model.sales.Sale;
 import com.owsb.model.sales.SaleItem;
 import com.owsb.model.user.User;
 import com.owsb.repository.PaymentRepository;
+import com.owsb.view.PanelHeaderUtils;
 import org.jfree.chart.ChartFactory;
 import org.jfree.chart.ChartPanel;
 import org.jfree.chart.JFreeChart;
@@ -95,12 +96,8 @@ public class FinancialReportsPanel extends JPanel {
      * Initialize panel components
      */
     private void initComponents() {
-        // Title panel
-        JPanel titlePanel = new JPanel(new BorderLayout());
-        JLabel titleLabel = new JLabel("Financial Reports", JLabel.CENTER);
-        titleLabel.setFont(new Font("Arial", Font.BOLD, 20));
-        titleLabel.setBorder(BorderFactory.createEmptyBorder(0, 0, 10, 0));
-        titlePanel.add(titleLabel, BorderLayout.CENTER);
+        // Title panel using PanelHeaderUtils
+        JPanel titlePanel = PanelHeaderUtils.createHeaderPanel("Financial Reports");
         
         // Control panel - Report selection and filters
         JPanel controlPanel = new JPanel(new BorderLayout());

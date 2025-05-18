@@ -4,6 +4,7 @@ import com.owsb.controller.SalesController;
 import com.owsb.model.inventory.Item;
 import com.owsb.model.sales.Sale;
 import com.owsb.model.sales.SaleItem;
+import com.owsb.view.PanelHeaderUtils;
 
 import javax.swing.*;
 import javax.swing.table.DefaultTableCellRenderer;
@@ -229,24 +230,17 @@ public class SalesEntryPanel extends JPanel {
     private JPanel createHeaderPanel() {
         JPanel panel = new JPanel(new BorderLayout());
         panel.setBorder(BorderFactory.createEmptyBorder(0, 0, 10, 0));
-        
-        JLabel titleLabel = new JLabel("Sales Entry");
-        titleLabel.setFont(new Font("Arial", Font.BOLD, 18));
+        JLabel titleLabel = PanelHeaderUtils.createHeaderLabel("Sales Entry");
         JPanel datePanel = new JPanel(new FlowLayout(FlowLayout.LEFT));
-        
         dateLabel = new JLabel("Sales Date:");
-        
         SpinnerDateModel dateModel = new SpinnerDateModel(new Date(), null, null, Calendar.DAY_OF_MONTH);
         dateSpinner = new JSpinner(dateModel);
         JSpinner.DateEditor dateEditor = new JSpinner.DateEditor(dateSpinner, "yyyy-MM-dd");
         dateSpinner.setEditor(dateEditor);
-        
         datePanel.add(dateLabel);
         datePanel.add(dateSpinner);
-        
         panel.add(titleLabel, BorderLayout.WEST);
         panel.add(datePanel, BorderLayout.CENTER);
-        
         return panel;
     }
     

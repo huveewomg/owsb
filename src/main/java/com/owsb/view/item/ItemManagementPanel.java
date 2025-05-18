@@ -3,6 +3,7 @@ package com.owsb.view.item;
 import com.owsb.controller.ItemController;
 import com.owsb.model.inventory.Item;
 import com.owsb.util.SupplierUtils;
+import com.owsb.view.PanelHeaderUtils;
 
 import javax.swing.*;
 import javax.swing.table.DefaultTableModel;
@@ -42,8 +43,7 @@ public class ItemManagementPanel extends JPanel {
         setBorder(BorderFactory.createEmptyBorder(10, 10, 10, 10));
         
         // Create header
-        JLabel headerLabel = new JLabel("Item Management", JLabel.CENTER);
-        headerLabel.setFont(new Font("Arial", Font.BOLD, 18));
+        JLabel headerLabel = PanelHeaderUtils.createHeaderLabel("Item Management");
         add(headerLabel, BorderLayout.NORTH);
         
         // Create split pane for form and table

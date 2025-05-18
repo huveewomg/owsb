@@ -2,6 +2,7 @@ package com.owsb.view.order;
 
 import com.owsb.controller.PurchaseOrderController;
 import com.owsb.model.user.User;
+import com.owsb.view.PanelHeaderUtils;
 
 import javax.swing.*;
 import java.awt.*;
@@ -45,9 +46,6 @@ public class PurchaseOrderPanel extends JPanel implements PropertyChangeListener
      * Initialize components
      */
     private void initComponents() {
-        // Create header panel
-        JPanel headerPanel = createHeaderPanel();
-        
         // Create card layout for switching between panels
         cardLayout = new CardLayout();
         cardPanel = new JPanel(cardLayout);
@@ -67,36 +65,7 @@ public class PurchaseOrderPanel extends JPanel implements PropertyChangeListener
         cardLayout.show(cardPanel, "list");
         
         // Add panels to main panel
-        add(headerPanel, BorderLayout.NORTH);
         add(cardPanel, BorderLayout.CENTER);
-    }
-    
-    /**
-     * Create header panel with title and buttons
-     * @return Header panel
-     */
-    private JPanel createHeaderPanel() {
-        JPanel panel = new JPanel(new BorderLayout());
-        panel.setBorder(BorderFactory.createEmptyBorder(0, 0, 10, 0));
-        
-        // Create title label
-        JLabel titleLabel = new JLabel("Purchase Orders");
-        titleLabel.setFont(new Font("Arial", Font.BOLD, 18));
-        
-        // Create button panel
-        JPanel buttonPanel = new JPanel(new FlowLayout(FlowLayout.RIGHT));
-        
-        JButton listButton = new JButton("View All Purchase Orders");
-        
-        listButton.addActionListener(e -> showListPanel());
-        
-        buttonPanel.add(listButton);
-        
-        // Add components to panel
-        panel.add(titleLabel, BorderLayout.WEST);
-        panel.add(buttonPanel, BorderLayout.EAST);
-        
-        return panel;
     }
     
     /**

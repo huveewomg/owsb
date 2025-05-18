@@ -4,6 +4,7 @@ import com.owsb.controller.ItemController;
 import com.owsb.model.inventory.Item;
 import com.owsb.model.user.User;
 import com.owsb.util.SupplierUtils;
+import com.owsb.view.PanelHeaderUtils;
 
 import javax.swing.*;
 import javax.swing.table.DefaultTableCellRenderer;
@@ -83,8 +84,7 @@ public class ItemListPanel extends JPanel {
     private JPanel createHeaderPanel() {
         JPanel panel = new JPanel(new BorderLayout());
         panel.setBorder(BorderFactory.createEmptyBorder(0, 0, 10, 0));
-        JLabel titleLabel = new JLabel("Items");
-        titleLabel.setFont(new Font("Arial", Font.BOLD, 18));
+        JLabel titleLabel = PanelHeaderUtils.createHeaderLabel("Items");
         JPanel buttonPanel = new JPanel(new FlowLayout(FlowLayout.RIGHT));
         refreshButton = new JButton("Refresh");
         buttonPanel.add(refreshButton);

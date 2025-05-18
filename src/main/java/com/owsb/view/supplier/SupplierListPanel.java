@@ -3,6 +3,7 @@ package com.owsb.view.supplier;
 import com.owsb.controller.SupplierController;
 import com.owsb.model.supplier.Supplier;
 import com.owsb.model.user.User;
+import com.owsb.view.PanelHeaderUtils;
 
 import javax.swing.*;
 import javax.swing.table.DefaultTableModel;
@@ -70,8 +71,7 @@ public class SupplierListPanel extends JPanel {
     private JPanel createHeaderPanel() {
         JPanel panel = new JPanel(new BorderLayout());
         panel.setBorder(BorderFactory.createEmptyBorder(0, 0, 10, 0));
-        JLabel titleLabel = new JLabel("Suppliers");
-        titleLabel.setFont(new Font("Arial", Font.BOLD, 18));
+        JLabel titleLabel = PanelHeaderUtils.createHeaderLabel("Suppliers");
         JPanel buttonPanel = new JPanel(new FlowLayout(FlowLayout.RIGHT));
         refreshButton = new JButton("Refresh");
         buttonPanel.add(refreshButton);

@@ -6,6 +6,7 @@ import com.owsb.model.inventory.Item;
 import com.owsb.model.user.User;
 import com.owsb.util.SupplierUtils;
 import com.owsb.util.UserRole;
+import com.owsb.view.PanelHeaderUtils;
 import com.owsb.view.message.MessagePanel;
 
 import javax.swing.*;
@@ -125,17 +126,12 @@ public class LowStockAlertsPanel extends JPanel {
     private JPanel createHeaderPanel() {
         JPanel panel = new JPanel(new BorderLayout());
         panel.setBorder(BorderFactory.createEmptyBorder(0, 0, 10, 0));
-        
-        JLabel titleLabel = new JLabel("Low Stock Alerts");
-        titleLabel.setFont(new Font("Arial", Font.BOLD, 18));
-        
+        JLabel titleLabel = PanelHeaderUtils.createHeaderLabel("Low Stock Alerts");
         JPanel buttonPanel = new JPanel(new FlowLayout(FlowLayout.RIGHT));
         refreshButton = new JButton("Refresh");
         buttonPanel.add(refreshButton);
-        
         panel.add(titleLabel, BorderLayout.WEST);
         panel.add(buttonPanel, BorderLayout.EAST);
-        
         return panel;
     }
 

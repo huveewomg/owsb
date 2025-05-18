@@ -100,7 +100,7 @@ public class FinanceManagerDashboard extends BaseDashboard {
         financialReportsPanel = new FinancialReportsPanel(poController, salesController, currentUser);
         
         // View Purchase Requisitions panel - Use PurchaseRequisitionListPanel
-        viewPRPanel = new PurchaseRequisitionListPanel(prController, currentUser);
+        viewPRPanel = new PurchaseRequisitionListPanel(prController, currentUser, true);
     }
     
     // Methods to show different panels

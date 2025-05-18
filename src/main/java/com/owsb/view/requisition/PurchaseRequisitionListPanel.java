@@ -29,7 +29,6 @@ public class PurchaseRequisitionListPanel extends JPanel {
     private JPanel topPanel;
     private JPanel centerPanel;
     private JPanel bottomPanel;
-    private JLabel titleLabel;
     
     private JTable prTable;
     private DefaultTableModel tableModel;
@@ -56,15 +55,20 @@ public class PurchaseRequisitionListPanel extends JPanel {
     private final SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
     private final NumberFormat currencyFormat = NumberFormat.getCurrencyInstance();
     
+    // Whether to show the title label
+    private final boolean showTitle;
+    
     /**
      * Constructor for PurchaseRequisitionListPanel
      * @param prController Purchase requisition controller
      * @param currentUser Current user
+     * @param showTitle Whether to show the title label
      */
-    public PurchaseRequisitionListPanel(PurchaseRequisitionController prController, User currentUser) {
+    public PurchaseRequisitionListPanel(PurchaseRequisitionController prController, User currentUser, boolean showTitle) {
         this.prController = prController;
         this.currentUser = currentUser;
         this.salesManagerNames = new HashMap<>();
+        this.showTitle = showTitle;
         
         // Set up panel
         setLayout(new BorderLayout(10, 10));
@@ -85,7 +89,7 @@ public class PurchaseRequisitionListPanel extends JPanel {
      */
     private void initComponents() {
         // Top panel - Filters and refresh button
-        topPanel = createHeaderPanel();
+        topPanel = createFilterPanel();
         
         // Center panel - PR table
         centerPanel = new JPanel(new BorderLayout());
@@ -167,18 +171,16 @@ public class PurchaseRequisitionListPanel extends JPanel {
     }
     
     /**
-     * Create header panel with title, status filter and refresh button
+     * Create filter panel with optional title, status filter and refresh button
      */
-    private JPanel createHeaderPanel() {
-        JPanel panel = new JPanel(new BorderLayout(0, 10));
-        panel.setBorder(BorderFactory.createEmptyBorder(0, 0, 10, 0));
-
-        titleLabel = new JLabel("Purchase Requisitions", JLabel.CENTER);
-        titleLabel.setFont(new Font("Arial", Font.BOLD, 20));
-        titleLabel.setBorder(BorderFactory.createEmptyBorder(5, 0, 5, 0));
-        panel.add(titleLabel, BorderLayout.NORTH);
-
-        // Filter and refresh controls
+    private JPanel createFilterPanel() {
+        JPanel panel = new JPanel(new BorderLayout());
+        if (showTitle) {
+            JLabel titleLabel = new JLabel("Purchase Requisitions", JLabel.CENTER);
+            titleLabel.setFont(new Font("Arial", Font.BOLD, 20));
+            titleLabel.setBorder(BorderFactory.createEmptyBorder(5, 0, 5, 0));
+            panel.add(titleLabel, BorderLayout.NORTH);
+        }
         JPanel controlsPanel = new JPanel(new FlowLayout(FlowLayout.RIGHT));
         JLabel statusFilterLabel = new JLabel("Status:");
         statusFilterComboBox = new JComboBox<>(getStatusFilters());
@@ -188,7 +190,6 @@ public class PurchaseRequisitionListPanel extends JPanel {
         controlsPanel.add(Box.createHorizontalStrut(20));
         controlsPanel.add(refreshButton);
         panel.add(controlsPanel, BorderLayout.EAST);
-
         return panel;
     }
 

@@ -239,59 +239,109 @@ public class AdminDashboard extends BaseDashboard {
     private JPanel createSystemConfigContent() {
         JPanel panel = new JPanel(new BorderLayout());
         panel.setBorder(BorderFactory.createEmptyBorder(10, 10, 10, 10));
-        
+
         // System settings form
-        JPanel formPanel = new JPanel(new GridLayout(5, 2, 10, 10));
-        
+        JPanel formPanel = new JPanel(new GridLayout(3, 2, 10, 10));
+
         formPanel.add(new JLabel("Company Name:"));
-        formPanel.add(new JTextField("Omega Wholesale Sdn Bhd"));
-        
+        JTextField companyNameField = new JTextField("Omega Wholesale Sdn Bhd");
+        formPanel.add(companyNameField);
+
         formPanel.add(new JLabel("Data Directory:"));
-        formPanel.add(new JTextField("./data"));
-        
+        JTextField dataDirField = new JTextField("./data");
+        formPanel.add(dataDirField);
+
         formPanel.add(new JLabel("Backup Directory:"));
-        formPanel.add(new JTextField("./backup"));
-        
-        formPanel.add(new JLabel("Auto Backup:"));
-        JComboBox<String> backupCombo = new JComboBox<>(new String[]{"Daily", "Weekly", "Monthly", "Off"});
-        formPanel.add(backupCombo);
-        
-        formPanel.add(new JLabel("Log Level:"));
-        JComboBox<String> logCombo = new JComboBox<>(new String[]{"DEBUG", "INFO", "WARNING", "ERROR"});
-        formPanel.add(logCombo);
-        
+        JTextField backupDirField = new JTextField("./backup");
+        formPanel.add(backupDirField);
+
         // Button panel
         JPanel buttonPanel = new JPanel();
-        buttonPanel.add(new JButton("Save Settings"));
-        buttonPanel.add(new JButton("Backup Now"));
-        buttonPanel.add(new JButton("View Logs"));
-        
+        JButton backupButton = new JButton("Backup Now");
+        buttonPanel.add(backupButton);
+
         // System status
         JPanel statusPanel = new JPanel(new BorderLayout());
         statusPanel.setBorder(BorderFactory.createTitledBorder("System Status"));
-        
-        JTextArea statusArea = new JTextArea(10, 40);
+
+        JTextArea statusArea = new JTextArea(7, 40);
         statusArea.setEditable(false);
-        statusArea.setText(
-            "System Version: 1.0.0\n" +
-            "Database Status: Connected\n" +
-            "Last Backup: 2025-03-27 08:00:00\n" +
-            "User Count: 5\n" +
-            "Item Count: 120\n" +
-            "Supplier Count: 15\n" +
-            "Active Sessions: 2\n" +
-            "System Uptime: 3 days, 4 hours, 12 minutes"
-        );
-        
+        statusArea.setFont(new Font("Monospaced", Font.PLAIN, 13));
+        updateSystemStatus(statusArea);
         JScrollPane scrollPane = new JScrollPane(statusArea);
         statusPanel.add(scrollPane, BorderLayout.CENTER);
-        
+
         // Combine components
         panel.add(formPanel, BorderLayout.NORTH);
         panel.add(buttonPanel, BorderLayout.CENTER);
         panel.add(statusPanel, BorderLayout.SOUTH);
-        
+
+        // Backup Now action
+        backupButton.addActionListener(e -> {
+            String dataDir = dataDirField.getText().trim();
+            String backupDir = backupDirField.getText().trim();
+            try {
+                backupDataFiles(dataDir, backupDir);
+                JOptionPane.showMessageDialog(panel, "Backup completed successfully!", "Backup", JOptionPane.INFORMATION_MESSAGE);
+                updateSystemStatus(statusArea);
+            } catch (Exception ex) {
+                JOptionPane.showMessageDialog(panel, "Backup failed: " + ex.getMessage(), "Backup Error", JOptionPane.ERROR_MESSAGE);
+            }
+        });
+
         return panel;
+    }
+
+    private void updateSystemStatus(JTextArea statusArea) {
+        int userCount = 0;
+        int itemCount = 0;
+        int supplierCount = 0;
+        int salesCount = 0;
+        try {
+            if (authController != null) {
+                userCount = authController.getAllUsers().size();
+            }
+            if (itemController != null) {
+                itemCount = itemController.getAllItems().size();
+            }
+            if (supplierController != null) {
+                supplierCount = supplierController.getAllSuppliers().size();
+            }
+            if (salesController != null) {
+                salesCount = salesController.getAllSales().size();
+            }
+        } catch (Exception e) {
+            // ignore, show 0 if error
+        }
+        statusArea.setText(
+            "User Count:     " + userCount + "\n" +
+            "Item Count:     " + itemCount + "\n" +
+            "Supplier Count: " + supplierCount + "\n" +
+            "Sales Count:    " + salesCount + "\n"
+        );
+    }
+    
+    // Backup utility: copy all files from dataDir to backupDir, renaming to .bak
+    private void backupDataFiles(String dataDir, String backupDir) throws Exception {
+        java.io.File dataFolder = new java.io.File(dataDir);
+        java.io.File backupFolder = new java.io.File(backupDir);
+        if (!dataFolder.exists() || !dataFolder.isDirectory()) {
+            throw new Exception("Data directory does not exist: " + dataDir);
+        }
+        if (!backupFolder.exists()) {
+            backupFolder.mkdirs();
+        }
+        java.io.File[] files = dataFolder.listFiles();
+        if (files == null) return;
+        for (java.io.File file : files) {
+            if (file.isFile()) {
+                String name = file.getName();
+                int dot = name.lastIndexOf('.');
+                String base = (dot > 0) ? name.substring(0, dot) : name;
+                java.io.File dest = new java.io.File(backupFolder, base + ".bak");
+                java.nio.file.Files.copy(file.toPath(), dest.toPath(), java.nio.file.StandardCopyOption.REPLACE_EXISTING);
+            }
+        }
     }
     
     // Methods to show Admin-specific panels

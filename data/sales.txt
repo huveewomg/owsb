@@ -23,5 +23,105 @@
       }
     ],
     "totalAmount": 487.18
+  },
+  {
+    "saleID": "SL019",
+    "date": "May 16, 2025, 10:30:00 AM",
+    "salesManagerID": "U002",
+    "notes": "",
+    "items": [
+      {
+        "itemID": "IT001",
+        "itemName": "Rice 5kg",
+        "quantity": 10,
+        "unitPrice": 25.5,
+        "profitRatio": 0.2,
+        "subtotal": 306
+      },
+      {
+        "itemID": "IT002",
+        "itemName": "Sugar 1kg",
+        "quantity": 8,
+        "unitPrice": 8.75,
+        "profitRatio": 0.15,
+        "subtotal": 80.5
+      }
+    ],
+    "totalAmount": 386.5
+  },
+  {
+    "saleID": "SL020",
+    "date": "May 17, 2025, 14:15:00 PM",
+    "salesManagerID": "U003",
+    "notes": "",
+    "items": [
+      {
+        "itemID": "IT004",
+        "itemName": "Cooking Oil 2L",
+        "quantity": 5,
+        "unitPrice": 15.25,
+        "profitRatio": 0.18,
+        "subtotal": 89.95
+      },
+      {
+        "itemID": "IT005",
+        "itemName": "Milk 1L",
+        "quantity": 12,
+        "unitPrice": 7.8,
+        "profitRatio": 0.12,
+        "subtotal": 104.83
+      }
+    ],
+    "totalAmount": 194.78
+  },
+  {
+    "saleID": "SL021",
+    "date": "May 18, 2025, 09:45:00 AM",
+    "salesManagerID": "U004",
+    "notes": "",
+    "items": [
+      {
+        "itemID": "IT008",
+        "itemName": "Soap Bar",
+        "quantity": 15,
+        "unitPrice": 3.25,
+        "profitRatio": 0.1,
+        "subtotal": 53.63
+      },
+      {
+        "itemID": "IT009",
+        "itemName": "Toothpaste",
+        "quantity": 10,
+        "unitPrice": 4.5,
+        "profitRatio": 0.15,
+        "subtotal": 51.75
+      }
+    ],
+    "totalAmount": 105.38
+  },
+  {
+    "saleID": "SL022",
+    "date": "May 18, 2025, 13:20:00 PM",
+    "salesManagerID": "U002",
+    "notes": "",
+    "items": [
+      {
+        "itemID": "IT012",
+        "itemName": "Basmati Rice 2kg",
+        "quantity": 6,
+        "unitPrice": 18.9,
+        "profitRatio": 0.22,
+        "subtotal": 138.41
+      },
+      {
+        "itemID": "IT015",
+        "itemName": "Chocolate Bar",
+        "quantity": 20,
+        "unitPrice": 4.8,
+        "profitRatio": 0.25,
+        "subtotal": 120
+      }
+    ],
+    "totalAmount": 258.41
   }
 ]

@@ -62,9 +62,8 @@ public class FinancialReportsPanel extends JPanel {
     
     // Report types
     private static final String PURCHASE_SUMMARY = "Purchase Summary Report";
-    private static final String SALES_PROFIT = "Sales & Profit Report";
+    private static final String PROFIT_LOSS = "Profit and Loss Report";
     private static final String SUPPLIER_PAYMENT = "Supplier Payment Report";
-    private static final String BUDGET_ACTUAL = "Budget vs. Actual Report";
     
     /**
      * Constructor for FinancialReportsPanel
@@ -112,9 +111,8 @@ public class FinancialReportsPanel extends JPanel {
         
         reportTypeComboBox = new JComboBox<>(new String[]{
             PURCHASE_SUMMARY,
-            SALES_PROFIT,
-            SUPPLIER_PAYMENT,
-            BUDGET_ACTUAL
+            PROFIT_LOSS,
+            SUPPLIER_PAYMENT
         });
         reportTypePanel.add(reportTypeComboBox);
         
@@ -208,14 +206,11 @@ public class FinancialReportsPanel extends JPanel {
             case PURCHASE_SUMMARY:
                 generatePurchaseSummaryReport();
                 break;
-            case SALES_PROFIT:
-                generateSalesProfitReport();
+            case PROFIT_LOSS:
+                generateProfitAndLossReport();
                 break;
             case SUPPLIER_PAYMENT:
                 generateSupplierPaymentReport();
-                break;
-            case BUDGET_ACTUAL:
-                generateBudgetVsActualReport();
                 break;
         }
     }
@@ -299,38 +294,29 @@ public class FinancialReportsPanel extends JPanel {
     }
     
     /**
-     * Generate Sales & Profit Report
+     * Generate Profit and Loss Report
      */
-    private void generateSalesProfitReport() {
+    private void generateProfitAndLossReport() {
         // Get sales data
         List<Sale> sales = salesController.getAllSales();
-        
-        // Get purchase orders for cost data
+        // Get purchase orders for loss calculation
         List<PurchaseOrder> purchaseOrders = poController.getAllPurchaseOrders();
-        
+
         // Setup table columns
         setupTableModel(new String[]{
             "Sale ID", "Date", "Sales Manager", "Items Sold", "Total Sales (RM)"
         });
-        
+
         // Calculate total sales amount
         double totalSalesAmount = 0;
-        
         // Map to store sales by item category
         Map<String, Double> salesByCategory = new HashMap<>();
-        
+
         // Populate table with sales data
         for (Sale sale : sales) {
-            // Format date
             String saleDate = sale.getDate() != null ? dateFormat.format(sale.getDate()) : "N/A";
-            
-            // Count items
             int itemCount = sale.getItems().size();
-            
-            // Format total amount
             String totalAmount = currencyFormat.format(sale.getTotalAmount());
-            
-            // Add to table
             tableModel.addRow(new Object[]{
                 sale.getSaleID(),
                 saleDate,
@@ -338,50 +324,42 @@ public class FinancialReportsPanel extends JPanel {
                 itemCount,
                 totalAmount
             });
-            
-            // Update total sales amount
             totalSalesAmount += sale.getTotalAmount();
-            
-            // Group sales by category
             for (SaleItem item : sale.getItems()) {
-                // Note: Since we don't have category in SaleItem, we would need to get it from ItemRepository
-                // For now, we'll use item name as category for demonstration
-                String category = item.getItemName().split(" ")[0]; // Using first word as placeholder for category
-                salesByCategory.put(category, 
+                String category = item.getItemName().split(" ")[0];
+                salesByCategory.put(category,
                     salesByCategory.getOrDefault(category, 0.0) + item.getSubtotal());
             }
         }
-        
-        // Calculate total cost of goods (from POs)
-        double totalCostOfGoods = purchaseOrders.stream()
-            .filter(po -> "COMPLETED".equals(po.getStatus()))
+
+        // Calculate total loss (all COMPLETED purchase orders)
+        double totalLoss = purchaseOrders.stream()
+            .filter(po -> "COMPLETED".equals(po.getStatus().toString()))
             .mapToDouble(PurchaseOrder::getTotalValue)
             .sum();
-        
-        // Calculate gross profit
-        double grossProfit = totalSalesAmount - totalCostOfGoods;
-        
+
+        // Calculate net profit
+        double netProfit = totalSalesAmount - totalLoss;
         // Calculate profit margin
-        double profitMarginPercentage = totalSalesAmount > 0 ? 
-            (grossProfit / totalSalesAmount) * 100 : 0;
-        
+        double profitMarginPercentage = totalSalesAmount > 0 ? (netProfit / totalSalesAmount) * 100 : 0;
+
         // Create sales by category chart
         createSalesByCategoryChart(salesByCategory);
-        
+
         // Create summary panel with key metrics
         JPanel summaryPanel = createSummaryPanel(
-            new String[]{"Total Sales", "Cost of Goods", "Gross Profit", "Profit Margin"},
+            new String[]{"Total Sales", "Total Loss", "Net Profit", "Profit Margin"},
             new String[]{
                 currencyFormat.format(totalSalesAmount),
-                currencyFormat.format(totalCostOfGoods),
-                currencyFormat.format(grossProfit),
+                currencyFormat.format(totalLoss),
+                currencyFormat.format(netProfit),
                 String.format("%.2f%%", profitMarginPercentage)
             }
         );
-        
+
         // Add summary to the top of the report content
         reportContentPanel.add(summaryPanel, BorderLayout.SOUTH);
-        
+
         // Update UI
         revalidate();
         repaint();
@@ -457,105 +435,6 @@ public class FinancialReportsPanel extends JPanel {
                 String.valueOf(paymentsBySupplier.size()),
                 String.valueOf(payments.size()),
                 currencyFormat.format(totalPayments)
-            }
-        );
-        
-        // Add summary to the top of the report content
-        reportContentPanel.add(summaryPanel, BorderLayout.SOUTH);
-        
-        // Update UI
-        revalidate();
-        repaint();
-    }
-    
-    /**
-     * Generate Budget vs. Actual Report
-     * Note: This is a simplified version with mock budget data
-     */
-    private void generateBudgetVsActualReport() {
-        // Get purchase orders
-        List<PurchaseOrder> purchaseOrders = poController.getAllPurchaseOrders();
-        
-        // Mock monthly budget data (in a real system, this would come from a budget repository)
-        Map<String, Double> monthlyBudget = new HashMap<>();
-        monthlyBudget.put("January", 10000.0);
-        monthlyBudget.put("February", 10000.0);
-        monthlyBudget.put("March", 12000.0);
-        monthlyBudget.put("April", 12000.0);
-        monthlyBudget.put("May", 15000.0);
-        monthlyBudget.put("June", 15000.0);
-        monthlyBudget.put("July", 15000.0);
-        monthlyBudget.put("August", 15000.0);
-        monthlyBudget.put("September", 12000.0);
-        monthlyBudget.put("October", 12000.0);
-        monthlyBudget.put("November", 15000.0);
-        monthlyBudget.put("December", 20000.0);
-        
-        // Group actual spending by month
-        Map<String, Double> actualSpendingByMonth = new HashMap<>();
-        
-        // Initialize all months with zero
-        for (String month : monthlyBudget.keySet()) {
-            actualSpendingByMonth.put(month, 0.0);
-        }
-        
-        // Calculate actual spending by month
-        Calendar cal = Calendar.getInstance();
-        for (PurchaseOrder po : purchaseOrders) {
-            cal.setTime(po.getDate());
-            int month = cal.get(Calendar.MONTH);
-            
-            // Map month index to name
-            String monthName = getMonthName(month);
-            
-            // Update spending for this month
-            actualSpendingByMonth.put(monthName, 
-                actualSpendingByMonth.getOrDefault(monthName, 0.0) + po.getTotalValue());
-        }
-        
-        // Setup table columns
-        setupTableModel(new String[]{
-            "Month", "Budget (RM)", "Actual Spending (RM)", "Variance (RM)", "Variance (%)"
-        });
-        
-        // Total values for summary
-        double totalBudget = 0;
-        double totalActual = 0;
-        
-        // Populate table
-        for (String month : monthlyBudget.keySet()) {
-            double budget = monthlyBudget.get(month);
-            double actual = actualSpendingByMonth.getOrDefault(month, 0.0);
-            double variance = budget - actual;
-            double variancePercentage = budget > 0 ? (variance / budget) * 100 : 0;
-            
-            tableModel.addRow(new Object[]{
-                month,
-                currencyFormat.format(budget),
-                currencyFormat.format(actual),
-                currencyFormat.format(variance),
-                String.format("%.2f%%", variancePercentage)
-            });
-            
-            totalBudget += budget;
-            totalActual += actual;
-        }
-        
-        // Calculate overall variance
-        double totalVariance = totalBudget - totalActual;
-        double totalVariancePercentage = totalBudget > 0 ? (totalVariance / totalBudget) * 100 : 0;
-        
-        // Create budget vs. actual chart
-        createBudgetVsActualChart(monthlyBudget, actualSpendingByMonth);
-        
-        // Create summary panel with key metrics
-        JPanel summaryPanel = createSummaryPanel(
-            new String[]{"Total Budget", "Total Actual", "Variance", "Variance %"},
-            new String[]{
-                currencyFormat.format(totalBudget),
-                currencyFormat.format(totalActual),
-                currencyFormat.format(totalVariance),
-                String.format("%.2f%%", totalVariancePercentage)
             }
         );
         
@@ -696,60 +575,6 @@ public class FinancialReportsPanel extends JPanel {
         // Color bars
         BarRenderer renderer = (BarRenderer) plot.getRenderer();
         renderer.setSeriesPaint(0, new Color(0, 0, 128));
-        
-        // Create panel
-        ChartPanel cp = new ChartPanel(chart);
-        cp.setPreferredSize(new Dimension(600, 300));
-        
-        chartPanel.add(cp, BorderLayout.CENTER);
-        chartPanel.revalidate();
-    }
-    
-    /**
-     * Create a budget vs. actual comparison chart
-     */
-    private void createBudgetVsActualChart(Map<String, Double> budget, Map<String, Double> actual) {
-        // Clear previous chart
-        chartPanel.removeAll();
-        
-        // Create dataset
-        DefaultCategoryDataset dataset = new DefaultCategoryDataset();
-        
-        // List of months in order
-        List<String> months = Arrays.asList(
-            "January", "February", "March", "April", "May", "June",
-            "July", "August", "September", "October", "November", "December"
-        );
-        
-        // Add budget and actual values by month
-        for (String month : months) {
-            dataset.addValue(budget.getOrDefault(month, 0.0), "Budget", month);
-            dataset.addValue(actual.getOrDefault(month, 0.0), "Actual", month);
-        }
-        
-        // Create chart
-        JFreeChart chart = ChartFactory.createBarChart(
-            "Budget vs. Actual Spending by Month",
-            "Month",
-            "Amount (RM)",
-            dataset,
-            PlotOrientation.VERTICAL,
-            true,   // include legend
-            true,   // tooltips
-            false   // URLs
-        );
-        
-        // Customize the chart
-        CategoryPlot plot = (CategoryPlot) chart.getPlot();
-        
-        // Rotate month labels
-        CategoryAxis domainAxis = plot.getDomainAxis();
-        domainAxis.setCategoryLabelPositions(CategoryLabelPositions.createUpRotationLabelPositions(Math.PI / 6.0));
-        
-        // Color bars
-        BarRenderer renderer = (BarRenderer) plot.getRenderer();
-        renderer.setSeriesPaint(0, new Color(0, 128, 0));  // Budget
-        renderer.setSeriesPaint(1, new Color(128, 0, 0));  // Actual
         
         // Create panel
         ChartPanel cp = new ChartPanel(chart);

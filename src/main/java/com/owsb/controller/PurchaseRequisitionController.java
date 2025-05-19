@@ -15,6 +15,7 @@ import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 import java.util.stream.Collectors;
+import com.owsb.util.Constants;
 
 /**
  * Controller for purchase requisition operations
@@ -28,7 +29,7 @@ public class PurchaseRequisitionController {
     private User currentUser;
     
     // Constants for business rules
-    public static final int MINIMUM_ITEMS_REQUIRED = 3;
+    public static final int MINIMUM_ITEMS_REQUIRED = Constants.MINIMUM_ITEMS_REQUIRED;
     
     /**
      * Constructor for PurchaseRequisitionController

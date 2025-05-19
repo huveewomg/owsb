@@ -25,6 +25,7 @@ public class Constants {
     
     // Business constants
     public static final double DEFAULT_PROFIT_RATIO = 0.10; // 10%
+    public static final int MINIMUM_ITEMS_REQUIRED = 3; // Minimum items required for a purchase requisition
     
     // Ensure data directory exists
     static {

@@ -169,13 +169,6 @@ public class LowStockAlertsPanel extends JPanel {
         
         notifySalesButton.setEnabled(false);
         
-        // Show message if no low stock items
-        if (lowStockItems.isEmpty()) {
-            JOptionPane.showMessageDialog(this, 
-                    "No items with low stock found.", 
-                    "Stock Status", 
-                    JOptionPane.INFORMATION_MESSAGE);
-        }
     }
     
     /**

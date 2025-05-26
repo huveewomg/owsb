@@ -6,6 +6,7 @@ import com.owsb.model.procurement.PRItem;
 import com.owsb.model.procurement.PurchaseRequisition;
 import com.owsb.model.supplier.Supplier;
 import com.owsb.util.Constants;
+import com.owsb.util.SupplierUtils;
 import com.owsb.view.PanelHeaderUtils;
 
 import javax.swing.*;
@@ -50,6 +51,9 @@ public class PurchaseRequisitionCreationPanel extends JPanel {
     private JButton cancelButton;
     private JButton saveButton;
     private JButton submitButton;
+    private String previousSupplierName = null; // To track previous supplier selection
+    
+    private JComboBox<String> supplierComboBox;
     
     // Controller
     private final PurchaseRequisitionController prController;
@@ -69,19 +73,12 @@ public class PurchaseRequisitionCreationPanel extends JPanel {
      */
     public PurchaseRequisitionCreationPanel(PurchaseRequisitionController prController) {
         this.prController = prController;
-        
-        // Set up panel
         setLayout(new BorderLayout(10, 10));
         setBorder(BorderFactory.createEmptyBorder(10, 10, 10, 10));
-        
-        // Initialize components
         initComponents();
-        loadItems();
-        
+        loadSuppliers();
         // Add listeners
         addListeners();
-        
-        // Update labels
         updateLabels();
     }
     
@@ -98,10 +95,25 @@ public class PurchaseRequisitionCreationPanel extends JPanel {
         GridBagConstraints gbc = new GridBagConstraints();
         gbc.insets = new Insets(5, 5, 5, 5);
         
-        requiredDateLabel = new JLabel("Required By:");
+        JLabel supplierLabel = new JLabel("Supplier:");
         gbc.gridx = 0;
         gbc.gridy = 0;
         gbc.anchor = GridBagConstraints.WEST;
+        topPanel.add(supplierLabel, gbc);
+        
+        supplierComboBox = new JComboBox<>();
+        supplierComboBox.setPreferredSize(new Dimension(250, 25));
+        gbc.gridx = 1;
+        gbc.gridy = 0;
+        gbc.gridwidth = 2;
+        gbc.fill = GridBagConstraints.HORIZONTAL;
+        topPanel.add(supplierComboBox, gbc);
+        
+        // Required date
+        requiredDateLabel = new JLabel("Required By:");
+        gbc.gridx = 0;
+        gbc.gridy = 1;
+        gbc.gridwidth = 1;
         topPanel.add(requiredDateLabel, gbc);
         
         // Calculate default required date (2 weeks from now)
@@ -114,21 +126,21 @@ public class PurchaseRequisitionCreationPanel extends JPanel {
         JSpinner.DateEditor dateEditor = new JSpinner.DateEditor(requiredDateSpinner, "yyyy-MM-dd");
         requiredDateSpinner.setEditor(dateEditor);
         gbc.gridx = 1;
-        gbc.gridy = 0;
+        gbc.gridy = 1;
         gbc.fill = GridBagConstraints.HORIZONTAL;
         topPanel.add(requiredDateSpinner, gbc);
         
         // Urgent checkbox
         urgentCheckBox = new JCheckBox("Urgent Order (bypass minimum item requirement)");
         gbc.gridx = 2;
-        gbc.gridy = 0;
+        gbc.gridy = 1;
         gbc.gridwidth = 2;
         topPanel.add(urgentCheckBox, gbc);
         
         // Notes label
         notesLabel = new JLabel("Notes:");
         gbc.gridx = 0;
-        gbc.gridy = 1;
+        gbc.gridy = 2;
         gbc.gridwidth = 1;
         topPanel.add(notesLabel, gbc);
         
@@ -138,7 +150,7 @@ public class PurchaseRequisitionCreationPanel extends JPanel {
         notesArea.setWrapStyleWord(true);
         notesScrollPane = new JScrollPane(notesArea);
         gbc.gridx = 1;
-        gbc.gridy = 1;
+        gbc.gridy = 2;
         gbc.gridwidth = 3;
         gbc.fill = GridBagConstraints.BOTH;
         topPanel.add(notesScrollPane, gbc);
@@ -202,9 +214,7 @@ public class PurchaseRequisitionCreationPanel extends JPanel {
         JScrollPane tableScrollPane = new JScrollPane(itemsTable);
         tableScrollPane.setPreferredSize(new Dimension(800, 300));
         
-        // Item selection panel
         JPanel itemSelectionPanel = new JPanel(new FlowLayout(FlowLayout.LEFT));
-        
         itemComboBox = new JComboBox<>();
         itemComboBox.setPreferredSize(new Dimension(250, 25));
         itemComboBox.setRenderer(new ItemRenderer());
@@ -262,21 +272,33 @@ public class PurchaseRequisitionCreationPanel extends JPanel {
     }
     
     /**
-     * Load items for combo box
+     * Load suppliers for combo box
      */
-    private void loadItems() {
-        // Clear existing items
+    private void loadSuppliers() {
+        supplierComboBox.removeAllItems();
+        List<Supplier> suppliers = SupplierUtils.getAllSuppliers();
+        for (Supplier supplier : suppliers) {
+            supplierComboBox.addItem(supplier.getName());
+        }
+        if (supplierComboBox.getItemCount() > 0) {
+            supplierComboBox.setSelectedIndex(0);
+        }
+        loadItemsForSelectedSupplier();
+    }
+    private void loadItemsForSelectedSupplier() {
         itemComboBox.removeAllItems();
-        
-        // Get all items
-        List<Item> items = prController.getAllItems();
-        
-        // Add items to combo box
-        for (Item item : items) {
-            itemComboBox.addItem(new ItemWrapper(item));
+        String selectedSupplierName = (String) supplierComboBox.getSelectedItem();
+        if (selectedSupplierName == null) return;
+        String supplierId = SupplierUtils.getSupplierNameToIdMap().get(selectedSupplierName);
+        Supplier supplier = SupplierUtils.getSupplierById(supplierId);
+        if (supplier == null || supplier.getItemIDs() == null) return;
+        List<Item> allItems = prController.getAllItems();
+        for (Item item : allItems) {
+            if (supplier.getItemIDs().contains(item.getItemID())) {
+                itemComboBox.addItem(new ItemWrapper(item));
+            }
         }
     }
-    
     /**
      * Add listeners to components
      */
@@ -314,6 +336,7 @@ public class PurchaseRequisitionCreationPanel extends JPanel {
                     
                     // Update total in table
                     double total = quantity * prItem.getUnitPrice();
+                    total = Math.round(total * 100.0) / 100.0; // Round to 2 decimals
                     tableModel.setValueAt(total, row, 7);
                     
                     // Update labels
@@ -333,66 +356,77 @@ public class PurchaseRequisitionCreationPanel extends JPanel {
         
         // Urgent checkbox listener
         urgentCheckBox.addActionListener(e -> updateButtonStates());
+        
+        supplierComboBox.addActionListener(e -> {
+            String selectedSupplierName = (String) supplierComboBox.getSelectedItem();
+            if (previousSupplierName == null) previousSupplierName = selectedSupplierName;
+            if (!prItems.isEmpty() || !notesArea.getText().trim().isEmpty()) {
+                int result = JOptionPane.showConfirmDialog(this,
+                        "Changing the supplier will reset all items and notes in this PR. Continue?",
+                        "Change Supplier", JOptionPane.YES_NO_OPTION, JOptionPane.WARNING_MESSAGE);
+                if (result != JOptionPane.YES_OPTION) {
+                    // Revert selection
+                    supplierComboBox.setSelectedItem(previousSupplierName);
+                    return;
+                }
+            }
+            previousSupplierName = selectedSupplierName;
+            // Reset PR
+            tableModel.setRowCount(0);
+            prItems.clear();
+            notesArea.setText("");
+            urgentCheckBox.setSelected(false);
+            quantitySpinner.setValue(1);
+            removeButton.setEnabled(false);
+            submitButton.setEnabled(false);
+            updateLabels();
+            loadItemsForSelectedSupplier();
+        });
     }
     
     /**
      * Quick add items below minimum stock
      */
     private void quickAddBelowMinimum() {
-        // Get items with low stock
-        List<Item> lowStockItems = prController.getItemsWithLowStock();
-        
-        if (lowStockItems.isEmpty()) {
-            JOptionPane.showMessageDialog(this, 
-                    "No items are below their minimum stock level.", 
-                    "No Low Stock Items", 
-                    JOptionPane.INFORMATION_MESSAGE);
+        String selectedSupplierName = (String) supplierComboBox.getSelectedItem();
+        if (selectedSupplierName == null) {
+            JOptionPane.showMessageDialog(this, "Please select a supplier first.", "No Supplier Selected", JOptionPane.WARNING_MESSAGE);
             return;
         }
-        
-        // Clear existing items
+        String supplierId = SupplierUtils.getSupplierNameToIdMap().get(selectedSupplierName);
+        Supplier supplier = SupplierUtils.getSupplierById(supplierId);
+        if (supplier == null || supplier.getItemIDs() == null) {
+            JOptionPane.showMessageDialog(this, "No items found for the selected supplier.", "No Items", JOptionPane.WARNING_MESSAGE);
+            return;
+        }
+        List<Item> lowStockItems = prController.getItemsWithLowStock();
+        // Only add items from this supplier
+        List<Item> filteredLowStock = new ArrayList<>();
+        for (Item item : lowStockItems) {
+            if (supplier.getItemIDs().contains(item.getItemID())) {
+                filteredLowStock.add(item);
+            }
+        }
+        if (filteredLowStock.isEmpty()) {
+            JOptionPane.showMessageDialog(this, "No low stock items for the selected supplier.", "No Low Stock Items", JOptionPane.INFORMATION_MESSAGE);
+            return;
+        }
         tableModel.setRowCount(0);
         prItems.clear();
-        
-        // Add each low stock item
-        for (Item item : lowStockItems) {
-            // Calculate suggested order quantity
+        for (Item item : filteredLowStock) {
             int suggestedQuantity = prController.getSuggestedOrderQuantity(item);
-            
-            // Skip if suggested quantity is 0
-            if (suggestedQuantity <= 0) {
-                continue;
-            }
-            
-            // Check for existing PRs for this item
+            if (suggestedQuantity <= 0) continue;
             String existingPRs = prController.checkExistingPendingPR(item.getItemID());
-            
             if (existingPRs != null) {
-                // Show warning with option to proceed
-                String message = "Item " + item.getItemID() + " already has pending purchase requisitions:\n" + 
-                                 existingPRs + "\n\n" +
-                                 "Do you want to include this item in the current PR?";
-                
-                int result = JOptionPane.showConfirmDialog(this, 
-                        message, 
-                        "Duplicate PR Warning", 
-                        JOptionPane.YES_NO_OPTION,
-                        JOptionPane.WARNING_MESSAGE);
-                
-                if (result != JOptionPane.YES_OPTION) {
-                    continue; // Skip this item and move to the next one
-                }
+                String message = "Item " + item.getItemID() + " already has pending purchase requisitions:\n" +
+                        existingPRs + "\n\nDo you want to include this item in the current PR?";
+                int result = JOptionPane.showConfirmDialog(this, message, "Duplicate PR Warning", JOptionPane.YES_NO_OPTION, JOptionPane.WARNING_MESSAGE);
+                if (result != JOptionPane.YES_OPTION) continue;
             }
-            
-            // Create PR item
             PRItem prItem = prController.createPRItemFromItem(item, suggestedQuantity);
             prItems.add(prItem);
-            
-            // Add to table
             addItemToTable(item, suggestedQuantity);
         }
-        
-        // Update labels
         updateLabels();
         updateButtonStates();
     }
@@ -455,6 +489,7 @@ public class PurchaseRequisitionCreationPanel extends JPanel {
                     
                     // Update total
                     double total = quantity * prItem.getUnitPrice();
+                    total = Math.round(total * 100.0) / 100.0; // Round to 2 decimals
                     tableModel.setValueAt(total, i, 7);
                     
                     // Update labels
@@ -488,7 +523,7 @@ public class PurchaseRequisitionCreationPanel extends JPanel {
     private void addItemToTable(Item item, int quantity) {
         // Calculate total
         double total = item.getUnitPrice() * quantity;
-        
+        total = Math.round(total * 100.0) / 100.0; // Round to 2 decimals
         // Add to table model
         tableModel.addRow(new Object[]{
                 item.getItemID(),
@@ -530,7 +565,7 @@ public class PurchaseRequisitionCreationPanel extends JPanel {
         for (PRItem item : prItems) {
             estimatedValue += item.getEstimatedCost();
         }
-        
+        estimatedValue = Math.round(estimatedValue * 100.0) / 100.0; // Round to 2 decimals
         estimatedValueLabel.setText("Estimated Value: " + currencyFormat.format(estimatedValue));
     }
     

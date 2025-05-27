@@ -17,7 +17,7 @@ public class FinanceManager extends User {
      * @param email Email
      */
     public FinanceManager(String userId, String username, String password, String name, String email) {
-        super(userId, username, password, name, UserRole.FINANCE_MANAGER, email);
+        super(userId, username, password, name, UserRole.FINANCE_MANAGER, email, false);
     }
     
     /**

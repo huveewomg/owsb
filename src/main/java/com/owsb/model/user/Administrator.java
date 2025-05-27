@@ -15,9 +15,10 @@ public class Administrator extends User {
      * @param password Password
      * @param name Full name
      * @param email Email
+     * @param rootAdmin Flag indicating if the user is a root admin
      */
-    public Administrator(String userId, String username, String password, String name, String email) {
-        super(userId, username, password, name, UserRole.ADMIN, email);
+    public Administrator(String userId, String username, String password, String name, String email, boolean rootAdmin) {
+        super(userId, username, password, name, UserRole.ADMIN, email, rootAdmin);
     }
     
     /**

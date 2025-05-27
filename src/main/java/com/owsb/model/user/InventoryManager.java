@@ -17,7 +17,7 @@ public class InventoryManager extends User {
      * @param email Email
      */
     public InventoryManager(String userId, String username, String password, String name, String email) {
-        super(userId, username, password, name, UserRole.INVENTORY_MANAGER, email);
+        super(userId, username, password, name, UserRole.INVENTORY_MANAGER, email, false);
     }
     
     /**

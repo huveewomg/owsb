@@ -11,4 +11,5 @@ public class UserDTO {
     public String name;
     public String role;
     public String email;
+    public boolean rootAdmin;
 }

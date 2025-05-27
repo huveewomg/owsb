@@ -103,10 +103,11 @@ public class AuthController {
         
         // Generate a unique user ID
         String userId = userRepository.generateUserId();
-        
-        // Create new user through factory
-        User newUser = UserFactory.createUser(userId, username, password, name, role, email);
-        
+
+        // By default, new users created through this method are not root admins.
+        // If a root admin needs to be created, it should be done by directly editing the users.txt file
+        User newUser = UserFactory.createUser(userId, username, password, name, role, email, false);
+
         // Save user to repository
         return userRepository.save(newUser);
     }
@@ -136,12 +137,13 @@ public class AuthController {
         if (user.getRole() != role) {
             // Create new user with updated role
             User updatedUser = UserFactory.createUser(
-                userId, 
-                username, 
-                user.getPassword(), 
-                name, 
-                role, 
-                email
+                userId,
+                username,
+                user.getPassword(),
+                name,
+                role,
+                email,
+                user.isRootAdmin()
             );
             
             // Update in repository

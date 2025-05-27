@@ -35,7 +35,8 @@
         "itemID": "IT010",
         "itemName": "Toilet Paper (6pk)",
         "quantity": 21,
-        "supplierName": "Unknown Supplier",
+        "supplierID": "SUP001",
+        "supplierName": "ABC Groceries Sdn Bhd",
         "unitPrice": 9.9,
         "totalCost": 207.9
       }

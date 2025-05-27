@@ -17,7 +17,7 @@ public class SalesManager extends User {
      * @param email Email
      */
     public SalesManager(String userId, String username, String password, String name, String email) {
-        super(userId, username, password, name, UserRole.SALES_MANAGER, email);
+        super(userId, username, password, name, UserRole.SALES_MANAGER, email, false);
     }
     
     /**

@@ -5,7 +5,8 @@
     "password": "a",
     "name": "System Administrator",
     "role": "ADMIN",
-    "email": "admin@owsb.com"
+    "email": "admin@owsb.com",
+    "rootAdmin": true
   },
   {
     "userID": "U002",
@@ -13,7 +14,8 @@
     "password": "s",
     "name": "John Sales",
     "role": "SALES_MANAGER",
-    "email": "john@owsb.com"
+    "email": "john@owsb.com",
+    "rootAdmin": false
   },
   {
     "userID": "U003",
@@ -21,7 +23,8 @@
     "password": "p",
     "name": "Mary Purchase",
     "role": "PURCHASE_MANAGER",
-    "email": "mary@owsb.com"
+    "email": "mary@owsb.com",
+    "rootAdmin": false
   },
   {
     "userID": "U004",
@@ -29,7 +32,8 @@
     "password": "i",
     "name": "Alex Inventory",
     "role": "INVENTORY_MANAGER",
-    "email": "alex@owsb.com"
+    "email": "alex@owsb.com",
+    "rootAdmin": false
   },
   {
     "userID": "U005",
@@ -37,7 +41,8 @@
     "password": "f",
     "name": "Sarah Finance",
     "role": "FINANCE_MANAGER",
-    "email": "sarah@owsb.com"
+    "email": "sarah@owsb.com",
+    "rootAdmin": false
   },
   {
     "userID": "U006",
@@ -45,6 +50,7 @@
     "password": "666",
     "name": "test john",
     "role": "ADMIN",
-    "email": "test@gmail.com"
+    "email": "test@gmail.com",
+    "rootAdmin": false
   }
 ]

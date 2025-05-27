@@ -285,7 +285,8 @@ public class UserRepository implements Repository<User> {
             dto.password,
             dto.name,
             UserRole.valueOf(dto.role),
-            dto.email
+            dto.email,
+            dto.rootAdmin
         );
     }
     
@@ -302,6 +303,7 @@ public class UserRepository implements Repository<User> {
         dto.name = user.getName();
         dto.role = user.getRole().name();
         dto.email = user.getEmail();
+        dto.rootAdmin = user.isRootAdmin();
         return dto;
     }
 }

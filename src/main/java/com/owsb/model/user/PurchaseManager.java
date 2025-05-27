@@ -17,7 +17,7 @@ public class PurchaseManager extends User {
      * @param email Email
      */
     public PurchaseManager(String userId, String username, String password, String name, String email) {
-        super(userId, username, password, name, UserRole.PURCHASE_MANAGER, email);
+        super(userId, username, password, name, UserRole.PURCHASE_MANAGER, email, false);
     }
     
     /**

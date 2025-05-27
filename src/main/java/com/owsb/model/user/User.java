@@ -14,6 +14,7 @@ public abstract class User {
     private String name;
     private UserRole role;
     private String email;
+    private boolean rootAdmin;
     
     /**
      * Constructor for User class
@@ -23,14 +24,16 @@ public abstract class User {
      * @param name Full name of user
      * @param role Role of user
      * @param email Email of user
+     * @param rootAdmin Flag indicating if the user is a root admin
      */
-    public User(String userId, String username, String password, String name, UserRole role, String email) {
+    public User(String userId, String username, String password, String name, UserRole role, String email, boolean rootAdmin) {
         this.userId = userId;
         this.username = username;
         this.password = password;
         this.name = name;
         this.role = role;
         this.email = email;
+        this.rootAdmin = rootAdmin;
     }
     
     // Getters and setters
@@ -81,7 +84,15 @@ public abstract class User {
     public void setEmail(String email) {
         this.email = email;
     }
-    
+
+    public boolean isRootAdmin() {
+        return rootAdmin;
+    }
+
+    public void setRootAdmin(boolean rootAdmin) {
+        this.rootAdmin = rootAdmin;
+    }
+
     /**
      * ABSTRACTION: Abstract method that forces subclasses to implement
      * Check if user has access to specific functionality

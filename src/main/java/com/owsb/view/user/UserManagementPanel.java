@@ -305,7 +305,18 @@ public class UserManagementPanel extends JPanel {
         
         // Get selected role
         UserRole role = UserRole.values()[roleCombo.getSelectedIndex()];
-        
+
+        // *** ADD VALIDATION FOR SUB ADMIN CREATION ***
+        User currentUser = authController.getCurrentUser();
+        if (currentUser != null && currentUser.getRole() == UserRole.ADMIN && !currentUser.isRootAdmin()) {
+            if (role == UserRole.ADMIN) {
+                JOptionPane.showMessageDialog(this,
+                    "Sub Admins cannot create other Admin users.",
+                    "Creation Error",
+                    JOptionPane.ERROR_MESSAGE);
+                return;
+            }
+        }
         // Call controller to create user
         boolean success = authController.registerUser(username, password, name, email, role);
         

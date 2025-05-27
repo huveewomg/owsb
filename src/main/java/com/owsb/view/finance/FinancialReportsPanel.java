@@ -55,7 +55,7 @@ public class FinancialReportsPanel extends JPanel {
     // Date range filter components
     private JPanel filterPanel;
     private JComboBox<String> periodComboBox;
-    private JButton generateButton;
+    private JButton printButton;
     
     // Formatters
     private final SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
@@ -125,8 +125,8 @@ public class FinancialReportsPanel extends JPanel {
         });
         filterPanel.add(periodComboBox);
         
-        generateButton = new JButton("Generate Report");
-        filterPanel.add(generateButton);
+        printButton = new JButton("Print Report");
+        filterPanel.add(printButton);
         
         // Add report type and filter panels to control panel
         controlPanel.add(reportTypePanel, BorderLayout.WEST);
@@ -180,11 +180,18 @@ public class FinancialReportsPanel extends JPanel {
             }
         });
         
-        // Generate button listener
-        generateButton.addActionListener(new ActionListener() {
+        periodComboBox.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
                 generateSelectedReport();
+            }
+        });
+        
+        // Print button listener
+        printButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                printReport(); // Call printReport method
             }
         });
     }
@@ -441,6 +448,27 @@ public class FinancialReportsPanel extends JPanel {
         // Update UI
         revalidate();
         repaint();
+    }
+    
+    /**
+     * Print the current report
+     */
+    private void printReport() {
+        try {
+            if (reportTable != null) {
+                reportTable.print();
+            } else {
+                JOptionPane.showMessageDialog(this,
+                        "No report data to print.",
+                        "Print Error",
+                        JOptionPane.WARNING_MESSAGE);
+            }
+        } catch (java.awt.print.PrinterException e) {
+            JOptionPane.showMessageDialog(this,
+                    "Error printing report: " + e.getMessage(),
+                    "Print Error",
+                    JOptionPane.ERROR_MESSAGE);
+        }
     }
     
     /**

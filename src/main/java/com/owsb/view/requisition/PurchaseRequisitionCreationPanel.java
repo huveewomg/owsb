@@ -131,7 +131,7 @@ public class PurchaseRequisitionCreationPanel extends JPanel {
         topPanel.add(requiredDateSpinner, gbc);
         
         // Urgent checkbox
-        urgentCheckBox = new JCheckBox("Urgent Order (bypass minimum item requirement)");
+        urgentCheckBox = new JCheckBox("Urgent Order (bypass minimum item requirement: 3)");
         gbc.gridx = 2;
         gbc.gridy = 1;
         gbc.gridwidth = 2;

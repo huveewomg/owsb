@@ -218,5 +218,63 @@
       }
     ],
     "estimatedTotal": 61.3
+  },
+  {
+    "prID": "PR015",
+    "date": "May 28, 2025, 7:55:28 AM",
+    "requiredDate": "Jun 11, 2025, 7:55:13 AM",
+    "salesManagerID": "U002",
+    "status": "PENDING_APPROVAL",
+    "notes": "",
+    "items": [
+      {
+        "itemID": "IT010",
+        "itemName": "Toilet Paper (6pk)",
+        "quantity": 30,
+        "requiredDate": "Jun 11, 2025, 7:55:19 AM",
+        "suggestedSupplierID": "SUP006",
+        "unitPrice": 9.9,
+        "estimatedCost": 297.0
+      },
+      {
+        "itemID": "IT017",
+        "itemName": "Hand Sanitizer 200ml",
+        "quantity": 170,
+        "requiredDate": "Jun 11, 2025, 7:55:19 AM",
+        "suggestedSupplierID": "SUP006",
+        "unitPrice": 10.0,
+        "estimatedCost": 1700.0
+      }
+    ],
+    "estimatedTotal": 1997.0
+  },
+  {
+    "prID": "PR016",
+    "date": "May 28, 2025, 7:59:28 AM",
+    "requiredDate": "Jun 11, 2025, 7:59:00 AM",
+    "salesManagerID": "U002",
+    "status": "PENDING_APPROVAL",
+    "notes": "Weekly Restock",
+    "items": [
+      {
+        "itemID": "IT005",
+        "itemName": "Milk 1L",
+        "quantity": 40,
+        "requiredDate": "Jun 11, 2025, 7:59:15 AM",
+        "suggestedSupplierID": "SUP004",
+        "unitPrice": 7.8,
+        "estimatedCost": 312.0
+      },
+      {
+        "itemID": "IT013",
+        "itemName": "Yogurt 500g",
+        "quantity": 35,
+        "requiredDate": "Jun 11, 2025, 7:59:15 AM",
+        "suggestedSupplierID": "SUP004",
+        "unitPrice": 6.2,
+        "estimatedCost": 217.0
+      }
+    ],
+    "estimatedTotal": 529.0
   }
 ]

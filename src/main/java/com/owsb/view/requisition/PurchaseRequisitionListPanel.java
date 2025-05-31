@@ -480,7 +480,6 @@ public class PurchaseRequisitionListPanel extends JPanel {
         // Add items to table
         for (PRItem item : pr.getItems()) {
             // Get the item and supplier names
-            // In a real implementation, these would be fetched from the repositories
             String itemName = item.getItemName();
             String supplierName = item.getSuggestedSupplierID();
             

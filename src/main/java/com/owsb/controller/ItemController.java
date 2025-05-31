@@ -290,7 +290,6 @@ public class ItemController {
         // Reduce stock (negative quantity because it's a reduction)
         return itemRepository.updateStock(itemId, -quantity);
         
-        // In a real system, we would also record the sale in a sales repository
     }
 
     /**

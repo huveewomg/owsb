@@ -42,8 +42,6 @@ public class FinanceManager extends User {
      * @return Whether approval was successful
      */
     public boolean approvePurchaseOrder(String poId) {
-        // Implementation would update the PO status in the database
-        // For demo purposes, just return true
         return true;
     }
     
@@ -54,8 +52,6 @@ public class FinanceManager extends User {
      * @return Whether payment processing was successful
      */
     public boolean processPayment(String poId, double amount) {
-        // Implementation would create a payment record in the database
-        // For demo purposes, just return true
         return true;
     }
     

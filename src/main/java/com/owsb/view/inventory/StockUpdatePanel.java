@@ -36,6 +36,7 @@ public class StockUpdatePanel extends JPanel {
     private JPanel poUpdatePanel;
     private JComboBox<String> poComboBox;
     private JButton loadPoButton;
+    private JButton refreshPoButton;
     private JTable poItemsTable;
     private DefaultTableModel poTableModel;
     private JButton quickFillButton;
@@ -118,10 +119,12 @@ public class StockUpdatePanel extends JPanel {
         JLabel poLabel = new JLabel("Select Purchase Order:");
         poComboBox = new JComboBox<>();
         loadPoButton = new JButton("Load Items");
+        refreshPoButton = new JButton("Refresh");
         
         topPanel.add(poLabel);
         topPanel.add(poComboBox);
         topPanel.add(loadPoButton);
+        topPanel.add(refreshPoButton);
         
         // Center panel - Items table
         JPanel centerPanel = new JPanel(new BorderLayout());
@@ -179,6 +182,7 @@ public class StockUpdatePanel extends JPanel {
         
         // Add listeners
         loadPoButton.addActionListener(e -> loadPOItems());
+        refreshPoButton.addActionListener(e -> loadApprovedPOs());
         quickFillButton.addActionListener(e -> quickFillQuantities());
         updatePoStockButton.addActionListener(e -> updatePoStock());
         cancelPoButton.addActionListener(e -> cancelPoUpdate());

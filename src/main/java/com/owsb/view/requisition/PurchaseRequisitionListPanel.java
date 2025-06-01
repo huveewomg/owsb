@@ -168,9 +168,10 @@ public class PurchaseRequisitionListPanel extends JPanel {
             bottomPanel.add(deleteButton);
         }
         
-        // Only add Generate PO button for Purchase Managers
+        // Only add Generate PO button for Purchase Managers and Administrators
         if (currentUser instanceof PurchaseManager || 
-            currentUser.getRole() == UserRole.PURCHASE_MANAGER) {
+            currentUser.getRole() == UserRole.PURCHASE_MANAGER ||
+            currentUser.getRole() == UserRole.ADMIN) {
             bottomPanel.add(createPoButton);
         }
         
@@ -262,7 +263,8 @@ public class PurchaseRequisitionListPanel extends JPanel {
             
             // Enable/disable create PO button based on selection and status
             if (hasSelection && (currentUser instanceof PurchaseManager || 
-                                currentUser.getRole() == UserRole.PURCHASE_MANAGER)) {
+                                currentUser.getRole() == UserRole.PURCHASE_MANAGER || 
+                                currentUser.getRole() == UserRole.ADMIN)) {
                 String prId = (String) prTable.getValueAt(selectedRow, 0);
                 
                 // Find the PR in our list

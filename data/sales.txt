@@ -123,5 +123,30 @@
       }
     ],
     "totalAmount": 258.41
+  },
+  {
+    "saleID": "SL023",
+    "date": "May 30, 2025, 7:10:51 PM",
+    "salesManagerID": "U002",
+    "notes": "",
+    "items": [
+      {
+        "itemID": "IT005",
+        "itemName": "Milk 1L",
+        "quantity": 20,
+        "unitPrice": 7.8,
+        "profitRatio": 0.1,
+        "subtotal": 171.6
+      },
+      {
+        "itemID": "IT008",
+        "itemName": "Soap Bar",
+        "quantity": 1,
+        "unitPrice": 3.25,
+        "profitRatio": 0.5,
+        "subtotal": 4.88
+      }
+    ],
+    "totalAmount": 176.48
   }
 ]

@@ -224,7 +224,7 @@
     "date": "May 28, 2025, 7:55:28 AM",
     "requiredDate": "Jun 11, 2025, 7:55:13 AM",
     "salesManagerID": "U002",
-    "status": "PENDING_APPROVAL",
+    "status": "PROCESSED",
     "notes": "",
     "items": [
       {
@@ -253,7 +253,7 @@
     "date": "May 28, 2025, 7:59:28 AM",
     "requiredDate": "Jun 11, 2025, 7:59:00 AM",
     "salesManagerID": "U002",
-    "status": "PENDING_APPROVAL",
+    "status": "PROCESSED",
     "notes": "Weekly Restock",
     "items": [
       {

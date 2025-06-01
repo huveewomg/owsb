@@ -32,19 +32,27 @@ import com.owsb.view.user.UserManagementPanel;
 
 import javax.swing.*;
 import java.awt.*;
+import java.beans.PropertyChangeEvent;
+import java.beans.PropertyChangeListener;
 
 /**
  * Enhanced Dashboard for Administrators
  * Extends BaseDashboard and adds admin-specific functionality
  * Administrators can access all functionalities of other roles
+ * 
+ * INHERITANCE: Extends BaseDashboard to reuse common dashboard functionality
+ * POLYMORPHISM: Overrides methods from BaseDashboard for admin-specific behavior
+ * COMPOSITION: Contains multiple panel objects representing different functionalities
+ * EVENT HANDLING: Implements PropertyChangeListener for inter-panel communication
  */
-public class AdminDashboard extends BaseDashboard {
+public class AdminDashboard extends BaseDashboard implements PropertyChangeListener {
     
     // Admin-specific components
     private UserManagementPanel userManagementPanel;
     private JPanel systemConfigPanel;
     
     // Controllers for all functionalities
+    // DEPENDENCY INJECTION: Controllers are injected to handle business logic
     private ItemController itemController;
     private SupplierController supplierController;
     private SalesController salesController;
@@ -80,13 +88,14 @@ public class AdminDashboard extends BaseDashboard {
     
     /**
      * Constructor for AdminDashboard
+     * ENCAPSULATION: Constructor ensures proper initialization of admin dashboard
      * @param user Current logged in user (should be Administrator)
      * @param authController Authentication controller
      */
     public AdminDashboard(User user, AuthController authController) {
         super("OWSB - Administrator Dashboard", user, authController);
         
-        // Check if user is an Administrator
+        // VALIDATION: Check if user is an Administrator using instanceof (POLYMORPHISM)
         if (!(user instanceof Administrator)) {
             throw new IllegalArgumentException("User must be an Administrator");
         }
@@ -100,6 +109,7 @@ public class AdminDashboard extends BaseDashboard {
     
     /**
      * Initialize all controllers
+     * DEPENDENCY INJECTION: Setting up controller dependencies
      */
     private void initControllers() {
         // Initialize all required controllers
@@ -124,6 +134,7 @@ public class AdminDashboard extends BaseDashboard {
     
     /**
      * Initialize all panels from all roles
+     * COMPOSITION: Creating and configuring panel objects
      */
     private void initAllPanels() {
         // Admin-specific panels
@@ -135,12 +146,18 @@ public class AdminDashboard extends BaseDashboard {
         supplierManagementPanel = new SupplierManagementPanel(supplierController, itemController);
         salesEntryPanel = new SalesEntryPanel(salesController);
         purchaseRequisitionPanel = new PurchaseRequisitionPanel(prController, currentUser);
+        
+        purchaseRequisitionPanel.addPropertyChangeListener(this);
+        
         messagePanel = new MessagePanel(messageController, prController, currentUser);
         
         // Purchase Manager panels
         itemListPanel = new ItemListPanel(itemController, currentUser);
         supplierListPanel = new SupplierListPanel(supplierController, currentUser);
         prListPanel = new PurchaseRequisitionListPanel(prController, currentUser);
+        
+        prListPanel.addPropertyChangeListener(this);
+        
         purchaseOrderPanel = new PurchaseOrderPanel(poController, currentUser);
         
         // Inventory Manager panels
@@ -158,7 +175,28 @@ public class AdminDashboard extends BaseDashboard {
     }
     
     /**
+     * PROPERTY CHANGE LISTENER IMPLEMENTATION
+     * Handle property change events from child panels
+     * This enables communication between panels without tight coupling
+     * 
+     * @param evt Property change event containing event details
+     */
+    @Override
+    public void propertyChange(PropertyChangeEvent evt) {
+        // Handle "createPO" event from PurchaseRequisitionListPanel
+        if (evt.getPropertyName().equals("createPO")) {
+            // POLYMORPHISM: Using the same method signature as PurchaseManagerDashboard
+            String prId = (String) evt.getNewValue();
+            purchaseOrderPanel.showGenerationPanel(prId);
+            setContent(purchaseOrderPanel);
+            setStatus("Creating Purchase Order from PR: " + prId);
+        }
+        
+    }
+    
+    /**
      * Initialize system configuration panel
+     * ENCAPSULATION: Private method to handle internal panel setup
      */
     private void initSystemConfigPanel() {
         systemConfigPanel = new JPanel(new BorderLayout());
@@ -208,7 +246,7 @@ public class AdminDashboard extends BaseDashboard {
         addMenuSeparator();
         
         // Procurement section
-        addMenuButton("Create Requisition", e -> showCreateRequisitionPanel());
+        addMenuButton("Create Requisitions", e -> showPurchaseRequisitionsPanel());
         addMenuButton("Purchase Orders", e -> showPurchaseOrdersPanel());
         
         addMenuSeparator();
@@ -434,7 +472,8 @@ public class AdminDashboard extends BaseDashboard {
     }
     
     /**
-     * Override navigateToPRPanel to navigate to the PR panel
+     * POLYMORPHISM: Override navigateToPRPanel from BaseDashboard
+     * Navigate to the PR panel for admin users
      */
     @Override
     public void navigateToPRPanel() {

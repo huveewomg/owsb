@@ -233,5 +233,66 @@
       }
     ],
     "totalValue": 61.3
+  },
+  {
+    "poID": "PO008",
+    "prID": "PR016",
+    "date": "Jun 1, 2025, 10:54:04 PM",
+    "deliveryDate": "Jun 11, 2025, 7:59:00 AM",
+    "purchaseManagerID": "U001",
+    "financeManagerID": "U001",
+    "status": "PENDING_ARRIVAL",
+    "notes": "",
+    "items": [
+      {
+        "itemID": "IT005",
+        "itemName": "Milk 1L",
+        "quantity": 40,
+        "supplierID": "SUP004",
+        "supplierName": "Fresh Dairy Products",
+        "unitPrice": 7.8,
+        "totalCost": 312.0
+      },
+      {
+        "itemID": "IT013",
+        "itemName": "Yogurt 500g",
+        "quantity": 35,
+        "supplierID": "SUP004",
+        "supplierName": "Fresh Dairy Products",
+        "unitPrice": 6.2,
+        "totalCost": 217.0
+      }
+    ],
+    "totalValue": 529.0
+  },
+  {
+    "poID": "PO009",
+    "prID": "PR015",
+    "date": "Jun 1, 2025, 10:54:38 PM",
+    "deliveryDate": "Jun 11, 2025, 7:55:13 AM",
+    "purchaseManagerID": "U003",
+    "status": "PENDING",
+    "notes": "",
+    "items": [
+      {
+        "itemID": "IT010",
+        "itemName": "Toilet Paper (6pk)",
+        "quantity": 30,
+        "supplierID": "SUP006",
+        "supplierName": "Hygiene Essentials Co.",
+        "unitPrice": 9.9,
+        "totalCost": 297.0
+      },
+      {
+        "itemID": "IT017",
+        "itemName": "Hand Sanitizer 200ml",
+        "quantity": 170,
+        "supplierID": "SUP006",
+        "supplierName": "Hygiene Essentials Co.",
+        "unitPrice": 10.0,
+        "totalCost": 1700.0
+      }
+    ],
+    "totalValue": 1997.0
   }
 ]

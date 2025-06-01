@@ -29,7 +29,7 @@
     "subject": "LOW Stock Alert: Brown Rice 1kg (IT014)",
     "content": "Attention Sales Manager,\n\nThis is an automated stock alert notification.\n\nItem: Brown Rice 1kg (IT014)\nCurrent Stock: 60\nMinimum Stock Level: 70\nStatus: LOW\nRecommended Reorder Quantity: 30\n\nPlease consider creating a Purchase Requisition for this item.\n\nRegards,\nAlex Inventory\nInventory Manager",
     "timestamp": "2025-05-28 07:56:09",
-    "isRead": false,
+    "isRead": true,
     "relatedItemID": "IT014"
   }
 ]

@@ -3,6 +3,7 @@ package com.owsb.view.order;
 import com.owsb.controller.PurchaseOrderController;
 import com.owsb.model.procurement.POItem;
 import com.owsb.model.procurement.PurchaseOrder;
+import com.owsb.model.user.Administrator;
 import com.owsb.model.user.FinanceManager;
 import com.owsb.model.user.User;
 import com.owsb.util.Constants;
@@ -154,7 +155,7 @@ public class PurchaseOrderListPanel extends JPanel {
         bottomPanel.add(viewButton);
         
         // Only add Approve and Reject buttons for Finance Managers
-        if (currentUser instanceof FinanceManager) {
+        if (currentUser instanceof FinanceManager || currentUser instanceof Administrator) {
             bottomPanel.add(approveButton);
             bottomPanel.add(rejectButton);
         }
@@ -196,7 +197,7 @@ public class PurchaseOrderListPanel extends JPanel {
             boolean hasSelection = selectedRow != -1;
             viewButton.setEnabled(hasSelection);
             // Enable/disable approve and reject buttons based on selection and status
-            if (hasSelection && currentUser instanceof FinanceManager) {
+            if (hasSelection && (currentUser instanceof FinanceManager || currentUser instanceof Administrator)) {
                 String poId = (String) poTable.getValueAt(selectedRow, 0);
                 // Find the PO in our list
                 PurchaseOrder selectedPO = null;
@@ -381,6 +382,8 @@ public class PurchaseOrderListPanel extends JPanel {
         // Add finance manager if available
         if (po.getFinanceManagerID() != null) {
             addLabelField(headerPanel, "Approved/Rejected By:", getManagerName(po.getFinanceManagerID()));
+        } else {
+            addLabelField(headerPanel, "Approved/Rejected By:", "Administrator");
         }
         
         addLabelField(headerPanel, "Status:", po.getStatus().getDisplayName());

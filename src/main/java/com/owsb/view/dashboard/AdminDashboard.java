@@ -246,7 +246,7 @@ public class AdminDashboard extends BaseDashboard implements PropertyChangeListe
         addMenuSeparator();
         
         // Procurement section
-        addMenuButton("Create Requisitions", e -> showPurchaseRequisitionsPanel());
+        addMenuButton("Manage Purchase Requisition", e -> showCreateRequisitionPanel());
         addMenuButton("Purchase Orders", e -> showPurchaseOrdersPanel());
         
         addMenuSeparator();

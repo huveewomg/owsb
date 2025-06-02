@@ -162,8 +162,8 @@ public class PurchaseRequisitionListPanel extends JPanel {
         
         bottomPanel.add(viewButton);
         
-        // Only add Edit and Delete buttons for Sales Managers
-        if (currentUser instanceof SalesManager) {
+        // Add Edit and Delete buttons for Sales Managers and Administrators
+        if (currentUser instanceof SalesManager || currentUser.getRole() == UserRole.ADMIN) {
             bottomPanel.add(editButton);
             bottomPanel.add(deleteButton);
         }

@@ -104,8 +104,6 @@ public class AuthController {
         // Generate a unique user ID
         String userId = userRepository.generateUserId();
 
-        // By default, new users created through this method are not root admins.
-        // If a root admin needs to be created, it should be done by directly editing the users.txt file
         User newUser = UserFactory.createUser(userId, username, password, name, role, email, false);
 
         // Save user to repository

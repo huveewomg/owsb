@@ -276,5 +276,54 @@
       }
     ],
     "estimatedTotal": 529.0
+  },
+  {
+    "prID": "PR017",
+    "date": "Jun 2, 2025, 11:09:52 PM",
+    "requiredDate": "Jun 16, 2025, 11:09:42 PM",
+    "salesManagerID": "U001",
+    "status": "PROCESSED",
+    "notes": "",
+    "items": [
+      {
+        "itemID": "IT011",
+        "itemName": "test",
+        "quantity": 1,
+        "requiredDate": "Jun 16, 2025, 11:09:50 PM",
+        "suggestedSupplierID": "SUP001",
+        "unitPrice": 12.0,
+        "estimatedCost": 12.0
+      }
+    ],
+    "estimatedTotal": 12.0
+  },
+  {
+    "prID": "PR018",
+    "date": "Jun 3, 2025, 2:14:15 PM",
+    "requiredDate": "Jun 17, 2025, 2:13:16 PM",
+    "salesManagerID": "U001",
+    "status": "PENDING_APPROVAL",
+    "notes": "",
+    "items": [
+      {
+        "itemID": "IT005",
+        "itemName": "Milk 1L",
+        "quantity": 60,
+        "requiredDate": "Jun 17, 2025, 2:14:13 PM",
+        "suggestedSupplierID": "SUP004",
+        "unitPrice": 7.8,
+        "estimatedCost": 468.0
+      },
+      {
+        "itemID": "IT013",
+        "itemName": "Yogurt 500g",
+        "quantity": 35,
+        "requiredDate": "Jun 17, 2025, 2:14:13 PM",
+        "suggestedSupplierID": "SUP004",
+        "unitPrice": 6.2,
+        "estimatedCost": 217.0
+      }
+    ],
+    "estimatedTotal": 685.0
   }
 ]
